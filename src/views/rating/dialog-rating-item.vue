@@ -1,5 +1,6 @@
 <template lang="pug">
-include /src/assets/pug/index.pug
+include /src/mixins.pug
+
 // Диалоговое окно для редактирования / создания элемента рейтинга
 el-dialog(v-model='isShow', :title='state.name.ua')
   el-form(label-position='top', v-loading='isSending')

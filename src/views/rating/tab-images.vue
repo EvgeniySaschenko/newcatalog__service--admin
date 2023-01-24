@@ -1,24 +1,25 @@
 <template lang="pug">
-include /src/assets/pug/index.pug
-+b.EL-FORM.tab-images(v-loading="isSending")
-  +e.title(ref="title")
+include /src/mixins.pug
+
++b.EL-FORM.tab-images(v-loading='isSending')
+  +e.title(ref='title')
     +e.title-col--1
       span {{ $route.name }}&nbsp;
-      span(v-if="items.length") {{ curIndex + 1 }} {{ 'из' }} {{ items.length }}
+      span(v-if='items.length') {{ curIndex + 1 }} {{ "из" }} {{ items.length }}
     +e.title-col--2
-      +e.EL-TAG.tag-processing-status(size="medium", :type="curItem.isSend ? 'success' : ''") {{ curItem.isSend ? 'Обработано' : 'Не обработано' }}
+      +e.EL-TAG.tag-processing-status(size='medium', :type='curItem.isSend ? "success" : ""') {{ curItem.isSend ? "Обработано" : "Не обработано" }}
 
-      el-button(type="primary", @click="sendImg()") {{ 'Отправить на сервер' }}
+      el-button(type='primary', @click='sendImg()') {{ "Отправить на сервер" }}
 
-  el-alert(v-if="messages.serverSuccess", :title="messages.serverSuccess", type="success")
-  el-alert(v-if="messages.imgError", :title="messages.imgError", type="error")
-  el-alert(v-if="messages.colorError", :title="messages.colorError", type="error")
-  el-alert(v-if="messages.serverError", :title="messages.serverError", type="error")
+  el-alert(v-if='messages.serverSuccess', :title='messages.serverSuccess', type='success')
+  el-alert(v-if='messages.imgError', :title='messages.imgError', type='error')
+  el-alert(v-if='messages.colorError', :title='messages.colorError', type='error')
+  el-alert(v-if='messages.serverError', :title='messages.serverError', type='error')
   +e.box-arrow
-    +e.I.arrow--prev.bi.bi-arrow-left-circle-fill(@click="toggleImg('prev')")
-    +e.I.arrow--next.bi.bi-arrow-right-circle-fill(@click="toggleImg('next')")
+    +e.I.arrow--prev.bi.bi-arrow-left-circle-fill(@click='toggleImg("prev")')
+    +e.I.arrow--next.bi.bi-arrow-right-circle-fill(@click='toggleImg("next")')
   +e.name-img.text-uppercase {{ curItem.img }}
-  img-cropper(:imgData="curItem", @img-data="setImgDataResult($event)")
+  img-cropper(:imgData='curItem', @img-data='setImgDataResult($event)')
 </template>
 
 <script>

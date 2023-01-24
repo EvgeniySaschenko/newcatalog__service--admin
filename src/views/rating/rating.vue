@@ -1,5 +1,6 @@
 <template lang="pug">
-include /src/assets/pug/index.pug
+include /src/mixins.pug
+
 +b.page--rating
   +e.H1.title {{ rating.name.ua }}
   el-tabs(v-model='tabActive')

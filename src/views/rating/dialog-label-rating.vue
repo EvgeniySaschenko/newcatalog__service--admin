@@ -1,5 +1,6 @@
 <template lang="pug">
-include /src/assets/pug/index.pug
+include /src/mixins.pug
+
 el-dialog(:title='title', v-model='isShow')
   +b.EL-FORM.dialog-label-rating(label-position='top', v-loading='isSending')
     el-form-item(:error='errors.name', label='Название ua')
