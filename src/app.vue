@@ -1,7 +1,7 @@
 <template lang="pug">
-include /src/assets/pug/index.pug
+include /src/mixins.pug
+
 .wrapper
-  app-svg-symbol
   .container
     header
       menu-main
@@ -10,12 +10,10 @@ include /src/assets/pug/index.pug
 </template>
 
 <script>
-import AppSvgSymbol from '@/components/svg-symbol/svg-symbol.vue';
 import MenuMain from '@/components/menu-main/menu-main.vue';
 
 export default {
   components: {
-    AppSvgSymbol,
     MenuMain,
   },
   mounted() {

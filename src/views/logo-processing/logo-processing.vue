@@ -1,5 +1,6 @@
 <template lang="pug">
-include /src/assets/pug/index.pug
+include /src/mixins.pug
+
 +b.page--img-cropper
   +e.H1.title
     +e.title-col--1

@@ -1,5 +1,5 @@
 <template lang="pug">
-include /src/assets/pug/index.pug
+include /src/mixins.pug
 +b.page--sections
   +e.H1.title {{ $route.name }}
   // Добавить

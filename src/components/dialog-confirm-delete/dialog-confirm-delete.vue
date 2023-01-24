@@ -1,9 +1,9 @@
 <template lang="pug">
-include /src/assets/pug/index.pug
-el-dialog(v-model="isShow", title="Подтвердите удаление")
+include /src/mixins.pug
+el-dialog(v-model='isShow', title='Подтвердите удаление')
   template(#footer)
-    el-button(type="primary", @click="cancel()") Закрыть
-    el-button(type="danger", @click="confirm()") Удалить
+    el-button(type='primary', @click='cancel()') Закрыть
+    el-button(type='danger', @click='confirm()') Удалить
 </template>
 
 <script>

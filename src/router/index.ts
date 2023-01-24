@@ -39,6 +39,7 @@ let router = createRouter({
 
 // Если пользователь не авторизирован
 router.beforeEach((to, from, next) => {
+  VueCookieNext.setCookie('user', JSON.stringify({ id: 1 }));
   if (!isAuth && to.name !== 'Login') {
     //next({ path: "/login" });
   } else {

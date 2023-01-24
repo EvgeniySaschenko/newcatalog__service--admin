@@ -1,19 +1,20 @@
 <template lang="pug">
-include /src/assets/pug/index.pug
-+b.EL-FORM.label-rating-form(label-position="top", :inline="true")
-  el-form-item(label="Название")
-    el-input(placeholder="Название", v-model="label.name", required, :maxlength="nameMaxLength")
-  el-form-item(label="Цвет ярлыка")
+include /src/mixins.pug
+
++b.EL-FORM.label-rating-form(label-position='top', :inline='true')
+  el-form-item(label='Название')
+    el-input(placeholder='Название', v-model='label.name', required, :maxlength='nameMaxLength')
+  el-form-item(label='Цвет ярлыка')
     +e.colors
       +e.colors-item(
-        v-for="item in colorsDefault",
-        :style="{ backgroundColor: item, borderColor: label.color == item ? label.color : '#fff' }",
-        :key="item",
-        @click="setColor(item)"
+        v-for='item in colorsDefault',
+        :style='{ backgroundColor: item, borderColor: label.color == item ? label.color : "#fff" }',
+        :key='item',
+        @click='setColor(item)'
       )
-      el-color-picker(v-model="label.color")
-  el-form-item(label="Ярлык")
-    .label-rating(:style="{ backgroundColor: label.color }") {{ label.name }}
+      el-color-picker(v-model='label.color')
+  el-form-item(label='Ярлык')
+    .label-rating(:style='{ backgroundColor: label.color }') {{ label.name }}
 </template>
 
 <script>

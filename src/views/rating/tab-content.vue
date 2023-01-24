@@ -1,71 +1,71 @@
 <template lang="pug">
-include /src/assets/pug/index.pug
+include /src/mixins.pug
 
-el-alert(v-if="success", :title="success", type="success")
-el-alert(v-if="errors.server", :title="errors.server", type="error")
+el-alert(v-if='success', :title='success', type='success')
+el-alert(v-if='errors.server', :title='errors.server', type='error')
 
 // Список сайтов
 +b.sites-list
   +e.panel-top
     +e.EL-BUTTON.btn-add-item(
-      v-if="rating.typeRating == 'site'",
-      type="primary",
-      @click="itemCurrent = {}",
-      :loading="isSending"
+      v-if='rating.typeRating == "site"',
+      type='primary',
+      @click='itemCurrent = {}',
+      :loading='isSending'
     ) Добавить
 
     +e.EL-BUTTON.btn-sennd-labels(
-      :type="countLabelsItemsChanged ? 'success' : 'info'",
-      @click="editRatingLabels()",
-      :loading="isSending"
+      :type='countLabelsItemsChanged ? "success" : "info"',
+      @click='editRatingLabels()',
+      :loading='isSending'
     ) Сохранить изменённые ярлыки
 
   +e.list
-    +e.item(v-for="item of rating.items")
+    +e.item(v-for='item of rating.items')
       +e.row-top
-        +e.box-img(:style="{ backgroundColor: item.img.color }")
-          +e.IMG.img.sites-list__img(:src="item.img.url", :alt="item.name.ua")
+        +e.box-img(:style='{ backgroundColor: item.img.color }')
+          +e.IMG.img.sites-list__img(:src='item.img.url', :alt='item.name.ua')
         +e.name 
           +e.name-text {{ item.name.ua }}
-        +e.A.link(:href="item.url", target="_blank") {{ getHost(item.url) }}
+        +e.A.link(:href='item.url', target='_blank') {{ getHost(item.url) }}
         div {{ item.alexaRank }}
         br
-        div {{ (item.whois.creationDate || item.whois.created || (item.whois.createdOn || '').slice(7, 11) || '').slice(0, 4) }}
+        div {{ (item.whois.creationDate || item.whois.created || (item.whois.createdOn || "").slice(7, 11) || "").slice(0, 4) }}
 
         +e.EL-SELECT.labels(
           multiple,
-          :multiple-limit="labelsIdsLimit",
-          v-model="stateItems[item.id].labelsIds",
-          placeholder="Ярлыки",
-          @change="createLabelsChangeList($event, item.id)"
+          :multiple-limit='labelsIdsLimit',
+          v-model='stateItems[item.id].labelsIds',
+          placeholder='Ярлыки',
+          @change='createLabelsChangeList($event, item.id)'
         )
           el-option(
-            v-for="item in rating.labels",
-            :key="item.id",
-            :label="item.name.ua",
-            :value="item.id"
+            v-for='item in rating.labels',
+            :key='item.id',
+            :label='item.name.ua',
+            :value='item.id'
           )
 
       +e.row-bottom
         +e.status
-          +e.EL-TAG.status-item(v-if="item.isHiden", effect="dark", size="small", type="info") Скрыт
+          +e.EL-TAG.status-item(v-if='item.isHiden', effect='dark', size='small', type='info') Скрыт
 
         +e.EL-BUTTON.btn--delete(
-          type="danger",
-          @click="deleteRatingItem(item.id)",
-          size="small"
+          type='danger',
+          @click='deleteRatingItem(item.id)',
+          size='small'
         ) Удалить
-        +e.EL-BUTTON.btn--edit(type="primary", @click="itemCurrent = item", size="small") Редактировать
+        +e.EL-BUTTON.btn--edit(type='primary', @click='itemCurrent = item', size='small') Редактировать
 
 // Диалоговое окно для редактирования сайта
 dialog-rating-item(
-  v-if="itemCurrent",
-  :itemCurrent="itemCurrent",
-  :labelsIdsLimit="labelsIdsLimit",
-  @closed="itemCurrent = null"
+  v-if='itemCurrent',
+  :itemCurrent='itemCurrent',
+  :labelsIdsLimit='labelsIdsLimit',
+  @closed='itemCurrent = null'
 )
 
-dialog-confirm-delete(ref="dialog-confirm")
+dialog-confirm-delete(ref='dialog-confirm')
 </template>
 
 <script>

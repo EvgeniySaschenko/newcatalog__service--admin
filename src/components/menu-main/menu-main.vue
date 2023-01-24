@@ -1,8 +1,9 @@
 <template lang="pug">
-include /src/assets/pug/index.pug
-+b.EL-MENU.menu-main(:default-active="$route.path", mode="horizontal")
-  +e.EL-MENU-ITEM.item(:index="item.path", v-for="item in items")
-    +e.ROUTER-LINK.link(:to="item.path") {{ item.name }}
+include /src/mixins.pug
+
++b.EL-MENU.menu-main(:default-active='$route.path', mode='horizontal')
+  +e.EL-MENU-ITEM.item(:index='item.path', v-for='item in items')
+    +e.ROUTER-LINK.link(:to='item.path') {{ item.name }}
 </template>
 
 <script lang="ts">
