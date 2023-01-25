@@ -6,6 +6,7 @@ import store from './store';
 import VueAxios from 'vue-axios';
 import axios from 'axios';
 import { VueCookieNext } from 'vue-cookie-next';
+import pluginApi from '@/plugins/api';
 import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
@@ -21,6 +22,7 @@ let i18n = {
 let app = createApp(App)
   .use(i18n)
   .use(VueAxios, axios)
+  .use(pluginApi)
   .use(ElementPlus)
   .use(VueCookieNext)
   .use(store)

@@ -28,7 +28,7 @@ export default {
 
     // Удалить раздел
     async deleteSection(context, id) {
-      let { data } = await axios.delete('/api/sections/', { data: { id } });
+      let { data } = await axios.delete(`/api/sections/${id}`, { data: { id } });
       if (data.errors) return Promise.reject(data.errors);
       context.dispatch('getSections');
       return data;

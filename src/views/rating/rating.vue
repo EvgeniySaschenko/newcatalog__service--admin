@@ -15,13 +15,14 @@ include /src/mixins.pug
       app-tab-images(:rating='rating', v-if='tabActive == "images"')
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue';
 import TabMain from './tab-main.vue';
 import TabContent from './tab-content.vue';
 import TabLabels from './tab-labels.vue';
 import TabImages from './tab-images.vue';
 
-export default {
+export default defineComponent({
   name: 'page-rating',
   mounted() {
     this.init();
@@ -47,7 +48,7 @@ export default {
   data() {
     return {
       // Активный таб
-      tabActive: 'main',
+      tabActive: 'main' as any,
     };
   },
 
@@ -80,12 +81,12 @@ export default {
         this.tabActive = tab;
       }
     },
-    // Добавить query параметры табу
-    setTabUrlParam(tabActive) {
+    // Добавить query параметры при клике на таб
+    setTabUrlParam(tabActive: string) {
       this.$router.push({ query: { tab: [tabActive] } });
     },
   },
-};
+});
 </script>
 
 <style lang="sass" scoped>
