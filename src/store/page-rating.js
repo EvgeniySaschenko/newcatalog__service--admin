@@ -155,7 +155,7 @@ export default {
 
     // Создать логотип сайта
     async createSiteLogo(context, dataLogo) {
-      let { data } = await axios.put(`/api/ratings-items/sites-logos/`, dataLogo);
+      let { data } = await axios.put(`/api/ratings-items/sites-logos`, dataLogo);
       if (data.errors) return Promise.reject(data.errors);
       return data;
     },
