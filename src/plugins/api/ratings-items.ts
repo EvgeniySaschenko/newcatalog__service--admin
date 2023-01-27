@@ -1,17 +1,5 @@
 import { $fetch, $utils } from './_core';
-
-type RatingSortType = 'alexa' | 'click';
-
-type RatingItemType = {
-  id: number;
-  isCreatedScreen: boolean;
-  isHiden: boolean;
-  labelsIds: object;
-  name: object;
-  priority: number;
-  ratingId: number;
-  url: string;
-};
+import { RatingItemType, RatingSortType } from '@/types';
 
 export default {
   // Get rating items (getRatingItems)

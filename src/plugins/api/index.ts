@@ -12,7 +12,7 @@ export let $api = {
   'ratings-items': ratingsItems,
 };
 
-// Доступ к $api через this в компонетах
+// Tell TypeScript that this property is global i.e. available in components via "this"
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
     $api: typeof $api;
