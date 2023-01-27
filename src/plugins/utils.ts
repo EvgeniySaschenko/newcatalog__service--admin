@@ -1,38 +1,82 @@
+import { $t } from '@/plugins/i18n';
+import { ElMessage, ElMessageBox } from 'element-plus';
+
+// Tell TypeScript that this property is global i.e. available in components via "this"
+declare module '@vue/runtime-core' {
+  interface ComponentCustomProperties {
+    $utils: typeof $utils;
+  }
+}
+
 export let $utils = {
-  /* 
-    Возваращает объект с ссобщениями об ошибках
-    errors - объект с ошибками
-    errorsTarget - на основе этого объекта определяются допустимые поля
+  /*
+    Show deletion confirmation dialog
   */
-  setErrors<T1 extends object, T2 extends object>(errorsMsg: T1, errorsTarget: T2): object {
-    let errorsMsgResult: Record<string, any> = {};
-
-    if (errorsMsg instanceof Error && 'server' in errorsTarget) {
-      errorsMsgResult = { server: 'Ошибка сервера' };
-    } else {
-      for (let key in errorsMsg) {
-        if (key in errorsTarget) {
-          errorsMsgResult[key] = errorsMsg[key];
-        }
-      }
-    }
-
-    return errorsMsgResult;
+  showDialogConfirmDelete({
+    title = $t('Вы действительно хотите удалить?'),
+    message = '',
+    confirmButtonText = $t('Да'),
+    cancelButtonText = $t('Нет'),
+  }) {
+    return ElMessageBox.confirm(message, title, {
+      confirmButtonText,
+      cancelButtonText,
+      type: 'warning',
+    });
+  },
+  /*
+    Show success message
+    Use to inform the user that an action was successful
+    For example "Save section"
+  */
+  showMessageSuccess({ duration = 3000, showClose = true, message = '' }) {
+    ElMessage({
+      duration,
+      showClose,
+      message,
+      type: 'success',
+    });
+  },
+  /*
+    Show error message
+    Use to tell the user when an action failed.
+    For example "Server error"
+  */
+  showMessageError({ duration = 0, showClose = true, message = '' }) {
+    ElMessage({
+      duration,
+      showClose,
+      message,
+      type: 'error',
+    });
   },
   /* 
-    Возваращает объект с в котором значения полей будут заменены на пустую строку
-    errorsTarget - на основе этого объекта определяются допустимые которые будут в объекте
+    targetObject - mutable object
+    keysErrors - Object containing the keys to be changed
+    Adds error messages to "targetObject" if fields are present in "targetObject" and "keysErrors"
   */
-  clearErrors(errorsTarget: object) {
-    let errorsClear: any = {};
-    for (let key in errorsTarget) {
-      errorsClear[key] = '';
+  setErrors(targetObject: any, keysErrors: any) {
+    for (let key in keysErrors) {
+      if (key in targetObject) {
+        targetObject[key] = keysErrors[key];
+      }
     }
-    return errorsClear;
+  },
+  /* 
+    targetObject - mutable object
+    keysErrors - Object containing the keys to be changed
+    Clear error messages to "targetObject" if fields are present in "targetObject" and "keysErrors"
+  */
+  clearErrors(targetObject: any, keysErrors: any) {
+    for (let key in keysErrors) {
+      if (key in targetObject) {
+        targetObject[key] = '';
+      }
+    }
   },
 
   /*
-    Преобразовать object в строку QueryParams
+    Convert object to string QueryParams
   */
   convertToQueryParams<T extends object>(obj: T): string {
     let query: string[] = [];
@@ -47,13 +91,6 @@ export let $utils = {
     return query.join('&');
   },
 };
-
-// Доступ к $errors через this в компонетах
-declare module '@vue/runtime-core' {
-  interface ComponentCustomProperties {
-    $utils: typeof $utils;
-  }
-}
 
 export default {
   install: (app: any, options: any) => {

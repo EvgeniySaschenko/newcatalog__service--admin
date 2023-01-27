@@ -1,14 +1,5 @@
 import { $fetch, $utils } from './_core';
-
-type RatingType = {
-  id: number;
-  descr: object;
-  name: object;
-  sectionsIds: object;
-  typeDisplay: 'tile' | 'inline';
-  typeRating: 'site';
-  typeSort: 'alexa' | 'click';
-};
+import { RatingType } from '@/types';
 
 export default {
   // Сейчас используется кука для userId - нужно исправить и на беке

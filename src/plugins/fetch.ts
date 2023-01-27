@@ -2,7 +2,7 @@ export interface FetchType {
   (url: string, params?: RequestInit): Promise<Response>;
 }
 
-// Доступ к $fetch через this в компонетах
+// Tell TypeScript that this property is global i.e. available in components via "this"
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
     $fetch: FetchType;
@@ -26,12 +26,24 @@ export let $fetch: FetchType = async (url: string, params?: RequestInit): Promis
   if (params && params.method !== 'GET') {
     params = Object.assign(defaultParams, params);
   }
-
-  let response: any = await fetch(url, params);
-
-  if (response && response.status >= 400 && response.status <= 600) {
+  let response: any;
+  try {
+    response = await fetch(url, params);
+  } catch (error) {
+    // Unexpected Errors
+    console.error(error);
+    throw { server: 'Ошибка сервера' };
+  }
+  if(response.status == 400) {
+    // Data validation errors
+    throw await response.json();
+  } else if(response.status > 400) {
+    // Other server errors
     console.error(response);
-    throw new Error(response);
+    if(response.json) {
+      console.error(await response?.json());
+    }
+    throw await { server: 'Ошибка сервера' };
   }
   return response;
 };

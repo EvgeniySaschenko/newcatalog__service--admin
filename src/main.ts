@@ -1,29 +1,28 @@
 import { createApp } from 'vue';
-import App from './app.vue';
-import './registerServiceWorker';
-import router from './router';
-import store from './store';
-import VueAxios from 'vue-axios';
-import axios from 'axios';
+import App from '@/app.vue';
+import '@/registerServiceWorker';
+import router from '@/router';
 import { VueCookieNext } from 'vue-cookie-next';
-import pluginApi from '@/plugins/api';
-import ElementPlus from 'element-plus';
-import 'element-plus/dist/index.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
-let i18n = {
-  install: (app: any) => {
-    app.config.globalProperties.$t = (key: string) => {
-      return key;
-    };
-  },
-};
+import store from '@/store';
+import VueAxios from 'vue-axios';
+import axios from 'axios';
+
+// Plugins
+import pluginApi from '@/plugins/api';
+import pluginUtils from '@/plugins/utils';
+import pluginElementPlus from '@/plugins/element-plus';
+import pluginI18n from '@/plugins/i18n';
+import pinia from '@/plugins/pinia';
 
 let app = createApp(App)
-  .use(i18n)
+  .use(pinia)
+  .use(pluginI18n)
   .use(VueAxios, axios)
   .use(pluginApi)
-  .use(ElementPlus)
+  .use(pluginUtils)
+  .use(pluginElementPlus)
   .use(VueCookieNext)
   .use(store)
   .use(router)

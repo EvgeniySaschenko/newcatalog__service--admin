@@ -2,24 +2,52 @@
 include /src/mixins.pug
 
 .wrapper
-  .container
-    header
-      menu-main
-    router-view
-    footer
+  header.container
+    menu-main
+  router-view(v-loading='isLoading')
+  footer.container
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue';
 import MenuMain from '@/components/menu-main/menu-main.vue';
+import useSectionsStore from '@/pinia/sections';
 
-export default {
+export default defineComponent({
+  data() {
+    return {
+      isLoading: false,
+    };
+  },
   components: {
     MenuMain,
   },
   mounted() {
-    this.$store.dispatch('sections/getSections');
+    this.getSections();
   },
-};
+
+  methods: {
+    // Get sections
+    async getSections() {
+      if (this.isLoading) return;
+      this.isLoading = true;
+      try {
+        let store = useSectionsStore();
+        let sections = await this.$api.sections.getSections();
+        store.setSections(sections);
+      } catch (errors: any) {
+        if (errors.server) {
+          this.$utils.showMessageError({ message: errors.server });
+          return;
+        }
+      } finally {
+        setTimeout(() => {
+          this.isLoading = false;
+        }, 200);
+      }
+    },
+  },
+});
 </script>
 
 <style lang="sass">

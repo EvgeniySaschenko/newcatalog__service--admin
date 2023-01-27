@@ -1,11 +1,5 @@
 import { $fetch, $utils } from './_core';
-
-type LabelType = {
-  id: number;
-  name: object;
-  color: string;
-  ratingId: number;
-};
+import { LabelType } from '@/types';
 
 export default {
   // Create label for rating

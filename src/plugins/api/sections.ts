@@ -1,15 +1,9 @@
 import { $fetch, $utils } from './_core';
-
-type SectionType = {
-  id: number;
-  isHiden: boolean;
-  name: object;
-  priority: number;
-};
+import { SectionType } from '@/types';
 
 export default {
   // Get all sections
-  getSections: async () => {
+  getSections: async (): Promise<SectionType[]> => {
     let result = await $fetch(`/api/sections`, {
       method: 'GET',
     });
@@ -17,10 +11,10 @@ export default {
   },
 
   // Create section
-  createSection: async (name: Pick<SectionType, 'name'>) => {
+  createSection: async ({ name }: Pick<SectionType, 'name'>) => {
     let result = await $fetch(`/api/sections`, {
       method: 'POST',
-      body: JSON.stringify(name),
+      body: JSON.stringify({ name }),
     });
     return await result.json();
   },
@@ -28,7 +22,7 @@ export default {
   // Edit section
   editSection: async ({ id, isHiden, name, priority }: SectionType) => {
     let result = await $fetch(`/api/sections`, {
-      method: 'POST',
+      method: 'PUT',
       body: JSON.stringify({ id, isHiden, name, priority }),
     });
     return await result.json();
