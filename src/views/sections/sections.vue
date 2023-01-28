@@ -18,13 +18,7 @@ include /src/mixins.pug
 
   // Edit
   el-form
-    el-table(
-      :data='items',
-      stripe,
-      row-key='id',
-      v-loading='isSendingFormEdit',
-      :scrollbar-always-on='true'
-    )
+    el-table(:data='items', stripe, v-loading='isSendingFormEdit', :scrollbar-always-on='true')
       el-table-column(:label='$t("Название")', :min-width='200')
         template(#default='scope')
           el-form-item(:error='errors.formEdit[`${scope.row.id}_name`]', required)

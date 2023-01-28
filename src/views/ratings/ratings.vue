@@ -1,63 +1,69 @@
 <template lang="pug">
 include /src/mixins.pug
-+b.page--ratings
++b.page--ratings.container
   +e.H1.title {{ $route.name }}
 
-// Кнопка создать рейтинг
-el-button.bi.bi-plus-circle-fill(
-  type="primary",
-  @click="goToPageCreateRating()"
-) {{ $('Создать новый рейтинг') }}
-
-// Список рейтингов
-el-table(:data="ratings", stripe)
-  el-table-column(label="Название")
-    template(#default="scope")
-      router-link(:to="`${pathPage}/${scope.row.id}`") {{ scope.row.name.ua }}
-  el-table-column(label="Дата создания", width="150")
-    template(#default="scope") {{ dateFormat(scope.row.dateCreate) }}
+  // Button create new rating
+  router-link.inline-block(:to='`${pathPage}/create`')
+    el-button(type='primary', icon='el-icon-plus') {{ $t("Создать новый рейтинг") }}
+  // List ratings
+  el-table(:data='ratings', stripe, :scrollbar-always-on='true')
+    el-table-column(:label='$t("Название")')
+      template(#default='scope')
+        router-link(:to='`${pathPage}/${scope.row.id}`') {{ scope.row.name.ua }}
+    el-table-column(:label='$t("Дата создания")', width='150')
+      template(#default='scope') {{ $utils.date(scope.row.dateCreate) }}
 </template>
 
-<script>
-import moment from 'moment';
+<script lang="ts">
+import { defineComponent } from 'vue';
+import useStoreUser from '@/pinia/user';
+import { RatingType } from '@/types';
 
-export default {
+export default defineComponent({
   name: 'page-ratings',
   data() {
     return {
-      // Путь текущей страницы
-      pathPage: '',
+      // loading data
+      isLoading: false,
+      // Path current page
+      pathPage: window.location.pathname,
+      // List ratings current user
+      ratings: [] as RatingType[],
     };
-  },
-  computed: {
-    ratings() {
-      return this.$store.state['page-ratings'].items;
-    },
   },
 
   mounted() {
-    this.setPathPage();
-    this.$store.dispatch('page-ratings/getRatings');
+    this.init();
   },
+
   methods: {
-    // Форматировать дату
-    dateFormat(dateCreate) {
-      return moment.unix(dateCreate).format('DD.MM.YYYY');
+    // Init
+    init() {
+      this.getRatings();
     },
-    // Установить значение базовй url
-    setPathPage() {
-      let { pathname } = location;
-      if (pathname.slice(-1) == '/') {
-        pathname = pathname.substring(0, pathname.length - 1);
+
+    // Get all ratings User
+    async getRatings() {
+      if (this.isLoading) return;
+      this.isLoading = true;
+
+      try {
+        let store = useStoreUser();
+        this.ratings = await this.$api.ratings.getRatingsUser({ userId: store.$state.id });
+      } catch (errors: any) {
+        if (errors.server) {
+          this.$utils.showMessageError({ message: errors.server });
+          return;
+        }
+      } finally {
+        setTimeout(() => {
+          this.isLoading = false;
+        }, 200);
       }
-      this.pathPage = pathname;
-    },
-    // Перейти на страницу создания рейтинга
-    goToPageCreateRating() {
-      this.$router.push({ path: `${this.pathPage}/create` });
     },
   },
-};
+});
 </script>
 
 <style lang="sass" scoped></style>

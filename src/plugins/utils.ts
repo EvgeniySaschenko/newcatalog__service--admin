@@ -10,6 +10,24 @@ declare module '@vue/runtime-core' {
 
 export let $utils = {
   /*
+    Date formatting
+  */
+  date(date: Date, format?: string) {
+    let options = {
+      year: 'numeric',
+      month: 'numeric',
+      day: 'numeric',
+    } as const;
+
+    switch (format) {
+      case 'datetime':
+        Object.assign(options, { hour: 'numeric', minute: 'numeric' });
+        break;
+    }
+
+    return new Intl.DateTimeFormat('uk', options).format(new Date(date));
+  },
+  /*
     Show deletion confirmation dialog
   */
   showDialogConfirmDelete({
