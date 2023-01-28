@@ -8,7 +8,7 @@ module.exports = {
   // Использовать одинарные кавычки
   singleQuote: true,
   // Одинарные кавычки JSX
-  jsxSingleQuote: false,
+  jsxSingleQuote: true,
   // Перенос тега в JSX ">"
   jsxBracketSameLine: false,
   // Добавить запятую для последнего свойства в массиве / объекте

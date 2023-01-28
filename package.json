@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@element-plus/icons": "^0.0.11",
+    "@vue/eslint-config-prettier": "^7.0.0",
     "axios": "^1.2.3",
     "bootstrap-icons": "^1.10.3",
     "core-js": "^3.8.3",
@@ -29,8 +30,6 @@
   },
   "devDependencies": {
     "@types/jest": "^27.0.1",
-    "@typescript-eslint/eslint-plugin": "^5.4.0",
-    "@typescript-eslint/parser": "^5.4.0",
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-e2e-cypress": "~5.0.0",
     "@vue/cli-plugin-eslint": "~5.0.0",
@@ -49,7 +48,6 @@
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-prettier-vue": "^4.2.0",
     "eslint-plugin-vue": "^8.0.3",
     "jest": "^27.0.5",
     "prettier": "^2.4.1",

@@ -34,13 +34,13 @@ export let $fetch: FetchType = async (url: string, params?: RequestInit): Promis
     console.error(error);
     throw { server: 'Ошибка сервера' };
   }
-  if(response.status == 400) {
+  if (response.status == 400) {
     // Data validation errors
     throw await response.json();
-  } else if(response.status > 400) {
+  } else if (response.status > 400) {
     // Other server errors
     console.error(response);
-    if(response.json) {
+    if (response.json) {
       console.error(await response?.json());
     }
     throw await { server: 'Ошибка сервера' };
