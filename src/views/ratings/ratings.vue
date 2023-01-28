@@ -4,15 +4,18 @@ include /src/mixins.pug
   +e.H1.title {{ $route.name }}
 
 // Кнопка создать рейтинг
-el-button.bi.bi-plus-circle-fill(type='primary', @click='goToPageCreateRating()') Создать новый рейтинг
+el-button.bi.bi-plus-circle-fill(
+  type="primary",
+  @click="goToPageCreateRating()"
+) {{ $('Создать новый рейтинг') }}
 
 // Список рейтингов
-el-table(:data='ratings', stripe)
-  el-table-column(label='Название')
-    template(#default='scope')
-      router-link(:to='`${pathPage}/${scope.row.id}`') {{ scope.row.name.ua }}
-  el-table-column(label='Дата создания', width='150')
-    template(#default='scope') {{ dateFormat(scope.row.dateCreate) }}
+el-table(:data="ratings", stripe)
+  el-table-column(label="Название")
+    template(#default="scope")
+      router-link(:to="`${pathPage}/${scope.row.id}`") {{ scope.row.name.ua }}
+  el-table-column(label="Дата создания", width="150")
+    template(#default="scope") {{ dateFormat(scope.row.dateCreate) }}
 </template>
 
 <script>

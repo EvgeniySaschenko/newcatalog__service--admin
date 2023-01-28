@@ -2,14 +2,14 @@
 export type LangType = {
   ua: string;
   ru: string;
-}
+};
 
 export let LangInit = (): LangType => {
   return {
     ua: '',
     ru: '',
-  }
-}
+  };
+};
 
 // Section
 export type SectionType = {

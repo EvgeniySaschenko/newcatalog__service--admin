@@ -61,7 +61,7 @@ include /src/mixins.pug
 </template>
 
 <script lang="ts">
-import { defineComponent, SetupContext } from 'vue';
+import { defineComponent } from 'vue';
 import useStoreSections from '@/pinia/sections';
 import { SectionType, LangInit } from '@/types';
 
@@ -124,7 +124,9 @@ export default defineComponent({
       this.$utils.clearErrors(this.errors.formAdd, this.errors.formAdd);
 
       try {
-        let response = await this.$api.sections.createSection({ name: this.nameNewSection });
+        let response = await this.$api.sections.createSection({
+          name: this.nameNewSection,
+        });
         await this.getSections();
         this.$utils.showMessageSuccess({
           message: `${this.$t('Раздел добавлен')}: "${response.name.ru}"`,
