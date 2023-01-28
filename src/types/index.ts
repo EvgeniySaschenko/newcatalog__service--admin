@@ -34,6 +34,7 @@ export type RatingType = {
   typeDisplay: RatingDisplayType;
   typeRating: RatingTypeType;
   typeSort: RatingSortType;
+  dateCreate: Date;
 };
 
 export type RatingItemType = {

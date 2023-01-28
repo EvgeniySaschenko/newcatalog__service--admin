@@ -30,13 +30,13 @@ include /src/mixins.pug
 
 <script>
 import ImgCropper from '@/components/img-cropper/img-cropper.vue';
-import { ArrowRight, ArrowLeft } from '@element-plus/icons';
+// import { ArrowRight, ArrowLeft } from '@element-plus/icons';
 
 export default {
   components: {
     ImgCropper,
-    ArrowRight,
-    ArrowLeft,
+    // ArrowRight,
+    // ArrowLeft,
   },
   data() {
     return {
