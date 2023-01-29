@@ -21,16 +21,16 @@ export default {
   },
 
   // Delete label for rating
-  deleteLabel: async ({ id, name, color, ratingId }: LabelType) => {
+  deleteLabel: async ({ id, ratingId }: Pick<LabelType, 'id' | 'ratingId'>) => {
     let result = await $fetch(`/api/ratings-labels/${id}`, {
       method: 'DELETE',
-      body: JSON.stringify({ id, name, color, ratingId }),
+      body: JSON.stringify({ id, ratingId }),
     });
     return await result.json();
   },
 
   // Get all labels for rating
-  getLabels: async (ratingId: number) => {
+  getLabels: async ({ ratingId }: Pick<LabelType, 'ratingId'>) => {
     let result = await $fetch(`/api/ratings-labels/rating/${ratingId}`, {
       method: 'GET',
     });

@@ -29,7 +29,7 @@ export default {
   },
 
   // Delete section
-  deleteSection: async (id: number) => {
+  deleteSection: async ({ id }: Pick<SectionType, 'id'>) => {
     let result = await $fetch(`/api/sections/${id}`, {
       method: 'DELETE',
     });
