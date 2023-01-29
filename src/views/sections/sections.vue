@@ -133,9 +133,7 @@ export default defineComponent({
         }
         this.$utils.setErrors(this.errors.formAdd, errors.errors);
       } finally {
-        setTimeout(() => {
-          this.isSendingFormAdd = false;
-        }, 200);
+        this.isSendingFormAdd = false;
       }
     },
 
@@ -146,7 +144,7 @@ export default defineComponent({
       this.isSendingFormEdit = true;
 
       try {
-        await this.$api.sections.deleteSection(id);
+        await this.$api.sections.deleteSection({ id: +id });
         await this.getSections();
         this.$utils.showMessageSuccess({
           message: `${this.$t('Раздел удалён')}: "${name.ru}"`,
@@ -157,9 +155,7 @@ export default defineComponent({
           return;
         }
       } finally {
-        setTimeout(() => {
-          this.isSendingFormEdit = false;
-        }, 200);
+        this.isSendingFormEdit = false;
       }
     },
 
@@ -187,9 +183,7 @@ export default defineComponent({
         let { name } = errors.errors;
         this.errors.formEdit[`${data.id}_name`] = name;
       } finally {
-        setTimeout(() => {
-          this.isSendingFormEdit = false;
-        }, 200);
+        this.isSendingFormEdit = false;
       }
     },
   },

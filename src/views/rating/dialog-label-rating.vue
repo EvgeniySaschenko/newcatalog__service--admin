@@ -2,12 +2,12 @@
 include /src/mixins.pug
 
 el-dialog(:title='title', v-model='isShow')
-  +b.EL-FORM.dialog-label-rating(label-position='top', v-loading='isSending')
-    el-form-item(:error='errors.name', label='Название ua')
-      el-input(placeholder='Текст ярлыка', v-model='label.name.ua', required)
-    el-form-item(:error='errors.name', label='Название ru')
-      el-input(placeholder='Текст ярлыка', v-model='label.name.ru', required)
-    el-form-item(:error='errors.color', label='Цвет ярлыка')
+  +b.EL-FORM.dialog-label-rating(label-position='top', v-loading='isLoading')
+    el-form-item(:error='errors.name', :label='$t("Название ua")')
+      el-input(:placeholder='$t("Текст ярлыка")', v-model='label.name.ua', required)
+    el-form-item(:error='errors.name', :label='$t("Название ru")')
+      el-input(:placeholder='$t("Текст ярлыка")', v-model='label.name.ru', required)
+    el-form-item(:error='errors.color', :label='$t("Цвет ярлыка")')
       +e.colors
         +e.colors-item(
           v-for='item in colorsDefault',
@@ -16,47 +16,51 @@ el-dialog(:title='title', v-model='isShow')
           @click='setColor(item)'
         )
         el-color-picker(v-model='label.color')
-    el-form-item(label='Ярлык')
+    el-form-item(:label='$t("Ярлык")')
       .label-rating(:style='{ backgroundColor: label.color }') {{ label.name.ua }}
-  // Сообщение при отправке   
-  el-alert(v-if='success', :title='success', type='success')
-  el-alert(v-if='errors.server', :title='errors.server', type='error')
 
   template(#footer)
-    el-button(v-if='actionType == "edit"', type='danger', @click='deleteLabel()') Удалить
-    el-button(type='primary', @click='isShow = false') Закрыть
-    el-button(v-if='actionType == "edit"', type='success', @click='editLabel()') Редактировать
-    el-button(v-if='actionType == "create"', type='success', @click='createLabel()') Создать
+    el-button(v-if='actionType == "edit"', type='danger', @click='deleteLabel()') {{ $t("Удалить") }}
+    el-button(type='primary', @click='isShow = false') {{ $t("Закрыть") }}
+    el-button(v-if='actionType == "edit"', type='success', @click='editLabel()') {{ $t("Редактировать") }}
+    el-button(v-if='actionType == "create"', type='success', @click='createLabel()') {{ $t("Создать") }}
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { LangType, LangInit } from '@/types';
+import { defineComponent } from 'vue';
+
+export default defineComponent({
+  emits: ['update:label', 'closed'],
   props: {
+    // Label name
     name: {
       type: Object,
       default: () => {
-        return {
-          ua: '',
-          ru: '',
-        };
+        return LangInit();
       },
     },
+    // Label color
     color: {
       type: String,
       default: '#7952b3',
     },
+    // Title dialog
     title: {
       type: String,
       default: '',
     },
+    // Label id from delete / edit
     labelId: {
       type: Number,
       default: null,
     },
+    // Rating id
     ratingId: {
       type: Number,
       default: null,
     },
+    // Action type for back-end query
     actionType: {
       type: String,
       default: '',
@@ -72,13 +76,10 @@ export default {
       success: '',
       // Показать модальное окно
       isShow: true,
-      isSending: false,
+      isLoading: false,
       label: {
         // Название
-        name: {
-          ua: '',
-          ru: '',
-        },
+        name: LangInit(),
         // Цвет
         color: '',
       },
@@ -105,103 +106,102 @@ export default {
     };
   },
   mounted() {
-    this.label.name = this.name;
+    this.label.name = { ...(this.name as LangType) };
     this.label.color = this.color;
   },
   methods: {
-    // Выбрать цвет
-    setColor(color) {
+    // Set color
+    setColor(color: string) {
       this.label.color = color;
     },
 
-    // Очистить сообщения
-    clearMessages() {
-      for (let item in this.errors) {
-        this.errors[item] = '';
-      }
-      this.success = '';
-    },
-
-    // Добавить сообщения об ошибке
-    setErrors(errors) {
-      // Если это ошибка, а не объект
-      if (errors instanceof Error) {
-        this.errors.server = 'Ошибка сервера';
-        return;
-      }
-
-      for (let item in errors) {
-        this.errors[item] = errors[item];
-      }
-    },
-
-    // Создать ярлык
+    // Create rating label
     async createLabel() {
-      if (this.isSending) return;
-      this.clearMessages();
-      this.isSending = true;
-      this.$store
-        .dispatch('page-rating/createLabel', {
+      if (this.isLoading) return;
+      this.isLoading = true;
+      this.$utils.clearErrors(this.errors, this.errors);
+
+      try {
+        let { name } = await this.$api['ratings-labels'].createLabel({
           color: this.label.color,
           name: this.label.name,
           ratingId: this.ratingId,
-        })
-        .then(() => {
-          this.success = 'Ярлык добавлен';
-        })
-        .catch((errors) => {
-          this.setErrors(errors);
-        })
-        .finally(() => {
-          this.isSending = false;
         });
+
+        this.$utils.showMessageSuccess({
+          message: `${this.$t('Ярлык создан')}: "${name.ru}"`,
+        });
+
+        this.$emit('update:label', { event: 'add' });
+      } catch (errors: any) {
+        if (errors.server) {
+          this.$utils.showMessageError({ message: errors.server });
+          return;
+        }
+        this.$utils.setErrors(this.errors, errors.errors);
+      } finally {
+        this.isLoading = false;
+      }
     },
 
-    // Редактировать ярлык
+    // Edit rating label
     async editLabel() {
-      if (this.isSending) return;
-      this.clearMessages();
-      this.isSending = true;
-      this.$store
-        .dispatch('page-rating/editLabel', {
+      if (this.isLoading) return;
+      this.isLoading = true;
+      this.$utils.clearErrors(this.errors, this.errors);
+
+      try {
+        await this.$api['ratings-labels'].editLabel({
           id: this.labelId,
           color: this.label.color,
           name: this.label.name,
           ratingId: this.ratingId,
-        })
-        .then(() => {
-          this.success = 'Ярлык отредактирован';
-        })
-        .catch((errors) => {
-          this.setErrors(errors);
-        })
-        .finally(() => {
-          this.isSending = false;
         });
+
+        this.$utils.showMessageSuccess({
+          message: `${this.$t('Ярлык изменён')}: "${this.label.name.ru}"`,
+        });
+
+        this.$emit('update:label', { event: 'edit' });
+      } catch (errors: any) {
+        if (errors.server) {
+          this.$utils.showMessageError({ message: errors.server });
+          return;
+        }
+        this.$utils.setErrors(this.errors, errors.errors);
+      } finally {
+        this.isLoading = false;
+      }
     },
 
-    // Удалить ярлык
+    // Delete label
     async deleteLabel() {
-      if (this.isSending) return;
-      this.clearMessages();
-      this.isSending = true;
-      this.$store
-        .dispatch('page-rating/deleteLabel', {
+      await this.$utils.showDialogConfirmDelete({ message: this.label.name.ru });
+      if (this.isLoading) return;
+      this.isLoading = true;
+
+      try {
+        await this.$api['ratings-labels'].deleteLabel({
           id: this.labelId,
           ratingId: this.ratingId,
-        })
-        .then(() => {
-          this.success = 'Ярлык удалён';
-        })
-        .catch((errors) => {
-          this.setErrors(errors);
-        })
-        .finally(() => {
-          this.isSending = false;
         });
+
+        this.$utils.showMessageSuccess({
+          message: `${this.$t('Ярлык удалён')}: "${this.label.name.ru}"`,
+        });
+
+        this.$emit('update:label', { event: 'delete' });
+        this.$emit('closed');
+      } catch (errors: any) {
+        if (errors.server) {
+          this.$utils.showMessageError({ message: errors.server });
+        }
+      } finally {
+        this.isLoading = false;
+      }
     },
   },
-};
+});
 </script>
 
 <style lang="sass" scoped>

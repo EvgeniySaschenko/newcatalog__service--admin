@@ -2,70 +2,112 @@
 include /src/mixins.pug
 
 // Добавить ярлык
-app-dialog-label-rating(
-  v-if='isShowDialogLabelAdd',
+dialog-label-rating(
+  v-if='isShowDialogAdd',
   actionType='create',
-  :ratingId='rating.id',
-  title='Добавить ярлык',
-  @closed='isShowDialogLabelAdd = false',
-  @send-form='sendForm($event)'
+  :ratingId='ratingId',
+  :title='$t("Добавить ярлык")',
+  @closed='toggleDialogLabelAdd(false)',
+  @update:label='getLabels(ratingId)'
 )
-el-button(type='primary')(@click='isShowDialogLabelAdd = true') Добавить ярлык
+el-button(type='primary')(@click='toggleDialogLabelAdd(true)') {{ $t("Добавить ярлык") }}
 
 // Редактировать ярлык
-app-dialog-label-rating(
-  v-if='labelCurrent',
+dialog-label-rating(
+  v-if='isShowDialogEdit',
   actionType='edit',
   :color='labelCurrent.color',
   :name='labelCurrent.name',
   :labelId='labelCurrent.id',
-  :ratingId='rating.id',
-  title='Редактировать ярлык',
-  @closed='labelCurrent = null',
-  @send-form='sendForm($event)'
+  :ratingId='ratingId',
+  :title='$t("Редактировать ярлык")',
+  @closed='toggleDialogLabelEdit(false, {})',
+  @update:label='getLabels(ratingId)'
 )
 
 // Список ярлыков
-el-table(:data='rating.labels')
-  el-table-column(label='Ярлык')
+el-table(:data='labels')
+  el-table-column(:label='$t("Ярлык")')
     template(#default='scope')
       .label-rating(:style='{ backgroundColor: scope.row.color }') {{ scope.row.name.ua }}
       .label-rating(:style='{ backgroundColor: scope.row.color }') {{ scope.row.name.ru }}
-  el-table-column(label='Редактировать', fixed='right', width='180')
+  el-table-column(:label='$t("Редактировать")', fixed='right', width='180')
     template(#default='scope')
-      el-button(type='primary', @click='labelCurrent = { ...scope.row }', size='small') Редактировать
+      el-button(
+        type='primary',
+        @click='toggleDialogLabelEdit(true, { ...scope.row })',
+        size='small'
+      ) {{ $t("Редактировать") }}
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue';
+import { LabelType } from '@/types';
 import DialogLabelRating from './dialog-label-rating.vue';
 
-export default {
-  watch: {
-    rating: {
-      deep: true,
-      immediate: true,
-      handler() {
-        // this.createState();
-      },
-    },
-  },
-  computed: {
-    rating() {
-      return this.$store.state['page-rating'];
+export default defineComponent({
+  props: {
+    // Rating id
+    ratingId: {
+      type: Number,
+      default: null,
     },
   },
   data() {
     return {
-      // Показать диалоговое окно для добавления ярлыка
-      isShowDialogLabelAdd: false,
+      // Show dialog for add label
+      isShowDialogAdd: false,
+      // Show dialog for edit label
+      isShowDialogEdit: false,
       // Текущий ярлык
-      labelCurrent: null,
+      labelCurrent: {} as LabelType | object,
+      // Loading data
+      isLoading: false,
+      // List rating labels
+      labels: [] as LabelType[],
     };
   },
   components: {
-    AppDialogLabelRating: DialogLabelRating,
+    DialogLabelRating,
   },
-};
+  mounted() {
+    this.init();
+  },
+  methods: {
+    // Init
+    async init() {
+      if (this.ratingId) {
+        await this.getLabels(this.ratingId);
+      }
+    },
+
+    // Get data labels
+    async getLabels(ratingId: number) {
+      if (this.isLoading) return;
+      this.isLoading = true;
+      try {
+        this.labels = await this.$api['ratings-labels'].getLabels({ ratingId });
+      } catch (errors: any) {
+        if (errors.server) {
+          this.$utils.showMessageError({ message: errors.server });
+        }
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
+    // Toggle dialog for label add
+    toggleDialogLabelAdd(isShow: boolean) {
+      this.isShowDialogAdd = isShow;
+    },
+
+    // Toggle dialog for label edit
+    toggleDialogLabelEdit(isShow: boolean, label: LabelType | object) {
+      this.isShowDialogEdit = isShow;
+      this.labelCurrent = label;
+    },
+  },
+});
 </script>
 
 <style lang="sass" scoped></style>

@@ -3,13 +3,13 @@ include /src/mixins.pug
 
 +b.page--rating.container
   +e.H1.title {{ ratingId ? $t("Редактировать рейтинг") : $t("Создать новый рейтинг") }}
-  el-tabs(v-model='tabActive', @tab-click='setTabUrlParam()')
-    el-tab-pane(:label='$t("Основные настройки")', name='main')
-      tab-main
+  el-tabs(v-model='tabActive', @tab-change='setTabUrlParam()')
+    el-tab-pane(:label='$t("Основные настройки")', name='main', :lazy='true')
+      tab-main(:ratingId='ratingId')
     //- el-tab-pane(:label='$t("Контент")', name='content', :disabled='!ratingId')
     //-   tab-content
-    //- el-tab-pane(:label='$t("Ярлыки")', name='labels', :disabled='!ratingId')
-    //-   tab-labels
+    el-tab-pane(:label='$t("Ярлыки")', name='labels', :disabled='!ratingId', :lazy='true')
+      tab-labels(:ratingId='ratingId')
     //- el-tab-pane(:label='$t("Изображения")', name='images', :disabled='!ratingId')
       tab-images(v-if='tabActive == "images"')
 </template>
@@ -47,7 +47,7 @@ export default defineComponent({
   computed: {
     ratingId() {
       let { ratingId } = this.$route.params;
-      return ratingId === 'create' ? null : ratingId;
+      return ratingId === 'create' ? null : +ratingId;
     },
   },
 

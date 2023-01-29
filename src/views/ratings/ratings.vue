@@ -57,9 +57,7 @@ export default defineComponent({
           return;
         }
       } finally {
-        setTimeout(() => {
-          this.isLoading = false;
-        }, 200);
+        this.isLoading = false;
       }
     },
   },

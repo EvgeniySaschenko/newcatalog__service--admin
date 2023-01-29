@@ -93,12 +93,19 @@ let ratingInit = (): RatingType => {
 };
 
 export default defineComponent({
+  props: {
+    // Rating id
+    ratingId: {
+      type: Number,
+      default: null,
+    },
+  },
   data() {
     return {
       // Rating data
       rating: ratingInit() as RatingType,
       // id sections - needed because the component works with an array, and an object is sent to the server (field "rating")
-      sectionsIds: [],
+      sectionsIds: [] as number[],
       // List rating types
       typesRating: [] as { type: RatingTypeType; name: string }[],
       // List display types
@@ -145,13 +152,12 @@ export default defineComponent({
       ];
 
       // Sections
-      let { ratingId } = this.$route.params;
       let store = useStoreSections();
       this.sections = store.$state.items.filter((el) => el.isHiden === false);
 
       // Data
-      if (ratingId !== 'create') {
-        await this.getRating(Number(ratingId));
+      if (this.ratingId) {
+        await this.getRating(Number(this.ratingId));
       }
     },
 
@@ -161,7 +167,7 @@ export default defineComponent({
       this.isLoading = true;
       try {
         this.rating = await this.$api.ratings.getRating({ ratingId });
-        this.sectionsIds = Object.values(this.rating.sectionsIds as []);
+        this.sectionsIds = Object.values(this.rating.sectionsIds) as number[];
       } catch (errors: any) {
         if (errors.server) {
           this.$utils.showMessageError({ message: errors.server });
@@ -238,9 +244,7 @@ export default defineComponent({
         }
         this.$utils.setErrors(this.errors, errors.errors);
       } finally {
-        setTimeout(() => {
-          this.isLoading = false;
-        }, 1000);
+        this.isLoading = false;
       }
     },
   },
