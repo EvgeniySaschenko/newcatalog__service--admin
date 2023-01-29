@@ -20,29 +20,53 @@ export default {
   },
 
   // Create rating
-  createRating: async (
-    rating: Pick<
-      RatingType,
-      'name' | 'descr' | 'sectionsIds' | 'typeSort' | 'typeDisplay' | 'typeRating'
-    >
-  ) => {
+  createRating: async ({
+    name,
+    descr,
+    isHiden,
+    sectionsIds,
+    typeSort,
+    typeDisplay,
+    typeRating,
+  }: RatingType) => {
     let result = await $fetch(`/api/ratings`, {
       method: 'POST',
-      body: JSON.stringify(rating),
+      body: JSON.stringify({
+        name,
+        descr,
+        isHiden,
+        sectionsIds,
+        typeSort,
+        typeDisplay,
+        typeRating,
+      }),
     });
     return await result.json();
   },
 
   // Edit rating
-  editRating: async (
-    rating: Pick<
-      RatingType,
-      'id' | 'name' | 'descr' | 'sectionsIds' | 'typeSort' | 'typeDisplay' | 'typeRating'
-    >
-  ) => {
+  editRating: async ({
+    id,
+    name,
+    descr,
+    isHiden,
+    sectionsIds,
+    typeSort,
+    typeDisplay,
+    typeRating,
+  }: RatingType) => {
     let result = await $fetch(`/api/ratings`, {
       method: 'PUT',
-      body: JSON.stringify(rating),
+      body: JSON.stringify({
+        id,
+        name,
+        descr,
+        isHiden,
+        sectionsIds,
+        typeSort,
+        typeDisplay,
+        typeRating,
+      }),
     });
     return await result.json();
   },

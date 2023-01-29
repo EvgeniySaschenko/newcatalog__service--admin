@@ -28,13 +28,14 @@ export type RatingDisplayType = 'tile' | 'inline';
 
 export type RatingType = {
   id: number;
+  isHiden: boolean;
   descr: LangType;
   name: LangType;
   sectionsIds: object;
   typeDisplay: RatingDisplayType;
   typeRating: RatingTypeType;
   typeSort: RatingSortType;
-  dateCreate: Date;
+  dateCreate?: Date;
 };
 
 export type RatingItemType = {
