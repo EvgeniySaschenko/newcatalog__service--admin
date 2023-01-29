@@ -1,90 +1,114 @@
 <template lang="pug">
 include /src/mixins.pug
 
-el-form(v-loading='isSending', label-position='left', label-width='150px')
+el-form(v-loading='isLoading', label-position='left', label-width='150px')
   // Разделы 
-  el-form-item(:error='errors.sectionsIds', label='Разделы', required)
+  el-form-item(:error='errors.sectionsIds', :label='$t("Разделы")', required)
     el-select(
       multiple,
       filterable,
       allow-create,
       :multiple-limit='sectionsIdsLimit',
       default-first-option,
-      v-model='state.sectionsIds',
-      placeholder='Разделы'
+      v-model='sectionsIds',
+      :placeholder='$t("Разделы")'
     )
       el-option(v-for='item in sections', :key='item.id', :label='item.name.ua', :value='item.id')
   // Тип рейтинга
-  el-form-item(label='Тип рейтинга')
-    el-radio-group(v-model='state.typeRating')
-      el-radio-button(label='site', size='small') Сайты
+  el-form-item(:label='$t("Тип рейтинга")')
+    el-radio-group(v-model='rating.typeRating')
+      el-radio-button(v-for='item in typesRating', :label='item.type', size='small') {{ item.name }}
+
   // Отображение
-  el-form-item(label='Отображение')
-    el-radio-group(v-model='state.typeDisplay')
-      el-radio-button(label='tile', size='small') Плитка
-      el-radio-button(label='inline', size='small') Линия
+  el-form-item(:label='$t("Отображение")')
+    el-radio-group(v-model='rating.typeDisplay')
+      el-radio-button(v-for='item in typesDisplay', :label='item.type', size='small') {{ item.name }}
+
   // Упорядочить контент по
-  el-form-item(label='Упорядочить контент по:')
-    el-radio-group(v-model='state.typeSort')
-      el-radio-button(label='alexa', size='small') Alexa Rank
-      el-radio-button(label='click', size='small') Кликам на ссылку
+  el-form-item(:label='$t("Упорядочить контент по:")')
+    el-radio-group(v-model='rating.typeSort')
+      el-radio-button(v-for='item in typesSort', :label='item.type', size='small') {{ item.name }}
+
   // Название
-  el-form-item(:error='errors.name', label='Название ua', required)
-    el-input(v-model='state.name.ua', placeholder='Название', :maxlength='nameMaxLength') 
-  el-form-item(:error='errors.name', label='Название ru', required)
-    el-input(v-model='state.name.ru', placeholder='Название', :maxlength='nameMaxLength') 
+  el-form-item(:error='errors.name', :label='$t("Название ua")', required)
+    el-input(v-model='rating.name.ua', :placeholder='$t("Название")', :maxlength='nameMaxLength') 
+  el-form-item(:error='errors.name', :label='$t("Название ru")', required)
+    el-input(v-model='rating.name.ru', :placeholder='$t("Название")', :maxlength='nameMaxLength') 
   // Описание
-  el-form-item(:error='errors.descr', label='Описание ua')
+  el-form-item(:error='errors.descr', :label='$t("Описание ua")')
     el-input(
       show-word-limit,
-      v-model='state.descr.ua',
-      placeholder='Описание',
+      v-model='rating.descr.ua',
+      :placeholder='$t("Описание")',
       type='textarea',
       :maxlength='descrMaxLength'
     )
-  el-form-item(:error='errors.descr', label='Описание ru')
+  el-form-item(:error='errors.descr', :label='$t("Описание ru")')
     el-input(
       show-word-limit,
-      v-model='state.descr.ru',
-      placeholder='Описание',
+      v-model='rating.descr.ru',
+      :placeholder='$t("Описание")',
       type='textarea',
       :maxlength='descrMaxLength'
     )
 
-  el-form-item(label='Скрыть')
-    el-checkbox(v-model='state.isHiden')
+  el-form-item(:label='$t("Скрыть")')
+    el-checkbox(v-model='rating.isHiden')
 
-  el-alert(v-if='success', :title='success', type='success')
-  el-alert(v-if='errors.server', :title='errors.server', type='error')
-
-  el-button(v-if='!rating.id', type='primary', @click='сreateRating()') Создать рейтинг
-  el-button(v-else, type='primary', @click='editRating()') Редактировать рейтинг
+  el-button(v-if='!rating.id', type='primary', @click='createRating()') {{ $t("Создать рейтинг") }}
+  el-button(v-else, type='primary', @click='editRating()') {{ $t("Редактировать рейтинг") }}
 </template>
 
-<script>
-import _lib from '@/plugins/_lib';
+<script lang="ts">
+import {
+  RatingType,
+  LabelType,
+  SectionType,
+  RatingTypeType,
+  RatingDisplayType,
+  RatingSortType,
+  LangInit,
+} from '@/types';
+import { defineComponent } from 'vue';
+import useStoreSections from '@/pinia/sections';
 
-export default {
+let ratingInit = (): RatingType => {
+  return {
+    id: 0,
+    // Selected sections
+    sectionsIds: {},
+    // Name rating
+    name: LangInit(),
+    // Descriptin rating
+    descr: LangInit(),
+    // Hidden rating
+    isHiden: true,
+    // Тип рейтинга
+    typeRating: 'site' as RatingTypeType,
+    // Отображать "плиткой" / "списком"
+    typeDisplay: 'tile' as RatingDisplayType,
+    // Порядок вывода елементов рейтинга
+    typeSort: 'alexa' as RatingSortType,
+  };
+};
+
+export default defineComponent({
   data() {
     return {
-      stateDefault: () => ({
-        id: null,
-        // Выбранные разделы
-        sectionsIds: [],
-        // Название рейтинга
-        name: {},
-        // Описание рейтинга
-        descr: {},
-        // Скрыть рейтинг
-        isHiden: true,
-        // Тип рейтинга
-        typeRating: 'site',
-        // Отображать "плиткой" / "списком"
-        typeDisplay: 'tile',
-        // Порядок вывода елементов рейтинга
-        typeSort: 'alexa',
-      }),
-      state: {},
+      // Rating data
+      rating: ratingInit() as RatingType,
+      // id sections - needed because the component works with an array, and an object is sent to the server (field "rating")
+      sectionsIds: [],
+      // List rating types
+      typesRating: [] as { type: RatingTypeType; name: string }[],
+      // List display types
+      typesDisplay: [] as { type: RatingDisplayType; name: string }[],
+      // List sort types
+      typesSort: [] as { type: RatingSortType; name: string }[],
+      // labels
+      labels: [] as LabelType[],
+      // Sections
+      sections: [] as SectionType[],
       // Максимьное количество разделов
       sectionsIdsLimit: 3,
       // Максимальное количество символов
@@ -93,8 +117,8 @@ export default {
       nameMinLength: 15,
       // Максимальная длина описания
       descrMaxLength: 1000,
-      // Указывает на то что данные отправляются
-      isSending: false,
+      // isLoading
+      isLoading: false,
       // Сообщения
       errors: {
         name: '',
@@ -102,111 +126,125 @@ export default {
         server: '',
         sectionsIds: '',
       },
-      success: '',
     };
   },
-  computed: {
-    // Разделы сайта
-    sections() {
-      let { items } = this.$store.state.sections;
-      return items.filter((el) => el.isHiden === false);
-    },
-
-    // Рейтинг
-    rating() {
-      return this.$store.state['page-rating'];
-    },
-  },
-  watch: {
-    rating: {
-      immediate: true,
-      deep: true,
-      handler() {
-        let { id } = this.rating;
-        let stateDefault = this.stateDefault();
-        if (id) {
-          // Если рейтинг существует
-          for (let item in stateDefault) {
-            if (item === 'sectionsIds') {
-              this.state[item] = _lib.transformObjToArray(this.rating[item]);
-            } else {
-              this.state[item] = this.rating[item];
-            }
-          }
-        } else {
-          // Создание нового рейтинга
-          this.state = stateDefault;
-        }
-      },
-    },
+  mounted() {
+    this.init();
   },
   methods: {
-    // Очистить ошибки
-    clearMessages() {
-      for (let item in this.errors) {
-        this.errors[item] = '';
+    async init() {
+      // Types params rating
+      this.typesDisplay = [
+        { type: 'tile', name: this.$t('Плитка') },
+        { type: 'inline', name: this.$t('Линия') },
+      ];
+      this.typesRating = [{ type: 'site', name: this.$t('Сайты') }];
+      this.typesSort = [
+        { type: 'alexa', name: this.$t('Alexa Rank') },
+        { type: 'click', name: this.$t('Клики') },
+      ];
+
+      // Sections
+      let { ratingId } = this.$route.params;
+      let store = useStoreSections();
+      this.sections = store.$state.items.filter((el) => el.isHiden === false);
+
+      // Data
+      if (ratingId !== 'create') {
+        await this.getRating(Number(ratingId));
       }
-      this.success = '';
     },
 
-    // Добавить сообщения об ошибке
-    setErrors(errors) {
-      // Если это ошибка, а не объект
-      if (errors instanceof Error) {
-        this.errors.server = 'Ошибка сервера';
-        return;
-      }
-
-      for (let item in errors) {
-        this.errors[item] = errors[item];
+    // Get data rating
+    async getRating(ratingId: number) {
+      if (this.isLoading) return;
+      this.isLoading = true;
+      try {
+        this.rating = await this.$api.ratings.getRating({ ratingId });
+        this.sectionsIds = Object.values(this.rating.sectionsIds as []);
+      } catch (errors: any) {
+        if (errors.server) {
+          this.$utils.showMessageError({ message: errors.server });
+        }
+      } finally {
+        setTimeout(() => {
+          this.isLoading = false;
+        }, 1000);
       }
     },
 
-    // Перейти на страницу рейтига после создания
-    goToPageRating(ratingId) {
-      this.$router.push({ path: `/ratings/${ratingId}` });
-    },
+    // Create rating
+    async createRating() {
+      if (this.isLoading) return;
+      this.isLoading = true;
+      this.$utils.clearErrors(this.errors, this.errors);
+      let ratingIdNew = null;
 
-    // Создать новый рейтинг
-    async сreateRating() {
-      if (this.isSending) return;
-      this.clearMessages();
-      this.isSending = true;
-      let data = { ...this.state, sectionsIds: _lib.transformArrToObject(this.state.sectionsIds) };
-      this.$store
-        .dispatch('page-rating/createRating', data)
-        .then(({ id }) => {
-          this.success = 'Рейтинг создан';
-          this.goToPageRating(id);
-        })
-        .catch((errors) => {
-          this.setErrors(errors);
-        })
-        .finally(() => {
-          this.isSending = false;
+      try {
+        let sectionsIds = this.sectionsIds.reduce((a, v) => ({ ...a, [v]: v }), {});
+        let { id, name } = await this.$api.ratings.createRating({
+          ...this.rating,
+          sectionsIds,
         });
+
+        this.$utils.showMessageSuccess({
+          message: `${this.$t('Рейтинг создан')}: "${name.ru}"`,
+        });
+
+        ratingIdNew = id;
+      } catch (errors: any) {
+        if (errors.server) {
+          this.$utils.showMessageError({ message: errors.server });
+          return;
+        }
+        this.$utils.setErrors(this.errors, errors.errors);
+      } finally {
+        this.isLoading = false;
+      }
+
+      // If success (try)
+      if (ratingIdNew) {
+        try {
+          await this.getRating(ratingIdNew);
+          // Go to the rating created page
+          this.$router.push({ path: `/ratings/${ratingIdNew}` });
+        } catch (error) {
+          // Go to the list ratings created page
+          this.$router.push({ path: `/ratings` });
+        }
+      }
     },
 
-    // Редактировать рейтинг
+    // Edit rating
     async editRating() {
-      if (this.isSending) return;
-      this.clearMessages();
-      this.isSending = true;
-      let data = { ...this.state, sectionsIds: _lib.transformArrToObject(this.state.sectionsIds) };
-      this.$store
-        .dispatch('page-rating/editRating', data)
-        .then(() => {
-          this.success = 'Изменения внесены';
-        })
-        .catch((errors) => {
-          this.setErrors(errors);
-        })
-        .finally(() => {
-          this.isSending = false;
+      if (this.isLoading) return;
+      this.isLoading = true;
+      this.$utils.clearErrors(this.errors, this.errors);
+
+      try {
+        let sectionsIds = this.sectionsIds.reduce((a, v) => ({ ...a, [v]: v }), {});
+        await this.$api.ratings.editRating({
+          ...this.rating,
+          sectionsIds,
         });
+
+        this.$utils.showMessageSuccess({
+          message: `${this.$t('Рейтинг изменён')}: "${this.rating.name.ru}"`,
+        });
+      } catch (errors: any) {
+        if (errors.server) {
+          this.$utils.showMessageError({ message: errors.server });
+          return;
+        }
+        this.$utils.setErrors(this.errors, errors.errors);
+      } finally {
+        setTimeout(() => {
+          this.isLoading = false;
+        }, 1000);
+      }
     },
   },
-};
+});
 </script>
 
 <style lang="sass" scoped></style>

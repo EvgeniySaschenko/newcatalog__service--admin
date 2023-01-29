@@ -16,7 +16,7 @@ let routes = [
     component: () => import('@/views/sections/sections.vue'),
   },
   {
-    path: '/ratings/:id',
+    path: '/ratings/:ratingId',
     name: 'Редактировать рейтинг',
     component: () => import('@/views/rating/rating.vue'),
   },
