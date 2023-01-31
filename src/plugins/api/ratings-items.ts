@@ -3,13 +3,13 @@ import { RatingItemType, RatingSortType } from '@/types';
 
 export default {
   // Get rating items (getRatingItems)
-  getItems: async <T extends { ratingId: number; typeSort: RatingSortType }>({
-    ratingId,
-    typeSort,
-  }: T) => {
-    let result = await $fetch(`/api/ratings-items/rating/${ratingId}?typeSort=${typeSort}`, {
-      method: 'GET',
-    });
+  getItems: async (rating: { ratingId: number; typeSort: RatingSortType }) => {
+    let result = await $fetch(
+      `/api/ratings-items/rating/${rating.ratingId}?typeSort=${rating.typeSort}`,
+      {
+        method: 'GET',
+      }
+    );
     return await result.json();
   },
 
@@ -22,7 +22,7 @@ export default {
     priority,
     ratingId,
     url,
-  }: Omit<RatingItemType, 'id'>) => {
+  }: Omit<RatingItemType, 'id' | 'img'>) => {
     let result = await $fetch(`/api/ratings-items`, {
       method: 'POST',
       body: JSON.stringify({
@@ -52,6 +52,7 @@ export default {
     let result = await $fetch(`/api/ratings-items/${id}`, {
       method: 'PUT',
       body: JSON.stringify({
+        id,
         isCreatedScreen,
         isHiden,
         labelsIds,
@@ -65,8 +66,8 @@ export default {
   },
 
   // Delete item for rating
-  deleteItem: async (ratingId: number) => {
-    let result = await $fetch(`/api/ratings-items/${ratingId}`, {
+  deleteItem: async (rating: { ratingItemId: number }) => {
+    let result = await $fetch(`/api/ratings-items/${rating.ratingItemId}`, {
       method: 'DELETE',
     });
     return await result.json();

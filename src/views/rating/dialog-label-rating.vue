@@ -1,7 +1,7 @@
 <template lang="pug">
 include /src/mixins.pug
 
-el-dialog(:title='title', v-model='isShow')
+el-dialog(:title='title', :model-value='true', @closed='$emit("dialog:closed")')
   +b.EL-FORM.dialog-label-rating(label-position='top', v-loading='isLoading')
     el-form-item(:error='errors.name', :label='$t("Название ua")')
       el-input(:placeholder='$t("Текст ярлыка")', v-model='label.name.ua', required)
@@ -21,9 +21,8 @@ el-dialog(:title='title', v-model='isShow')
 
   template(#footer)
     el-button(v-if='actionType == "edit"', type='danger', @click='deleteLabel()') {{ $t("Удалить") }}
-    el-button(type='primary', @click='isShow = false') {{ $t("Закрыть") }}
-    el-button(v-if='actionType == "edit"', type='success', @click='editLabel()') {{ $t("Редактировать") }}
-    el-button(v-if='actionType == "create"', type='success', @click='createLabel()') {{ $t("Создать") }}
+    el-button(v-if='actionType == "edit"', type='primary', @click='editLabel()') {{ $t("Редактировать") }}
+    el-button(v-if='actionType == "create"', type='primary', @click='createLabel()') {{ $t("Создать") }}
 </template>
 
 <script lang="ts">
@@ -31,7 +30,7 @@ import { LangType, LangInit } from '@/types';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
-  emits: ['update:label', 'closed'],
+  emits: ['label:update', 'dialog:closed'],
   props: {
     // Label name
     name: {
@@ -68,22 +67,20 @@ export default defineComponent({
   },
   data() {
     return {
+      // Errors
       errors: {
         server: '',
         name: '',
         color: '',
       },
-      success: '',
-      // Показать модальное окно
-      isShow: true,
+      // Loading data
       isLoading: false,
+      // Rating label
       label: {
-        // Название
         name: LangInit(),
-        // Цвет
         color: '',
       },
-      // Предлагаемые цвета
+      // Default colors
       colorsDefault: [
         '#7952b3',
         '#E94B3C',
@@ -132,7 +129,7 @@ export default defineComponent({
           message: `${this.$t('Ярлык создан')}: "${name.ru}"`,
         });
 
-        this.$emit('update:label', { event: 'add' });
+        this.$emit('label:update', { event: 'create' });
       } catch (errors: any) {
         if (errors.server) {
           this.$utils.showMessageError({ message: errors.server });
@@ -162,7 +159,7 @@ export default defineComponent({
           message: `${this.$t('Ярлык изменён')}: "${this.label.name.ru}"`,
         });
 
-        this.$emit('update:label', { event: 'edit' });
+        this.$emit('label:update', { event: 'edit' });
       } catch (errors: any) {
         if (errors.server) {
           this.$utils.showMessageError({ message: errors.server });
@@ -190,8 +187,8 @@ export default defineComponent({
           message: `${this.$t('Ярлык удалён')}: "${this.label.name.ru}"`,
         });
 
-        this.$emit('update:label', { event: 'delete' });
-        this.$emit('closed');
+        this.$emit('label:update', { event: 'delete' });
+        this.$emit('dialog:closed');
       } catch (errors: any) {
         if (errors.server) {
           this.$utils.showMessageError({ message: errors.server });

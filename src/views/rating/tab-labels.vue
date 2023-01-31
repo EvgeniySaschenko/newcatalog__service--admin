@@ -7,8 +7,8 @@ dialog-label-rating(
   actionType='create',
   :ratingId='ratingId',
   :title='$t("Добавить ярлык")',
-  @closed='toggleDialogLabelAdd(false)',
-  @update:label='getLabels(ratingId)'
+  @dialog:closed='toggleDialogLabelAdd(false)',
+  @label:update='getLabels(ratingId)'
 )
 el-button(type='primary')(@click='toggleDialogLabelAdd(true)') {{ $t("Добавить ярлык") }}
 
@@ -21,8 +21,8 @@ dialog-label-rating(
   :labelId='labelCurrent.id',
   :ratingId='ratingId',
   :title='$t("Редактировать ярлык")',
-  @closed='toggleDialogLabelEdit(false, {})',
-  @update:label='getLabels(ratingId)'
+  @dialog:closed='toggleDialogLabelEdit(false, {})',
+  @label:update='getLabels(ratingId)'
 )
 
 // Список ярлыков

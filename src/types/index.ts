@@ -26,6 +26,12 @@ export type RatingTypeType = 'site';
 
 export type RatingDisplayType = 'tile' | 'inline';
 
+export type LogoType = {
+  id: number;
+  img: string;
+  color: string;
+};
+
 export type RatingType = {
   id: number;
   isHiden: boolean;
@@ -44,6 +50,7 @@ export type RatingItemType = {
   isHiden: boolean;
   labelsIds: object;
   name: LangType;
+  img: LogoType;
   priority: number;
   ratingId: number;
   url: string;

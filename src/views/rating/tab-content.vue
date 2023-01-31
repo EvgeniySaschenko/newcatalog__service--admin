@@ -1,219 +1,165 @@
 <template lang="pug">
 include /src/mixins.pug
 
-el-alert(v-if='success', :title='success', type='success')
-el-alert(v-if='errors.server', :title='errors.server', type='error')
-
 // Список сайтов
 +b.sites-list
   +e.panel-top
     +e.EL-BUTTON.btn-add-item(
-      v-if='rating.typeRating == "site"',
       type='primary',
-      @click='itemCurrent = {}',
-      :loading='isSending'
-    ) Добавить
-
-    +e.EL-BUTTON.btn-sennd-labels(
-      :type='countLabelsItemsChanged ? "success" : "info"',
-      @click='editRatingLabels()',
-      :loading='isSending'
-    ) Сохранить изменённые ярлыки
+      @click='toggleDialogRatingItem(true, {})',
+      :loading='isLoading'
+    ) {{ $t("Добавить") }}
 
   +e.list
-    +e.item(v-for='item of rating.items')
+    +e.item(v-for='item of ratingItems')
       +e.row-top
         +e.box-img(:style='{ backgroundColor: item.img.color }')
-          +e.IMG.img.sites-list__img(:src='item.img.url', :alt='item.name.ua')
+          +e.IMG.img.sites-list__img(:src='item.img.url', :alt='item.name.ru')
         +e.name 
-          +e.name-text {{ item.name.ua }}
+          +e.name-text {{ item.name.ru }}
         +e.A.link(:href='item.url', target='_blank') {{ getHost(item.url) }}
         div {{ item.alexaRank }}
         br
         div {{ (item.whois.creationDate || item.whois.created || (item.whois.createdOn || "").slice(7, 11) || "").slice(0, 4) }}
 
-        +e.EL-SELECT.labels(
-          multiple,
-          :multiple-limit='labelsIdsLimit',
-          v-model='stateItems[item.id].labelsIds',
-          placeholder='Ярлыки',
-          @change='createLabelsChangeList($event, item.id)'
-        )
-          el-option(
-            v-for='item in rating.labels',
-            :key='item.id',
-            :label='item.name.ua',
-            :value='item.id'
-          )
+        +e.labels
+          template(v-for='label in labels') 
+            .label-rating(
+              v-if='item.labelsIds[label.id]',
+              :style='{ backgroundColor: label.color }'
+            ) {{ label.name.ru }}
 
       +e.row-bottom
         +e.status
-          +e.EL-TAG.status-item(v-if='item.isHiden', effect='dark', size='small', type='info') Скрыт
-
-        +e.EL-BUTTON.btn--delete(
-          type='danger',
-          @click='deleteRatingItem(item.id)',
+          +e.EL-TAG.status-item(v-if='item.isHiden', effect='dark', size='small', type='info') {{ $t("Скрыт") }}
+        +e.EL-BUTTON.btn--edit(
+          type='primary',
+          @click='toggleDialogRatingItem(true, item)',
           size='small'
-        ) Удалить
-        +e.EL-BUTTON.btn--edit(type='primary', @click='itemCurrent = item', size='small') Редактировать
+        ) {{ $t("Редактировать") }}
 
 // Диалоговое окно для редактирования сайта
 dialog-rating-item(
-  v-if='itemCurrent',
+  v-if='isShowDialogRatingItem',
+  :labels='labels',
+  :ratingId='ratingId',
   :itemCurrent='itemCurrent',
   :labelsIdsLimit='labelsIdsLimit',
-  @closed='itemCurrent = null'
+  @rating-item:update='getRatingItems()',
+  @dialog:closed='toggleDialogRatingItem(false, {})'
 )
-
-dialog-confirm-delete(ref='dialog-confirm')
 </template>
 
-<script>
-import DialogRatingItem from './dialog-rating-item.vue';
-import DialogConfirmDelete from '@/components/dialog-confirm-delete/dialog-confirm-delete.vue';
-import _lib from '@/plugins/_lib';
+<script lang="ts">
+import { defineComponent } from 'vue';
+import { RatingItemType, LabelType, RatingType } from '@/types';
 
-export default {
+import DialogRatingItem from './dialog-rating-item.vue';
+
+export default defineComponent({
+  mounted() {
+    this.init();
+  },
   data() {
     return {
-      // Текущий елемент для редактирования
-      itemCurrent: null,
-      // Состояние Items
-      stateItems: {},
-      // Максимьное количество ярлыков
+      isShowDialogRatingItem: false,
+      // Rating main data
+      rating: {} as RatingType,
+      // Labels this rating
+      labels: [] as LabelType[],
+      // Curent element from edit
+      itemCurrent: {} as RatingItemType,
+      // Rating items
+      ratingItems: [] as RatingItemType[],
+      // Labels max quantity
       labelsIdsLimit: 5,
-      // Указывает на то что данные отправляются
-      isSending: false,
-      // Список изменённых ярлыков для изменённых items - чтобы массово сохранить
-      labelsChangedListByItem: {},
-      // Сообщение об ошибке / успехе
-      errors: {},
-      success: '',
+      // Loading data
+      isLoading: false,
+      // Errors messages
+      errors: {
+        server: '',
+      },
     };
+  },
+  props: {
+    // Rating id
+    ratingId: {
+      type: Number,
+      default: null,
+    },
   },
   components: {
     DialogRatingItem,
-    DialogConfirmDelete,
-  },
-  computed: {
-    // Указывает на то что ярлыки items изменялись
-    countLabelsItemsChanged() {
-      return Object.values(this.labelsChangedListByItem).length;
-    },
-    // Рейтинг
-    rating() {
-      return this.$store.state['page-rating'];
-    },
-  },
-  watch: {
-    rating: {
-      deep: true,
-      immediate: true,
-      handler() {
-        this.createState();
-      },
-    },
   },
   methods: {
-    // Создать состояние
-    createState() {
-      let { items } = this.rating;
-      if (items.length) {
-        this.labelsChangedListByItem = {};
-        for (let item of items) {
-          this.stateItems[item.id] = {
-            labelsIds: _lib.transformObjToArray(item.labelsIds),
-          };
+    // Init
+    async init() {
+      await this.getRating();
+      await this.getRatingLabels();
+      await this.getRatingItems();
+    },
+
+    // Get data rating
+    async getRating() {
+      if (this.isLoading) return;
+      this.isLoading = true;
+      try {
+        this.rating = await this.$api.ratings.getRating({ ratingId: this.ratingId });
+      } catch (errors: any) {
+        if (errors.server) {
+          this.$utils.showMessageError({ message: errors.server });
         }
+      } finally {
+        this.isLoading = false;
       }
     },
 
-    // Получить домен из Хост
-    getHost(url) {
+    // Get data rating labels
+    async getRatingLabels() {
+      if (this.isLoading) return;
+      this.isLoading = true;
+      try {
+        this.labels = await this.$api['ratings-labels'].getLabels({ ratingId: this.ratingId });
+      } catch (errors: any) {
+        if (errors.server) {
+          this.$utils.showMessageError({ message: errors.server });
+        }
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
+    // Get data rating items
+    async getRatingItems() {
+      if (this.isLoading) return;
+      this.isLoading = true;
+      try {
+        this.ratingItems = await this.$api['ratings-items'].getItems({
+          ratingId: this.ratingId,
+          typeSort: this.rating.typeSort,
+        });
+      } catch (errors: any) {
+        if (errors.server) {
+          this.$utils.showMessageError({ message: errors.server });
+        }
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
+    // Get host from url
+    getHost(url: string) {
       let { host } = new URL(url);
       return host;
     },
 
-    // Очистить сообщения
-    clearMessages() {
-      for (let item in this.errors) {
-        this.errors[item] = '';
-      }
-      this.success = '';
-    },
-
-    // Добавить сообщения об ошибке
-    setErrors(errors) {
-      // Если это ошибка, а не объект
-      if (errors instanceof Error) {
-        this.errors.server = 'Ошибка сервера';
-        return;
-      }
-
-      for (let item in errors) {
-        this.errors[item] = errors[item];
-      }
-    },
-
-    // Редактировать ярлыки рейтинга
-    async editRatingLabels() {
-      if (this.isSending) return;
-      this.clearMessages();
-      this.isSending = true;
-      let labelsItems = {};
-
-      for (let key in this.labelsChangedListByItem) {
-        labelsItems[key] = _lib.transformArrToObject(this.labelsChangedListByItem[key]);
-      }
-
-      await this.$store
-        .dispatch('page-rating/editRatingLabels', {
-          labelsItems,
-          ratingId: this.rating.id,
-          typeSort: this.rating.typeSort,
-        })
-        .then(() => {
-          this.success = 'Ярлыки изменены';
-          this.labelsChangedListByItem = {};
-        })
-        .catch((errors) => {
-          this.setErrors(errors);
-        })
-        .finally(() => {
-          this.isSending = false;
-        });
-    },
-
-    // Создать список изменённых ярлыков
-    createLabelsChangeList(labelsIds, itemId) {
-      this.labelsChangedListByItem[itemId] = labelsIds;
-    },
-
-    // Удалить елемент
-    async deleteRatingItem(id) {
-      let isDelete = await this.$refs['dialog-confirm'].show();
-      if (!isDelete) return;
-      if (this.isSending) return;
-      this.clearMessages();
-      this.isSending = true;
-      await this.$store
-        .dispatch('page-rating/deleteRatingItem', {
-          id,
-          ratingId: this.rating.id,
-          typeSort: this.rating.typeSort,
-        })
-        .then(() => {
-          this.success = 'Елемент удалён';
-        })
-        .catch((errors) => {
-          this.setErrors(errors);
-        })
-        .finally(() => {
-          this.isSending = false;
-        });
+    // Toggle dialog rating item
+    toggleDialogRatingItem(isShow: boolean, item: RatingItemType) {
+      this.isShowDialogRatingItem = isShow;
+      this.itemCurrent = item;
     },
   },
-};
+});
 </script>
 
 <style lang="sass" scoped>
