@@ -37,13 +37,13 @@ export default {
     return await result.json();
   },
 
-  // Поменять URL на беке ?????????????
+  // DELETE the
   // Edit all labels for rating
-  editLabels: async (labelsItems: LabelType[]) => {
-    let result = await $fetch(`/api/ratings-items/labels/`, {
-      method: 'PUT',
-      body: JSON.stringify(labelsItems),
-    });
-    return await result.json();
-  },
+  // editLabels: async (labelsItems: LabelType[]) => {
+  //   let result = await $fetch(`/api/ratings-items/labels/`, {
+  //     method: 'PUT',
+  //     body: JSON.stringify(labelsItems),
+  //   });
+  //   return await result.json();
+  // },
 };

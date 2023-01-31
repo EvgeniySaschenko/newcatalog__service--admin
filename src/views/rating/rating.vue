@@ -4,13 +4,13 @@ include /src/mixins.pug
 +b.page--rating.container
   +e.H1.title {{ ratingId ? $t("Редактировать рейтинг") : $t("Создать новый рейтинг") }}
   el-tabs(v-model='tabActive', @tab-change='setTabUrlParam()')
-    el-tab-pane(:label='$t("Основные настройки")', name='main', :lazy='true')
-      tab-main(:ratingId='ratingId')
-    //- el-tab-pane(:label='$t("Контент")', name='content', :disabled='!ratingId')
-    //-   tab-content
-    el-tab-pane(:label='$t("Ярлыки")', name='labels', :disabled='!ratingId', :lazy='true')
-      tab-labels(:ratingId='ratingId')
-    //- el-tab-pane(:label='$t("Изображения")', name='images', :disabled='!ratingId')
+    el-tab-pane(:label='$t("Основные настройки")', name='main')
+      tab-main(v-if='tabActive == "main"', :ratingId='ratingId')
+    el-tab-pane(:label='$t("Контент")', name='content', :disabled='!ratingId')
+      tab-content(v-if='tabActive == "content"', :ratingId='ratingId')
+    el-tab-pane(:label='$t("Ярлыки")', name='labels', :disabled='!ratingId')
+      tab-labels(v-if='tabActive == "labels"', :ratingId='ratingId')
+    //- el-tab-pane(v-if='tabActive == "images"', :label='$t("Изображения")', name='images', :disabled='!ratingId')
       tab-images(v-if='tabActive == "images"')
 </template>
 

@@ -2,203 +2,246 @@
 include /src/mixins.pug
 
 // Диалоговое окно для редактирования / создания элемента рейтинга
-el-dialog(v-model='isShow', :title='state.name.ua')
-  el-form(label-position='top', v-loading='isSending')
-    .dialog-site-edit__box-img(:style='{ backgroundColor: state.img.color }', v-if='!isAddItem')
-      img.dialog-site-edit__img(:src='state.img.url', :alt='state.name.ua')
-    // Ссылка
-    el-form-item(:error='errors.url', label='Ссылка', required)
-      el-input(placeholder='Ссылка', size='small', v-model='state.url', :disabled='!isAddItem')
-    // Название   
-    el-form-item(:error='errors.name', label='Название ua')
-      el-input(placeholder='Название', size='small', v-model='state.name.ua')
-    el-form-item(:error='errors.name', label='Название ru')
-      el-input(placeholder='Название', size='small', v-model='state.name.ru')
-    // Ярлыки  
-    el-form-item
-      el-select(
-        size='small',
-        multiple,
-        filterable,
-        allow-create,
-        :multiple-limit='labelsIdsLimit',
-        default-first-option,
-        v-model='state.labelsIds',
-        style='width: 100%',
-        placeholder='Ярлыки'
-      )
-        el-option(
-          v-for='item in rating.labels',
-          :key='item.id',
-          :label='item.name.ua',
-          :value='item.id'
+el-dialog.dialog-rating-item(
+  :title='state.id ? state.name.ru : $t("Создать элемент")',
+  :model-value='true',
+  @closed='$emit("dialog:closed")'
+)
+  el-tabs(v-model='tabActive', type='border-card')
+    // TAB - descr
+    el-tab-pane(:label='$t("Оисание")', name='descr')
+      el-form(label-position='top', v-loading='isLoading')
+        .dialog-rating-item__box-img(
+          :style='{ backgroundColor: state.img.color }',
+          v-if='!isAddItem'
         )
-    // Приоритет  
-    el-form-item
-      el-input-number(v-model='state.priority', size='small', placeholder='Приоритет')
-    el-form-item
-      el-checkbox(v-model='state.isHiden') Скрыть
-      el-checkbox(v-model='state.isCreatedScreen') Создать скриншот
-      +e.EL-BUTTON.btn--screenshot(
-        type='warning',
-        @click='createScreenshotRatingItem()',
-        size='small'
-      ) Создать скриншот
-      +e.EL-BUTTON.btn--screenshot(
-        type='warning',
-        @click='createScreenshotRatingItem()',
-        size='small'
-      ) Вернуть изображение на доработку
+          img.dialog-rating-item__img(:src='state.img.url', :alt='state.name.ru')
+        // Ссылка
+        el-form-item(:error='errors.url', :label='$t("Ссылка")', required)
+          el-input(
+            :placeholder='$t("Ссылка")',
+            size='small',
+            v-model='state.url',
+            :disabled='!isAddItem'
+          )
+        // Название   
+        el-form-item(:error='errors.name', :label='$t("Название ua")')
+          el-input(:placeholder='$t("Название")', size='small', v-model='state.name.ua')
+        el-form-item(:error='errors.name', :label='$t("Название ru")')
+          el-input(:placeholder='$t("Название")', size='small', v-model='state.name.ru')
+        // Ярлыки  
+        el-form-item
+          el-select(
+            size='small',
+            multiple,
+            filterable,
+            allow-create,
+            :multiple-limit='labelsIdsLimit',
+            default-first-option,
+            v-model='labelsIds',
+            style='width: 100%',
+            :placeholder='$t("Ярлыки")'
+          )
+            el-option(
+              v-for='item in labels',
+              :key='item.id',
+              :label='item.name.ru',
+              :value='item.id'
+            )
+        // Приоритет  
+        el-form-item
+          el-input-number(v-model='state.priority', size='small', :placeholder='$t("Приоритет")')
+        el-form-item
+          el-checkbox(v-model='state.isHiden') {{ $t("Скрыть") }}
 
-  el-upload.upload-demo(action='...')
-    el-button(type='primary', size='small') Загрузить изображение
-
-  el-alert(v-if='success', :title='success', type='success')
-  el-alert(v-if='errors.server', :title='errors.server', type='error')
+    // TAB - images
+    el-tab-pane(:label='$t("Изображение")', name='images')
+      el-form(label-position='top', v-loading='isLoading')
+        el-form-item
+          el-upload.upload-demo(action='...')
+            el-button(type='primary', size='small') {{ $t("Загрузить изображение") }}
+        el-form-item
+          +e.EL-BUTTON.btn--screenshot(
+            type='warning',
+            @click='createScreenshotRatingItem()',
+            size='small'
+          ) {{ $t("Создать скриншот") }}
+        el-form-item
+          +e.EL-BUTTON.btn--screenshot(
+            type='warning',
+            @click='createScreenshotRatingItem()',
+            size='small'
+          ) {{ $t("Вернуть изображение на доработку") }}
 
   template(#footer)
-    el-button(v-if='!isAddItem', type='success', @click='editRatingItem()') Сохранить
-    el-button(v-if='isAddItem', type='success', @click='createRatingItem()') Создать
+    el-button(v-if='!isAddItem', type='danger', @click='deleteRatingItem()') {{ $t("Удалить") }}
+    el-button(v-if='!isAddItem', type='primary', @click='editRatingItem()') {{ $t("Сохранить") }}
+    el-button(v-if='isAddItem', type='primary', @click='createRatingItem()') {{ $t("Создать") }}
 </template>
 
-<script>
-import _lib from '@/plugins/_lib';
+<script lang="ts">
+import { defineComponent } from 'vue';
+import { LabelType, LangInit, RatingItemType } from '@/types';
 
-export default {
+export default defineComponent({
+  emits: ['rating-item:update', 'dialog:closed'],
   mounted() {
     this.init();
   },
   data() {
     return {
-      // Указывает на то что добавляется новый елемент
+      // Tab current
+      tabActive: 'descr',
+      // Element add / edit
       isAddItem: false,
-      // Состояние
+      // State rating item
       state: {
-        name: {},
+        id: 0,
+        name: LangInit(),
         url: '',
-        labelsIds: [],
+        labelsIds: {},
         ratingId: 0,
         priority: 0,
+        img: {},
         isCreatedScreen: false,
         isHiden: false,
-        // Нужуно в store чтобы получить все items
-        typeSort: '',
-      },
-      // Показать диалоговое окно
-      isShow: true,
-      // Указывает на то что выполняется отправка
-      isSending: false,
-      // Сообщения
+      } as RatingItemType,
+      // id labels - needed because the component works with an array, and an object is sent to the server (field "itemCurrent.labelsIds")
+      labelsIds: [] as number[],
+      // Loading data
+      isLoading: false,
+      // Error messages
       errors: {
         name: '',
         url: '',
         server: '',
       },
-      success: '',
     };
-  },
-  computed: {
-    rating() {
-      return this.$store.state['page-rating'];
-    },
   },
 
   props: {
-    // Текущий елемент для редактировани
+    // Rating id
+    ratingId: {
+      type: Number,
+      default: 0,
+    },
+
+    // List labels
+    labels: {
+      type: Array,
+      default: () => [] as LabelType[],
+    },
+
+    // Current rating item
     itemCurrent: {
       type: Object,
       default: () => {},
     },
 
-    // Максимьное количество ярлыков
+    // Labels max count
     labelsIdsLimit: {
       type: Number,
     },
   },
   methods: {
-    // Подготовка данных
+    // Init
     init() {
-      this.isAddItem = Object.keys(this.itemCurrent).length ? false : true;
-      this.state.ratingId = this.rating.id;
-      this.state.typeSort = this.rating.typeSort;
+      this.isAddItem = Object.keys(this.itemCurrent)?.length ? false : true;
       if (this.isAddItem) return;
-      // Если редактирование
-      Object.assign(
-        this.state,
-        { ...this.itemCurrent },
-        { labelsIds: _lib.transformObjToArray(this.itemCurrent.labelsIds) }
-      );
+      // Is edit
+      this.labelsIds = Object.values(this.itemCurrent.labelsIds);
+      this.state = JSON.parse(JSON.stringify({ ...this.itemCurrent }));
     },
 
-    // Очистить сообщения
-    clearMessages() {
-      for (let item in this.errors) {
-        this.errors[item] = '';
-      }
-      this.success = '';
-    },
-
-    // Добавить сообщения об ошибке
-    setErrors(errors) {
-      // Если это ошибка, а не объект
-      if (errors instanceof Error) {
-        this.errors.server = 'Ошибка сервера';
-        return;
-      }
-      for (let item in errors) {
-        this.errors[item] = errors[item];
-      }
-    },
-
-    // Создать елемент
+    // Create rating item
     async createRatingItem() {
-      if (this.isSending) return;
-      this.clearMessages();
-      this.isSending = true;
-      await this.$store
-        .dispatch('page-rating/createRatingItem', {
+      if (this.isLoading) return;
+      this.isLoading = true;
+      this.$utils.clearErrors(this.errors, this.errors);
+      let labelsIds = this.labelsIds.reduce((a, v) => ({ ...a, [v]: v }), {}) as LabelType[];
+
+      try {
+        await this.$api['ratings-items'].createItem({
           ...this.state,
-          labelsIds: _lib.transformArrToObject(this.state.labelsIds),
-        })
-        .then(() => {
-          this.state.name = {};
-          this.state.priority = 0;
-          this.success = 'Елемент добавлен';
-        })
-        .catch((errors) => {
-          this.setErrors(errors);
-        })
-        .finally(() => {
-          this.isSending = false;
+          ratingId: this.ratingId,
+          labelsIds,
         });
+
+        this.$utils.showMessageSuccess({
+          message: `${this.$t('Добавлен:')}: "${this.state.name.ru}"`,
+        });
+
+        this.$emit('rating-item:update', { event: 'create' });
+      } catch (errors: any) {
+        if (errors.server) {
+          this.$utils.showMessageError({ message: errors.server });
+          return;
+        }
+        this.$utils.setErrors(this.errors, errors.errors);
+      } finally {
+        this.isLoading = false;
+      }
     },
 
-    // Создать елемент
+    // Edit rating item
     async editRatingItem() {
-      if (this.isSending) return;
-      this.clearMessages();
-      this.isSending = true;
-      await this.$store
-        .dispatch('page-rating/editRatingItem', {
+      if (this.isLoading) return;
+      this.isLoading = true;
+      this.$utils.clearErrors(this.errors, this.errors);
+      let labelsIds = this.labelsIds.reduce((a, v) => ({ ...a, [v]: v }), {}) as LabelType[];
+
+      try {
+        await this.$api['ratings-items'].editItem({
           ...this.state,
-          labelsIds: _lib.transformArrToObject(this.state.labelsIds),
-        })
-        .then(() => {
-          this.success = 'Елемент изменён';
-        })
-        .catch((errors) => {
-          this.setErrors(errors);
-        })
-        .finally(() => {
-          this.isSending = false;
+          ratingId: this.ratingId,
+          labelsIds,
         });
+
+        this.$utils.showMessageSuccess({
+          message: `${this.$t('Изменён:')}: "${this.state.name.ru}"`,
+        });
+
+        this.$emit('rating-item:update', { event: 'edit' });
+      } catch (errors: any) {
+        if (errors.server) {
+          this.$utils.showMessageError({ message: errors.server });
+          return;
+        }
+        this.$utils.setErrors(this.errors, errors.errors);
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
+    // Delete rating item
+    async deleteRatingItem() {
+      if (this.isLoading) return;
+      await this.$utils.showDialogConfirmDelete({ message: this.state.name.ru });
+      this.isLoading = true;
+
+      try {
+        await this.$api['ratings-items'].deleteItem({ ratingItemId: this.state.id });
+
+        this.$utils.showMessageSuccess({
+          message: `${this.$t('Удалён:')}: "${this.state.name.ru}"`,
+        });
+
+        this.$emit('rating-item:update', { event: 'delete' });
+        this.$emit('dialog:closed');
+      } catch (errors: any) {
+        if (errors.server) {
+          this.$utils.showMessageError({ message: errors.server });
+        }
+      } finally {
+        this.isLoading = false;
+      }
     },
   },
-};
+});
 </script>
 
 <style lang="sass" scoped>
-.dialog-site-edit
+.dialog-rating-item
   &__box-img
     height: 120px
     padding: 10px
