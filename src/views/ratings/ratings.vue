@@ -17,7 +17,7 @@ include /src/mixins.pug
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import useStoreUser from '@/pinia/user';
+import useStoreUser from '@/store/user';
 import { RatingType } from '@/types';
 
 export default defineComponent({

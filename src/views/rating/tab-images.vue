@@ -1,66 +1,79 @@
 <template lang="pug">
 include /src/mixins.pug
 
-+b.EL-FORM.tab-images(v-loading='isSending')
++b.EL-FORM.tab-images(v-loading='isLoading')
   +e.title(ref='title')
     +e.title-col--1
       span {{ $route.name }}&nbsp;
-      span(v-if='items.length') {{ curIndex + 1 }} {{ "из" }} {{ items.length }}
+      span(v-if='sreens.length') {{ curIndex + 1 }} {{ $t("из") }} {{ sreens.length }}
     +e.title-col--2
-      +e.EL-TAG.tag-processing-status(size='medium', :type='curItem.isSend ? "success" : ""') {{ curItem.isSend ? "Обработано" : "Не обработано" }}
-
-      el-button(type='primary', @click='sendImg()') {{ "Отправить на сервер" }}
-
-  el-alert(v-if='messages.serverSuccess', :title='messages.serverSuccess', type='success')
-  el-alert(v-if='messages.imgError', :title='messages.imgError', type='error')
-  el-alert(v-if='messages.colorError', :title='messages.colorError', type='error')
-  el-alert(v-if='messages.serverError', :title='messages.serverError', type='error')
-  +e.box-arrow
-    +e.I.arrow--prev.bi.bi-arrow-left-circle-fill(@click='toggleImg("prev")')
-    +e.I.arrow--next.bi.bi-arrow-right-circle-fill(@click='toggleImg("next")')
+      +e.EL-TAG.tag-processing-status(:type='curItem.isSend ? "success" : ""') {{ curItem.isSend ? $t("Обработано") : $t("Не обработано") }}
+      el-button(type='primary', @click='createSiteLogo()', :disabled='!curItem.color') {{ $t("Отправить на сервер") }}
+  +e.box-arrow(v-if='sreens.length')
+    +e.EL-ICON-ARROW-LEFT.arrow--prev(@click='setCurrentItem("prev")')
+    +e.EL-ICON-ARROW-RIGHT.arrow--next(@click='setCurrentItem("next")')
   +e.name-img.text-uppercase {{ curItem.img }}
   img-cropper(:imgData='curItem', @img-data='setImgDataResult($event)')
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue';
+import { SiteLogoForScreenType } from '@/types';
+
 import ImgCropper from '@/components/img-cropper/img-cropper.vue';
 
-export default {
+type ScreenItemType = {
+  id: number;
+  isSend: boolean;
+  color: string;
+  params: SiteLogoForScreenType['params'];
+  imgBase64: string;
+};
+
+function ScreenItemDefault(): ScreenItemType {
+  return {
+    id: 0,
+    isSend: false,
+    color: '',
+    params: {
+      cutHeight: 0,
+      cutWidth: 0,
+      imgHeight: 0,
+      imgWidth: 0,
+      left: 0,
+      top: 0,
+    },
+    imgBase64: '',
+  };
+}
+
+export default defineComponent({
   components: {
     ImgCropper,
   },
   props: {
-    rating: {
-      type: Object,
-    },
-  },
-
-  watch: {
-    rating: {
-      immediate: true,
-      deep: true,
-      handler() {
-        this.preparationData();
-        this.setCurImg();
-      },
+    // Rating id
+    ratingId: {
+      type: Number,
+      default: 0,
     },
   },
 
   data() {
     return {
-      items: [],
+      // Loading data
+      isLoading: false,
+      // Screenshots where "id" is id screnshot
+      sreens: [] as ScreenItemType[],
+      // Position current screen in "screens"
       curIndex: 0,
-      isSending: false,
-      curItem: {
-        isSend: false,
+      // Current screen
+      curItem: ScreenItemDefault(),
+      // Errors message
+      errors: {
+        img: '',
         color: '',
-        params: null,
-      },
-      messages: {
-        imgError: '',
-        colorError: '',
-        serverError: '',
-        serverSuccess: '',
+        server: '',
       },
     };
   },
@@ -70,23 +83,69 @@ export default {
   },
 
   methods: {
+    // Init
     async init() {
-      await this.$store.dispatch('page-rating/getSitesSreens', {
-        ratingId: this.rating.id,
-      });
+      await this.getSitesSreens();
+      this.setCurrentItem();
     },
 
-    // Подготовка данных
-    preparationData() {
-      let { screensSites } = this.rating;
-      this.items = [...screensSites];
+    // Get sites sreens
+    async getSitesSreens() {
+      if (this.isLoading) return;
+      this.isLoading = true;
+
+      try {
+        let sreens = await this.$api['ratings-items'].getSitesSreens({ ratingId: this.ratingId });
+        this.sreens = sreens.map((el: any) => {
+          Object.assign(ScreenItemDefault(), el); // add default props
+          return el;
+        });
+      } catch (errors: any) {
+        if (errors.server) {
+          this.$utils.showMessageError({ message: errors.server });
+        }
+      } finally {
+        this.isLoading = false;
+      }
     },
-    // Установить текущую картинку
-    setCurImg(direction) {
-      if (!this.items.length) return;
+
+    // Create site logo
+    async createSiteLogo() {
+      if (this.isLoading) return;
+      this.isLoading = true;
+      this.$utils.clearErrors(this.errors, this.errors);
+
+      try {
+        let { id, color, params } = this.curItem;
+        await this.$api['ratings-items'].createSiteLogo({
+          id,
+          color,
+          params,
+        });
+
+        this.curItem.isSend = true;
+        this.sreens[this.curIndex] = this.curItem;
+
+        this.$utils.showMessageSuccess({
+          message: `${this.$t('Логотип добавлен')}`,
+        });
+      } catch (errors: any) {
+        if (errors.server) {
+          this.$utils.showMessageError({ message: errors.server });
+        } else {
+          console.error(errors);
+        }
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
+    // Set current screenshot
+    setCurrentItem(direction?: string) {
+      if (!this.sreens.length) return;
       switch (direction) {
         case 'next': {
-          let maxIndex = this.items.length - 1;
+          let maxIndex = this.sreens.length - 1;
           this.curIndex = this.curIndex + 1 <= maxIndex ? this.curIndex + 1 : maxIndex;
           break;
         }
@@ -97,11 +156,12 @@ export default {
         default:
           this.curIndex = 0;
       }
-      this.curItem = { ...this.items[this.curIndex] };
+      this.curItem = JSON.parse(JSON.stringify(this.sreens[this.curIndex]));
     },
-    // Если изображение обработано, устанавливаем флаг
-    setImgDataResult({ params, color, imgBase64 }) {
-      if (params) {
+
+    // Set logo params
+    setImgDataResult({ params, color, imgBase64 }: ScreenItemType) {
+      if (imgBase64) {
         this.curItem.params = params;
         this.curItem.imgBase64 = imgBase64;
       }
@@ -109,52 +169,8 @@ export default {
         this.curItem.color = color;
       }
     },
-    // Переключение слайдов
-    toggleImg(direction) {
-      this.clearMessages();
-      this.curItem = {};
-      this.setCurImg(direction);
-    },
-    // Очистить сообщения
-    clearMessages() {
-      for (let item in this.messages) {
-        this.messages[item] = '';
-      }
-    },
-    // Установить сообщения
-    setMessages(messages) {
-      Object.assign(this.messages, messages);
-    },
-    // Отправить изображение на сервер
-    async sendImg() {
-      this.clearMessages();
-      let { params, color, imgBase64, id } = this.curItem;
-      if (this.isSending) return;
-      this.isSending = true;
-
-      try {
-        await this.$store.dispatch('page-rating/createSiteLogo', {
-          params,
-          color,
-          id,
-          ratingId: this.rating.id,
-        });
-
-        this.curItem.isSend = true;
-        this.items[this.curIndex] = {
-          isSend: true,
-          params,
-          color,
-          imgBase64,
-        };
-      } catch (error) {
-        this.messages.serverError = 'Ошибка сервера';
-      } finally {
-        this.isSending = false;
-      }
-    },
   },
-};
+});
 </script>
 
 <style lang="sass" scoped>
@@ -168,8 +184,9 @@ export default {
   &__box-arrow
     display: flex
     justify-content: space-between
+    margin-bottom: 10px
   &__arrow
-    font-size: 25px
+    height: 40px
     cursor: pointer
   &__tag-processing-status
     margin-right: 10px
