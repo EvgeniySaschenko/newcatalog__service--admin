@@ -3,7 +3,6 @@ import App from '@/app.vue';
 import '@/registerServiceWorker';
 import router from '@/router';
 import { VueCookieNext } from 'vue-cookie-next';
-import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/dist/css/bootstrap-utilities.css';
 
 // Plugins
