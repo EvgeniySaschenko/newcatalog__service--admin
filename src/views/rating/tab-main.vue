@@ -70,7 +70,7 @@ import {
   LangInit,
 } from '@/types';
 import { defineComponent } from 'vue';
-import useStoreSections from '@/pinia/sections';
+import useStoreSections from '@/store/sections';
 
 let ratingInit = (): RatingType => {
   return {
@@ -173,9 +173,7 @@ export default defineComponent({
           this.$utils.showMessageError({ message: errors.server });
         }
       } finally {
-        setTimeout(() => {
-          this.isLoading = false;
-        }, 1000);
+        this.isLoading = false;
       }
     },
 

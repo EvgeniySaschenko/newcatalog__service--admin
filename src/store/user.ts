@@ -1,10 +1,7 @@
-export default {
-  namespaced: true,
+import { defineStore } from 'pinia';
+
+export default defineStore('user', {
   state: () => ({
-    id: null,
-    name: null,
+    id: 1,
   }),
-  mutations: {},
-  actions: {},
-  getters: {},
-};
+});

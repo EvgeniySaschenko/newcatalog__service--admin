@@ -11,7 +11,7 @@ include /src/mixins.pug
 <script lang="ts">
 import { defineComponent } from 'vue';
 import MenuMain from '@/components/menu-main/menu-main.vue';
-import useSectionsStore from '@/pinia/sections';
+import useSectionsStore from '@/store/sections';
 
 export default defineComponent({
   data() {

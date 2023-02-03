@@ -63,3 +63,18 @@ export type LabelType = {
   color: string;
   ratingId: number;
 };
+
+// Logo
+// "params" are needed to cut the logo from the screenshot on the backend
+export type SiteLogoForScreenType = {
+  id: number;
+  color: string;
+  params: {
+    cutHeight: number;
+    cutWidth: number;
+    imgHeight: number;
+    imgWidth: number;
+    left: number;
+    top: number;
+  };
+};

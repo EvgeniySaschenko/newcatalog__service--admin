@@ -56,7 +56,7 @@ include /src/mixins.pug
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import useStoreSections from '@/pinia/sections';
+import useStoreSections from '@/store/sections';
 import { SectionType, LangInit } from '@/types';
 
 export default defineComponent({

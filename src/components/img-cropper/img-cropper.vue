@@ -53,7 +53,7 @@ export default {
 
   data() {
     return {
-      // Параметры плагина
+      // Params the plugin
       isAutoCrop: true,
       isCenterBox: true,
       isCanMove: true,
@@ -62,7 +62,7 @@ export default {
       autoCropWidth: 250,
       autoCropHeight: 80,
       fixedNumber: [1, 0.36],
-      // Мои
+      // Custom params
       heightImgCropper: '500px',
       color: 'transparent',
       canvasHeight: 10,
@@ -81,7 +81,7 @@ export default {
     },
   },
   methods: {
-    // Обрезать изображение
+    // Crop image
     addCanvasImg(data) {
       let { canvas } = this.$refs;
       let ctx = canvas.getContext('2d');
@@ -97,7 +97,8 @@ export default {
         });
       });
     },
-    // Добавить изображение в canvas
+
+    // Add image in canvas
     cropCanvasImg() {
       this.$refs.cropper.getCropData((data) => {
         this.addCanvasImg(data);
@@ -108,7 +109,7 @@ export default {
         });
       });
     },
-    // Кординаты / размеры
+    // Calc coordinates and sizes
     setCanvasImgParams() {
       let imgAxis = this.$refs.cropper.getImgAxis();
       let cropAxis = this.$refs.cropper.getCropAxis();
@@ -122,7 +123,8 @@ export default {
         imgHeight: Math.round(Math.abs(imgAxis.y2 - imgAxis.y1)),
       };
     },
-    // Получить цвет пинселя canvas
+
+    // Gets the color of the clicked pixel
     getCanvasColor(event) {
       let { canvas } = this.$refs;
       let bounds = event.target.getBoundingClientRect();
