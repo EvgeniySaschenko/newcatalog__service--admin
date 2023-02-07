@@ -1,5 +1,5 @@
 import { $fetch, $utils } from './_core';
-import { RatingItemType, RatingSortType, SiteLogoForScreenType } from '@/types';
+import { RatingItemType, RatingSortType } from '@/types';
 
 export default {
   // Get rating items (getRatingItems)
@@ -70,28 +70,6 @@ export default {
     let result = await $fetch(`/api/ratings-items/${rating.ratingItemId}`, {
       method: 'DELETE',
     });
-    return await result.json();
-  },
-
-  // Get screenshots for sites no logo
-  getSitesSreens: async (rating: { ratingId: number }) => {
-    let result = await $fetch(`/api/ratings-items/sites-screens/${rating.ratingId}`, {
-      method: 'GET',
-    });
-    return await result.json();
-  },
-
-  // Create logo site
-  createSiteLogo: async ({ id, color, params }: SiteLogoForScreenType) => {
-    let result = await $fetch(`/api/ratings-items/sites-logos`, {
-      method: 'PUT',
-      body: JSON.stringify({
-        id,
-        color,
-        params,
-      }),
-    });
-
     return await result.json();
   },
 };
