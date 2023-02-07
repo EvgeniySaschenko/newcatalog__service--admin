@@ -26,12 +26,36 @@ export type RatingTypeType = 'site';
 
 export type RatingDisplayType = 'tile' | 'inline';
 
-export type LogoType = {
-  id: number;
-  img: string;
-  color: string;
+// params - Needed to cut out the logo from the screenshot
+export type SiteLogoScreenshotParamsType = {
+  logoScreenshotParams: {
+    cutHeight: number;
+    cutWidth: number;
+    imgHeight: number;
+    imgWidth: number;
+    left: number;
+    top: number;
+  };
 };
 
+// Site
+export type SiteType = {
+  id: number;
+  siteScreenshotId: number;
+  img: string;
+  color: string;
+  host: string;
+  alexaRank: number;
+  dateDomainCreate: Date;
+};
+
+// Site screenshot
+export type SiteScreenshotType = {
+  id: number;
+  img: string;
+};
+
+// Rating
 export type RatingType = {
   id: number;
   isHiden: boolean;
@@ -44,13 +68,14 @@ export type RatingType = {
   dateCreate?: Date;
 };
 
+// Rating item
 export type RatingItemType = {
   id: number;
   isCreatedScreen: boolean;
   isHiden: boolean;
   labelsIds: object;
   name: LangType;
-  img: LogoType;
+  site: SiteType;
   priority: number;
   ratingId: number;
   url: string;
@@ -62,19 +87,4 @@ export type LabelType = {
   name: LangType;
   color: string;
   ratingId: number;
-};
-
-// Logo
-// "params" are needed to cut the logo from the screenshot on the backend
-export type SiteLogoForScreenType = {
-  id: number;
-  color: string;
-  params: {
-    cutHeight: number;
-    cutWidth: number;
-    imgHeight: number;
-    imgWidth: number;
-    left: number;
-    top: number;
-  };
 };

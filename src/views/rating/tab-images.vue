@@ -18,23 +18,24 @@ include /src/mixins.pug
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { SiteLogoForScreenType } from '@/types';
-
 import ImgCropper from '@/components/img-cropper/img-cropper.vue';
+import { SiteLogoScreenshotParamsType, SiteType, SiteScreenshotType } from '@/types';
 
-type ScreenItemType = {
-  id: number;
+type LogoDataForCreateType = {
+  id: SiteScreenshotType['id'];
+  img: SiteScreenshotType['img'];
+  color: SiteType['color'];
+  params: SiteLogoScreenshotParamsType['logoScreenshotParams'];
   isSend: boolean;
-  color: string;
-  params: SiteLogoForScreenType['params'];
   imgBase64: string;
 };
 
-function ScreenItemDefault(): ScreenItemType {
+function SiteLogoScreenshotParamsDefault(): LogoDataForCreateType {
   return {
     id: 0,
     isSend: false,
     color: '',
+    img: '',
     params: {
       cutHeight: 0,
       cutWidth: 0,
@@ -64,11 +65,11 @@ export default defineComponent({
       // Loading data
       isLoading: false,
       // Screenshots where "id" is id screnshot
-      sreens: [] as ScreenItemType[],
+      sreens: [] as LogoDataForCreateType[],
       // Position current screen in "screens"
       curIndex: 0,
       // Current screen
-      curItem: ScreenItemDefault(),
+      curItem: SiteLogoScreenshotParamsDefault(),
       // Errors message
       errors: {
         img: '',
@@ -95,9 +96,9 @@ export default defineComponent({
       this.isLoading = true;
 
       try {
-        let sreens = await this.$api['ratings-items'].getSitesSreens({ ratingId: this.ratingId });
+        let sreens = await this.$api['sites'].getSitesSreens({ ratingId: this.ratingId });
         this.sreens = sreens.map((el: any) => {
-          Object.assign(ScreenItemDefault(), el); // add default props
+          Object.assign(SiteLogoScreenshotParamsDefault(), el); // add default props
           return el;
         });
       } catch (errors: any) {
@@ -117,10 +118,10 @@ export default defineComponent({
 
       try {
         let { id, color, params } = this.curItem;
-        await this.$api['ratings-items'].createSiteLogo({
+        await this.$api['sites'].createSiteLogo({
           id,
           color,
-          params,
+          logoScreenshotParams: params,
         });
 
         this.curItem.isSend = true;
@@ -160,7 +161,7 @@ export default defineComponent({
     },
 
     // Set logo params
-    setImgDataResult({ params, color, imgBase64 }: ScreenItemType) {
+    setImgDataResult({ params, color, imgBase64 }: LogoDataForCreateType) {
       if (imgBase64) {
         this.curItem.params = params;
         this.curItem.imgBase64 = imgBase64;

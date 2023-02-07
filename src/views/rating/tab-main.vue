@@ -153,7 +153,7 @@ export default defineComponent({
 
       // Sections
       let store = useStoreSections();
-      this.sections = store.$state.items.filter((el) => el.isHiden === false);
+      this.sections = store.$state.items;
 
       // Data
       if (this.ratingId) {

@@ -13,14 +13,14 @@ include /src/mixins.pug
   +e.list
     +e.item(v-for='item of ratingItems')
       +e.row-top
-        +e.box-img(:style='{ backgroundColor: item.img.color }')
-          +e.IMG.img.sites-list__img(:src='item.img.url', :alt='item.name.ru')
+        +e.box-img(:style='{ backgroundColor: item.site.color }')
+          +e.IMG.img.sites-list__img(:src='item.site.img', :alt='item.name.ru')
         +e.name 
           +e.name-text {{ item.name.ru }}
         +e.A.link(:href='item.url', target='_blank') {{ getHost(item.url) }}
-        div {{ item.alexaRank }}
+        div {{ item.site.alexaRank }}
         br
-        div {{ (item.whois.creationDate || item.whois.created || (item.whois.createdOn || "").slice(7, 11) || "").slice(0, 4) }}
+        //div {{ (item.site.whois.creationDate || item.site.whois.created || (item.site.whois.createdOn || "").slice(7, 11) || "").slice(0, 4) }}
 
         +e.labels
           template(v-for='label in labels') 

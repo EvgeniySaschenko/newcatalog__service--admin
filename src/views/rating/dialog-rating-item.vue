@@ -12,10 +12,10 @@ el-dialog.dialog-rating-item(
     el-tab-pane(:label='$t("Оисание")', name='descr')
       el-form(label-position='top', v-loading='isLoading')
         .dialog-rating-item__box-img(
-          :style='{ backgroundColor: state.img.color }',
+          :style='{ backgroundColor: state.site.color }',
           v-if='!isAddItem'
         )
-          img.dialog-rating-item__img(:src='state.img.url', :alt='state.name.ru')
+          img.dialog-rating-item__img(:src='state.site.img', :alt='state.name.ru')
         // Ссылка
         el-form-item(:error='errors.url', :label='$t("Ссылка")', required)
           el-input(
@@ -102,7 +102,7 @@ export default defineComponent({
         labelsIds: {},
         ratingId: 0,
         priority: 0,
-        img: {},
+        site: {},
         isCreatedScreen: false,
         isHiden: false,
       } as RatingItemType,
@@ -168,7 +168,9 @@ export default defineComponent({
         });
 
         this.$utils.showMessageSuccess({
-          message: `${this.$t('Добавлен:')}: "${this.state.name.ru}"`,
+          message: `${this.$t('Добавлен:')}: "${
+            this.state.name.ru ? this.state.name.ru : this.$t('Новый сайт')
+          }"`,
         });
 
         this.$emit('rating-item:update', { event: 'create' });
