@@ -57,7 +57,8 @@ export type SiteScreenshotType = {
 
 // Rating
 export type RatingType = {
-  id: number;
+  userId: number;
+  ratingId: number;
   isHiden: boolean;
   descr: LangType;
   name: LangType;

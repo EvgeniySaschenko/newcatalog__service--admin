@@ -4,16 +4,16 @@ import { RatingType } from '@/types';
 export default {
   // Сейчас используется кука для userId - нужно исправить и на беке
   // Get the ratings of the user who created them
-  getRatingsUser: async (user: { userId: number }) => {
-    let result = await $fetch(`/api/ratings/user/${user.userId}`, {
+  getRatingsUser: async ({ userId }: Pick<RatingType, 'userId'>) => {
+    let result = await $fetch(`/api/ratings/user/${userId}`, {
       method: 'GET',
     });
     return await result.json();
   },
 
   // Get rating
-  getRating: async (rating: { ratingId: number }) => {
-    let result = await $fetch(`/api/ratings/${rating.ratingId}`, {
+  getRating: async ({ ratingId }: Pick<RatingType, 'ratingId'>) => {
+    let result = await $fetch(`/api/ratings/${ratingId}`, {
       method: 'GET',
     });
     return await result.json();
@@ -46,7 +46,7 @@ export default {
 
   // Edit rating
   editRating: async ({
-    id,
+    ratingId,
     name,
     descr,
     isHiden,
@@ -55,10 +55,10 @@ export default {
     typeDisplay,
     typeRating,
   }: RatingType) => {
-    let result = await $fetch(`/api/ratings`, {
+    let result = await $fetch(`/api/ratings/${ratingId}`, {
       method: 'PUT',
       body: JSON.stringify({
-        id,
+        ratingId,
         name,
         descr,
         isHiden,

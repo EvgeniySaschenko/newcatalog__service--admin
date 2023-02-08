@@ -40,7 +40,7 @@ export default defineComponent({
   data() {
     return {
       // Curent active tab
-      tabActive: 'main' as TabsType,
+      tabActive: '' as TabsType,
     };
   },
 
@@ -60,7 +60,7 @@ export default defineComponent({
     // Makes tab active depending on query params url
     setActiveTab() {
       let { tab } = this.$route.query;
-      this.tabActive = (tab as TabsType) || this.tabActive;
+      this.tabActive = (tab as TabsType) || 'main';
     },
 
     // Add query parameters to url when changing tabs

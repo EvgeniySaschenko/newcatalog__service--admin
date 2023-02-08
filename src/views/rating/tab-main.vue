@@ -5,6 +5,7 @@ el-form(v-loading='isLoading', label-position='left', label-width='150px')
   // Разделы 
   el-form-item(:error='errors.sectionsIds', :label='$t("Разделы")', required)
     el-select(
+      size='small',
       multiple,
       filterable,
       allow-create,
@@ -55,7 +56,7 @@ el-form(v-loading='isLoading', label-position='left', label-width='150px')
   el-form-item(:label='$t("Скрыть")')
     el-checkbox(v-model='rating.isHiden')
 
-  el-button(v-if='!rating.id', type='primary', @click='createRating()') {{ $t("Создать рейтинг") }}
+  el-button(v-if='!rating.ratingId', type='primary', @click='createRating()') {{ $t("Создать рейтинг") }}
   el-button(v-else, type='primary', @click='editRating()') {{ $t("Редактировать рейтинг") }}
 </template>
 
@@ -72,9 +73,9 @@ import {
 import { defineComponent } from 'vue';
 import useStoreSections from '@/store/sections';
 
-let ratingInit = (): RatingType => {
+let ratingInit = (): Omit<RatingType, 'userId'> => {
   return {
-    id: 0,
+    ratingId: 0,
     // Selected sections
     sectionsIds: {},
     // Name rating
@@ -186,7 +187,7 @@ export default defineComponent({
 
       try {
         let sectionsIds = this.sectionsIds.reduce((a, v) => ({ ...a, [v]: v }), {});
-        let { id, name } = await this.$api.ratings.createRating({
+        let { ratingId, name } = await this.$api.ratings.createRating({
           ...this.rating,
           sectionsIds,
         });
@@ -195,7 +196,7 @@ export default defineComponent({
           message: `${this.$t('Рейтинг создан')}: "${name.ru}"`,
         });
 
-        ratingIdNew = id;
+        ratingIdNew = ratingId;
       } catch (errors: any) {
         if (errors.server) {
           this.$utils.showMessageError({ message: errors.server });
