@@ -51,7 +51,7 @@ export type SiteType = {
 
 // Site screenshot
 export type SiteScreenshotType = {
-  id: number;
+  siteScreenshotId: number;
   img: string;
 };
 
