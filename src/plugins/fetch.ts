@@ -37,13 +37,12 @@ export let $fetch: FetchType = async (url: string, params?: RequestInit): Promis
   if (response.status == 400) {
     // Data validation errors
     throw await response.json();
+  } else if (response.status == 404) {
+    throw { server: 'URL не найден на сервере' };
   } else if (response.status > 400) {
     // Other server errors
     console.error(response);
-    if (response.json) {
-      console.error(await response?.json());
-    }
-    throw await { server: 'Ошибка сервера' };
+    throw { server: 'Ошибка сервера' };
   }
   return response;
 };

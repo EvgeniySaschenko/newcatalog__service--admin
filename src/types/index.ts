@@ -13,7 +13,7 @@ export let LangInit = (): LangType => {
 
 // Section
 export type SectionType = {
-  id: number;
+  sectionId: number;
   isHiden: boolean;
   name: LangType;
   priority: number;
@@ -40,7 +40,7 @@ export type SiteLogoScreenshotParamsType = {
 
 // Site
 export type SiteType = {
-  id: number;
+  siteId: number;
   siteScreenshotId: number;
   img: string;
   color: string;
@@ -51,13 +51,14 @@ export type SiteType = {
 
 // Site screenshot
 export type SiteScreenshotType = {
-  id: number;
+  siteScreenshotId: number;
   img: string;
 };
 
 // Rating
 export type RatingType = {
-  id: number;
+  userId: number;
+  ratingId: number;
   isHiden: boolean;
   descr: LangType;
   name: LangType;
@@ -70,7 +71,7 @@ export type RatingType = {
 
 // Rating item
 export type RatingItemType = {
-  id: number;
+  ratingItemId: number;
   isCreatedScreen: boolean;
   isHiden: boolean;
   labelsIds: object;
@@ -83,7 +84,7 @@ export type RatingItemType = {
 
 // Label
 export type LabelType = {
-  id: number;
+  labelId: number;
   name: LangType;
   color: string;
   ratingId: number;

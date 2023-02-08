@@ -20,18 +20,19 @@ export default {
   },
 
   // Edit section
-  editSection: async ({ id, isHiden, name, priority }: SectionType) => {
-    let result = await $fetch(`/api/sections`, {
+  editSection: async ({ sectionId, isHiden, name, priority }: SectionType) => {
+    let result = await $fetch(`/api/sections/${sectionId}`, {
       method: 'PUT',
-      body: JSON.stringify({ id, isHiden, name, priority }),
+      body: JSON.stringify({ sectionId, isHiden, name, priority }),
     });
     return await result.json();
   },
 
   // Delete section
-  deleteSection: async ({ id }: Pick<SectionType, 'id'>) => {
-    let result = await $fetch(`/api/sections/${id}`, {
+  deleteSection: async ({ sectionId }: Pick<SectionType, 'sectionId'>) => {
+    let result = await $fetch(`/api/sections/${sectionId}`, {
       method: 'DELETE',
+      body: JSON.stringify({ sectionId }),
     });
     return await result.json();
   },

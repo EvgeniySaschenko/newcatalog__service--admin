@@ -22,7 +22,7 @@ import ImgCropper from '@/components/img-cropper/img-cropper.vue';
 import { SiteLogoScreenshotParamsType, SiteType, SiteScreenshotType } from '@/types';
 
 type LogoDataForCreateType = {
-  id: SiteScreenshotType['id'];
+  siteScreenshotId: SiteScreenshotType['siteScreenshotId'];
   img: SiteScreenshotType['img'];
   color: SiteType['color'];
   params: SiteLogoScreenshotParamsType['logoScreenshotParams'];
@@ -32,7 +32,7 @@ type LogoDataForCreateType = {
 
 function SiteLogoScreenshotParamsDefault(): LogoDataForCreateType {
   return {
-    id: 0,
+    siteScreenshotId: 0,
     isSend: false,
     color: '',
     img: '',
@@ -117,9 +117,9 @@ export default defineComponent({
       this.$utils.clearErrors(this.errors, this.errors);
 
       try {
-        let { id, color, params } = this.curItem;
+        let { siteScreenshotId, color, params } = this.curItem;
         await this.$api['sites'].createSiteLogo({
-          id,
+          siteScreenshotId,
           color,
           logoScreenshotParams: params,
         });

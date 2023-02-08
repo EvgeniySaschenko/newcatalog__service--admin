@@ -10,7 +10,7 @@ include /src/mixins.pug
   el-table(:data='ratings', stripe, :scrollbar-always-on='true')
     el-table-column(:label='$t("Название")')
       template(#default='scope')
-        router-link(:to='`${pathPage}/${scope.row.id}`') {{ scope.row.name.ua }}
+        router-link(:to='`${pathPage}/${scope.row.ratingId}`') {{ scope.row.name.ua }}
     el-table-column(:label='$t("Дата создания")', width='150')
       template(#default='scope') {{ $utils.date(scope.row.dateCreate) }}
 </template>

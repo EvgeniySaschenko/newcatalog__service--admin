@@ -25,7 +25,7 @@ include /src/mixins.pug
         +e.labels
           template(v-for='label in labels') 
             .label-rating(
-              v-if='item.labelsIds[label.id]',
+              v-if='item.labelsIds[label.labelId]',
               :style='{ backgroundColor: label.color }'
             ) {{ label.name.ru }}
 
@@ -119,7 +119,7 @@ export default defineComponent({
       if (this.isLoading) return;
       this.isLoading = true;
       try {
-        this.labels = await this.$api['ratings-labels'].getLabels({ ratingId: this.ratingId });
+        this.labels = await this.$api['labels'].getLabels({ ratingId: this.ratingId });
       } catch (errors: any) {
         if (errors.server) {
           this.$utils.showMessageError({ message: errors.server });

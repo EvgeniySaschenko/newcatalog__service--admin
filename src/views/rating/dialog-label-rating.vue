@@ -119,7 +119,7 @@ export default defineComponent({
       this.$utils.clearErrors(this.errors, this.errors);
 
       try {
-        let { name } = await this.$api['ratings-labels'].createLabel({
+        let { name } = await this.$api['labels'].createLabel({
           color: this.label.color,
           name: this.label.name,
           ratingId: this.ratingId,
@@ -148,8 +148,8 @@ export default defineComponent({
       this.$utils.clearErrors(this.errors, this.errors);
 
       try {
-        await this.$api['ratings-labels'].editLabel({
-          id: this.labelId,
+        await this.$api['labels'].editLabel({
+          labelId: this.labelId,
           color: this.label.color,
           name: this.label.name,
           ratingId: this.ratingId,
@@ -178,8 +178,8 @@ export default defineComponent({
       this.isLoading = true;
 
       try {
-        await this.$api['ratings-labels'].deleteLabel({
-          id: this.labelId,
+        await this.$api['labels'].deleteLabel({
+          labelId: this.labelId,
           ratingId: this.ratingId,
         });
 

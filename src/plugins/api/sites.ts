@@ -12,18 +12,18 @@ export default {
 
   // Create logo site
   createSiteLogo: async ({
-    id,
+    siteScreenshotId,
     color,
     logoScreenshotParams,
   }: {
-    id: SiteScreenshotType['id'];
+    siteScreenshotId: SiteScreenshotType['siteScreenshotId'];
     color: SiteType['color'];
     logoScreenshotParams: SiteLogoScreenshotParamsType['logoScreenshotParams'];
   }) => {
     let result = await $fetch(`/api/sites/logo`, {
       method: 'PUT',
       body: JSON.stringify({
-        id,
+        siteScreenshotId,
         color,
         logoScreenshotParams,
       }),

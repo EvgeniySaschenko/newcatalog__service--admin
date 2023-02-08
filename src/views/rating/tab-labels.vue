@@ -18,7 +18,7 @@ dialog-label-rating(
   actionType='edit',
   :color='labelCurrent.color',
   :name='labelCurrent.name',
-  :labelId='labelCurrent.id',
+  :labelId='labelCurrent.labelId',
   :ratingId='ratingId',
   :title='$t("Редактировать ярлык")',
   @dialog:closed='toggleDialogLabelEdit(false, {})',
@@ -86,7 +86,7 @@ export default defineComponent({
       if (this.isLoading) return;
       this.isLoading = true;
       try {
-        this.labels = await this.$api['ratings-labels'].getLabels({ ratingId });
+        this.labels = await this.$api['labels'].getLabels({ ratingId });
       } catch (errors: any) {
         if (errors.server) {
           this.$utils.showMessageError({ message: errors.server });
