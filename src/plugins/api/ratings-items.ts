@@ -1,15 +1,18 @@
 import { $fetch, $utils } from './_core';
-import { RatingItemType, RatingSortType } from '@/types';
+import { RatingType, RatingItemType, RatingSortType } from '@/types';
 
 export default {
   // Get rating items (getRatingItems)
-  getItems: async (rating: { ratingId: number; typeSort: RatingSortType }) => {
-    let result = await $fetch(
-      `/api/ratings-items/rating/${rating.ratingId}?typeSort=${rating.typeSort}`,
-      {
-        method: 'GET',
-      }
-    );
+  getItems: async ({
+    ratingId,
+    typeSort,
+  }: {
+    ratingId: RatingType['ratingId'];
+    typeSort: RatingSortType;
+  }) => {
+    let result = await $fetch(`/api/ratings-items/rating/${ratingId}?typeSort=${typeSort}`, {
+      method: 'GET',
+    });
     return await result.json();
   },
 
@@ -22,7 +25,7 @@ export default {
     priority,
     ratingId,
     url,
-  }: Omit<RatingItemType, 'id' | 'img'>) => {
+  }: Omit<RatingItemType, 'ratingItemId' | 'img'>) => {
     let result = await $fetch(`/api/ratings-items`, {
       method: 'POST',
       body: JSON.stringify({
@@ -40,7 +43,7 @@ export default {
 
   // Edit item for rating
   editItem: async ({
-    id,
+    ratingItemId,
     isCreatedScreen,
     isHiden,
     labelsIds,
@@ -49,10 +52,10 @@ export default {
     ratingId,
     url,
   }: RatingItemType) => {
-    let result = await $fetch(`/api/ratings-items/${id}`, {
+    let result = await $fetch(`/api/ratings-items/${ratingItemId}`, {
       method: 'PUT',
       body: JSON.stringify({
-        id,
+        ratingItemId,
         isCreatedScreen,
         isHiden,
         labelsIds,
@@ -66,9 +69,12 @@ export default {
   },
 
   // Delete item for rating
-  deleteItem: async (rating: { ratingItemId: number }) => {
-    let result = await $fetch(`/api/ratings-items/${rating.ratingItemId}`, {
+  deleteItem: async ({ ratingItemId }: Pick<RatingItemType, 'ratingItemId'>) => {
+    let result = await $fetch(`/api/ratings-items/${ratingItemId}`, {
       method: 'DELETE',
+      body: JSON.stringify({
+        ratingItemId,
+      }),
     });
     return await result.json();
   },

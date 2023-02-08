@@ -3,7 +3,7 @@ include /src/mixins.pug
 
 // Диалоговое окно для редактирования / создания элемента рейтинга
 el-dialog.dialog-rating-item(
-  :title='state.id ? state.name.ru : $t("Создать элемент")',
+  :title='state.ratingItemId ? state.name.ru : $t("Создать элемент")',
   :model-value='true',
   @closed='$emit("dialog:closed")'
 )
@@ -96,7 +96,7 @@ export default defineComponent({
       isAddItem: false,
       // State rating item
       state: {
-        id: 0,
+        ratingItemId: 0,
         name: LangInit(),
         url: '',
         labelsIds: {},
@@ -222,7 +222,7 @@ export default defineComponent({
       this.isLoading = true;
 
       try {
-        await this.$api['ratings-items'].deleteItem({ ratingItemId: this.state.id });
+        await this.$api['ratings-items'].deleteItem({ ratingItemId: this.state.ratingItemId });
 
         this.$utils.showMessageSuccess({
           message: `${this.$t('Удалён:')}: "${this.state.name.ru}"`,

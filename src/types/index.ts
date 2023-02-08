@@ -71,7 +71,7 @@ export type RatingType = {
 
 // Rating item
 export type RatingItemType = {
-  id: number;
+  ratingItemId: number;
   isCreatedScreen: boolean;
   isHiden: boolean;
   labelsIds: object;
