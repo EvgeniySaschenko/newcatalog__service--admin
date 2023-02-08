@@ -40,7 +40,7 @@ export type SiteLogoScreenshotParamsType = {
 
 // Site
 export type SiteType = {
-  id: number;
+  siteId: number;
   siteScreenshotId: number;
   img: string;
   color: string;
