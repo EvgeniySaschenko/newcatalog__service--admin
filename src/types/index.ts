@@ -13,7 +13,7 @@ export let LangInit = (): LangType => {
 
 // Section
 export type SectionType = {
-  id: number;
+  sectionId: number;
   isHiden: boolean;
   name: LangType;
   priority: number;

@@ -14,7 +14,12 @@ el-form(v-loading='isLoading', label-position='left', label-width='150px')
       v-model='sectionsIds',
       :placeholder='$t("Разделы")'
     )
-      el-option(v-for='item in sections', :key='item.id', :label='item.name.ua', :value='item.id')
+      el-option(
+        v-for='item in sections',
+        :key='item.sectionId',
+        :label='item.name.ua',
+        :value='item.sectionId'
+      )
   // Тип рейтинга
   el-form-item(:label='$t("Тип рейтинга")')
     el-radio-group(v-model='rating.typeRating')

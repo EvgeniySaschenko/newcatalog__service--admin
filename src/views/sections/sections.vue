@@ -50,7 +50,7 @@ include /src/mixins.pug
             el-button(
               type='danger',
               size='small',
-              @click='deleteSection({ id: scope.row.id, name: scope.row.name })'
+              @click='deleteSection({ sectionId: scope.row.sectionId, name: scope.row.name })'
             ) {{ $t("Удалить") }}
 </template>
 
@@ -138,13 +138,13 @@ export default defineComponent({
     },
 
     // Delete section
-    async deleteSection({ id, name }: Pick<SectionType, 'id' | 'name'>) {
+    async deleteSection({ sectionId, name }: Pick<SectionType, 'sectionId' | 'name'>) {
       await this.$utils.showDialogConfirmDelete({ message: name.ru });
       if (this.isSendingFormEdit) return;
       this.isSendingFormEdit = true;
 
       try {
-        await this.$api.sections.deleteSection({ id: +id });
+        await this.$api.sections.deleteSection({ sectionId: +sectionId });
         await this.getSections();
         this.$utils.showMessageSuccess({
           message: `${this.$t('Раздел удалён')}: "${name.ru}"`,
@@ -160,20 +160,20 @@ export default defineComponent({
     },
 
     // Edit section
-    async editSection(data: SectionType) {
+    async editSection(section: SectionType) {
       if (this.isSendingFormEdit) return;
       this.isSendingFormEdit = true;
 
       let keysErrors = {
-        [`${data.id}_name`]: '',
+        [`${section.sectionId}_name`]: '',
       };
       this.$utils.clearErrors(this.errors.formEdit, keysErrors);
 
       try {
-        await this.$api.sections.editSection(data);
+        await this.$api.sections.editSection(section);
         await this.getSections();
         this.$utils.showMessageSuccess({
-          message: `${this.$t('Раздел отредакирован')}: "${data.name.ru}"`,
+          message: `${this.$t('Раздел отредакирован')}: "${section.name.ru}"`,
         });
       } catch (errors: any) {
         if (errors.server) {
@@ -181,7 +181,7 @@ export default defineComponent({
           return;
         }
         let { name } = errors.errors;
-        this.errors.formEdit[`${data.id}_name`] = name;
+        this.errors.formEdit[`${section.sectionId}_name`] = name;
       } finally {
         this.isSendingFormEdit = false;
       }
