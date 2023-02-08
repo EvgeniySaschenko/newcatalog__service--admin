@@ -84,7 +84,7 @@ export type RatingItemType = {
 
 // Label
 export type LabelType = {
-  id: number;
+  labelId: number;
   name: LangType;
   color: string;
   ratingId: number;

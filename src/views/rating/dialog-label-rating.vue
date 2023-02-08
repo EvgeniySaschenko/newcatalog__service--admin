@@ -149,7 +149,7 @@ export default defineComponent({
 
       try {
         await this.$api['ratings-labels'].editLabel({
-          id: this.labelId,
+          labelId: this.labelId,
           color: this.label.color,
           name: this.label.name,
           ratingId: this.ratingId,
@@ -179,7 +179,7 @@ export default defineComponent({
 
       try {
         await this.$api['ratings-labels'].deleteLabel({
-          id: this.labelId,
+          labelId: this.labelId,
           ratingId: this.ratingId,
         });
 

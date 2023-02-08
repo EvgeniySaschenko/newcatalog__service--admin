@@ -25,7 +25,7 @@ include /src/mixins.pug
         +e.labels
           template(v-for='label in labels') 
             .label-rating(
-              v-if='item.labelsIds[label.id]',
+              v-if='item.labelsIds[label.labelId]',
               :style='{ backgroundColor: label.color }'
             ) {{ label.name.ru }}
 

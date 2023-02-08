@@ -44,9 +44,9 @@ el-dialog.dialog-rating-item(
           )
             el-option(
               v-for='item in labels',
-              :key='item.id',
+              :key='item.labelId',
               :label='item.name.ru',
-              :value='item.id'
+              :value='item.labelId'
             )
         // Приоритет  
         el-form-item

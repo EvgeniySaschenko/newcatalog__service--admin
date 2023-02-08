@@ -3,7 +3,7 @@ import { LabelType } from '@/types';
 
 export default {
   // Create label for rating
-  createLabel: async ({ name, color, ratingId }: Omit<LabelType, 'id'>) => {
+  createLabel: async ({ name, color, ratingId }: Omit<LabelType, 'labelId'>) => {
     let result = await $fetch(`/api/ratings-labels`, {
       method: 'POST',
       body: JSON.stringify({ name, color, ratingId }),
@@ -12,19 +12,19 @@ export default {
   },
 
   // Edit label for rating
-  editLabel: async ({ id, name, color, ratingId }: LabelType) => {
-    let result = await $fetch(`/api/ratings-labels/${id}`, {
+  editLabel: async ({ labelId, name, color, ratingId }: LabelType) => {
+    let result = await $fetch(`/api/ratings-labels/${labelId}`, {
       method: 'PUT',
-      body: JSON.stringify({ id, name, color, ratingId }),
+      body: JSON.stringify({ labelId, name, color, ratingId }),
     });
     return await result.json();
   },
 
   // Delete label for rating
-  deleteLabel: async ({ id, ratingId }: Pick<LabelType, 'id' | 'ratingId'>) => {
-    let result = await $fetch(`/api/ratings-labels/${id}`, {
+  deleteLabel: async ({ labelId, ratingId }: Pick<LabelType, 'labelId' | 'ratingId'>) => {
+    let result = await $fetch(`/api/ratings-labels/${labelId}`, {
       method: 'DELETE',
-      body: JSON.stringify({ id, ratingId }),
+      body: JSON.stringify({ labelId, ratingId }),
     });
     return await result.json();
   },

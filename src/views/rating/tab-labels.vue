@@ -18,7 +18,7 @@ dialog-label-rating(
   actionType='edit',
   :color='labelCurrent.color',
   :name='labelCurrent.name',
-  :labelId='labelCurrent.id',
+  :labelId='labelCurrent.labelId',
   :ratingId='ratingId',
   :title='$t("Редактировать ярлык")',
   @dialog:closed='toggleDialogLabelEdit(false, {})',
