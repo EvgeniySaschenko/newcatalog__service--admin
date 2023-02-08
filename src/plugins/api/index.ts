@@ -1,7 +1,7 @@
 import user from './user';
 import sections from './sections';
 import ratings from './ratings';
-import ratingsLabels from './ratings-labels';
+import labels from './labels';
 import ratingsItems from './ratings-items';
 import sites from './sites';
 
@@ -9,7 +9,7 @@ export let $api = {
   user,
   sections,
   ratings,
-  'ratings-labels': ratingsLabels,
+  labels,
   'ratings-items': ratingsItems,
   sites,
 };
