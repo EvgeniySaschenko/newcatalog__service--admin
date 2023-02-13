@@ -66,8 +66,6 @@ el-form(v-loading='isLoading', label-position='left', label-width='150px')
 </template>
 
 <script lang="ts">
-type ValueOfType<T> = T[keyof T];
-
 import {
   RatingType,
   LabelType,
@@ -75,6 +73,7 @@ import {
   RatingTypeTypeEnum,
   RatingDisplayTypeEnum,
   RatingSortTypeEnum,
+  ValueOfType,
   LangInit,
 } from '@/types';
 import { defineComponent } from 'vue';
