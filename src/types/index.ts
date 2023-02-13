@@ -4,7 +4,7 @@ export type LangType = {
   ru: string;
 };
 
-export let LangInit = (): LangType => {
+export const LangInit = (): LangType => {
   return {
     ua: '',
     ru: '',
@@ -20,11 +20,20 @@ export type SectionType = {
 };
 
 // Rating
-export type RatingSortType = 'alexa' | 'click';
 
-export type RatingTypeType = 'site';
+export enum RatingTypeTypeEnum {
+  'site' = '1',
+}
 
-export type RatingDisplayType = 'tile' | 'inline';
+export enum RatingDisplayTypeEnum {
+  'tile' = '1',
+  'inline' = '2',
+}
+
+export enum RatingSortTypeEnum {
+  'alexa' = '1',
+  'click' = '2',
+}
 
 // params - Needed to cut out the logo from the screenshot
 export type SiteLogoScreenshotParamsType = {
@@ -63,9 +72,9 @@ export type RatingType = {
   descr: LangType;
   name: LangType;
   sectionsIds: object;
-  typeDisplay: RatingDisplayType;
-  typeRating: RatingTypeType;
-  typeSort: RatingSortType;
+  typeDisplay: RatingDisplayTypeEnum;
+  typeRating: RatingTypeTypeEnum;
+  typeSort: RatingSortTypeEnum;
   dateCreate?: Date;
 };
 
