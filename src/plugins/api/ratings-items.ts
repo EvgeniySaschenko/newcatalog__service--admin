@@ -1,5 +1,5 @@
 import { $fetch, $utils } from './_core';
-import { RatingType, RatingItemType, RatingSortType } from '@/types';
+import { RatingType, RatingItemType, RatingSortTypeEnum } from '@/types';
 
 export default {
   // Get rating items (getRatingItems)
@@ -8,7 +8,7 @@ export default {
     typeSort,
   }: {
     ratingId: RatingType['ratingId'];
-    typeSort: RatingSortType;
+    typeSort: RatingSortTypeEnum;
   }) => {
     let result = await $fetch(`/api/ratings-items/rating/${ratingId}?typeSort=${typeSort}`, {
       method: 'GET',

@@ -66,13 +66,15 @@ el-form(v-loading='isLoading', label-position='left', label-width='150px')
 </template>
 
 <script lang="ts">
+type ValueOfType<T> = T[keyof T];
+
 import {
   RatingType,
   LabelType,
   SectionType,
-  RatingTypeType,
-  RatingDisplayType,
-  RatingSortType,
+  RatingTypeTypeEnum,
+  RatingDisplayTypeEnum,
+  RatingSortTypeEnum,
   LangInit,
 } from '@/types';
 import { defineComponent } from 'vue';
@@ -90,11 +92,11 @@ let ratingInit = (): Omit<RatingType, 'userId'> => {
     // Hidden rating
     isHiden: true,
     // Тип рейтинга
-    typeRating: 'site' as RatingTypeType,
+    typeRating: RatingTypeTypeEnum.site,
     // Отображать "плиткой" / "списком"
-    typeDisplay: 'tile' as RatingDisplayType,
+    typeDisplay: RatingDisplayTypeEnum.tile,
     // Порядок вывода елементов рейтинга
-    typeSort: 'alexa' as RatingSortType,
+    typeSort: RatingSortTypeEnum.alexa,
   };
 };
 
@@ -113,17 +115,20 @@ export default defineComponent({
       // id sections - needed because the component works with an array, and an object is sent to the server (field "rating")
       sectionsIds: [] as number[],
       // List rating types
-      typesRating: [] as { type: RatingTypeType; name: string }[],
+      typesRating: [] as {
+        type: ValueOfType<typeof RatingTypeTypeEnum>;
+        name: string;
+      }[],
       // List display types
-      typesDisplay: [] as { type: RatingDisplayType; name: string }[],
+      typesDisplay: [] as { type: ValueOfType<typeof RatingDisplayTypeEnum>; name: string }[],
       // List sort types
-      typesSort: [] as { type: RatingSortType; name: string }[],
+      typesSort: [] as { type: ValueOfType<typeof RatingSortTypeEnum>; name: string }[],
       // labels
       labels: [] as LabelType[],
       // Sections
       sections: [] as SectionType[],
       // Максимьное количество разделов
-      sectionsIdsLimit: 3,
+      sectionsIdsLimit: 2,
       // Максимальное количество символов
       nameMaxLength: 150,
       // Минимальное количество символов
@@ -148,13 +153,13 @@ export default defineComponent({
     async init() {
       // Types params rating
       this.typesDisplay = [
-        { type: 'tile', name: this.$t('Плитка') },
-        { type: 'inline', name: this.$t('Линия') },
+        { type: RatingDisplayTypeEnum.tile, name: this.$t('Плитка') },
+        { type: RatingDisplayTypeEnum.inline, name: this.$t('Линия') },
       ];
-      this.typesRating = [{ type: 'site', name: this.$t('Сайты') }];
+      this.typesRating = [{ type: RatingTypeTypeEnum.site, name: this.$t('Сайты') }];
       this.typesSort = [
-        { type: 'alexa', name: this.$t('Alexa Rank') },
-        { type: 'click', name: this.$t('Клики') },
+        { type: RatingSortTypeEnum.alexa, name: this.$t('Alexa Rank') },
+        { type: RatingSortTypeEnum.click, name: this.$t('Клики') },
       ];
 
       // Sections
