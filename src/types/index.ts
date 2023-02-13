@@ -1,3 +1,5 @@
+export type ValueOfType<T> = T[keyof T];
+
 // Lang
 export type LangType = {
   ua: string;
@@ -22,17 +24,17 @@ export type SectionType = {
 // Rating
 
 export enum RatingTypeTypeEnum {
-  'site' = '1',
+  site = '1',
 }
 
 export enum RatingDisplayTypeEnum {
-  'tile' = '1',
-  'inline' = '2',
+  tile = '1',
+  inline = '2',
 }
 
 export enum RatingSortTypeEnum {
-  'alexa' = '1',
-  'click' = '2',
+  alexa = '1',
+  click = '2',
 }
 
 // params - Needed to cut out the logo from the screenshot
