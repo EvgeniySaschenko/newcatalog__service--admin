@@ -63,7 +63,7 @@ export type SiteType = {
 // Site screenshot
 export type SiteScreenshotType = {
   siteScreenshotId: number;
-  img: string;
+  screenshotImg: string;
 };
 
 // Rating
@@ -83,14 +83,16 @@ export type RatingType = {
 // Rating item
 export type RatingItemType = {
   ratingItemId: number;
-  isCreatedScreen: boolean;
+  siteScreenshotId: number;
   isHiden: boolean;
   labelsIds: object;
   name: LangType;
-  site: SiteType;
+  siteId: number;
   priority: number;
   ratingId: number;
   url: string;
+  domain: string;
+  color: string;
 };
 
 // Label

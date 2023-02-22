@@ -139,7 +139,10 @@ export default defineComponent({
 
     // Delete section
     async deleteSection({ sectionId, name }: Pick<SectionType, 'sectionId' | 'name'>) {
-      await this.$utils.showDialogConfirmDelete({ message: name.ru });
+      await this.$utils.showDialogConfirm({
+        message: name.ru,
+        title: this.$t('Вы действительно хотите удалить?'),
+      });
       if (this.isSendingFormEdit) return;
       this.isSendingFormEdit = true;
 

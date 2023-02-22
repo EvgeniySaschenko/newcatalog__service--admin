@@ -1,29 +1,29 @@
 <template lang="pug">
 include /src/mixins.pug
 
-+b.EL-FORM.tab-images(v-loading='isLoading')
++b.EL-FORM.tab-logos(v-loading='isLoading')
   +e.title(ref='title')
     +e.title-col--1
       span {{ $route.name }}&nbsp;
-      span(v-if='sreens.length') {{ curIndex + 1 }} {{ $t("из") }} {{ sreens.length }}
+      span(v-if='sreens.length') {{ curIndex + 1 }} {{ $t('из') }} {{ sreens.length }}
     +e.title-col--2
-      +e.EL-TAG.tag-processing-status(:type='curItem.isSend ? "success" : ""') {{ curItem.isSend ? $t("Обработано") : $t("Не обработано") }}
-      el-button(type='primary', @click='createSiteLogo()', :disabled='!curItem.color') {{ $t("Отправить на сервер") }}
+      +e.EL-TAG.tag-processing-status(:type='curItem.isSend ? "success" : ""') {{ curItem.isSend ? $t('Обработано') : $t('Не обработано') }}
+      el-button(type='primary', @click='createSiteLogo()', :disabled='!curItem.color') {{ $t('Отправить на сервер') }}
   +e.box-arrow(v-if='sreens.length')
     +e.EL-ICON-ARROW-LEFT.arrow--prev(@click='setCurrentItem("prev")')
     +e.EL-ICON-ARROW-RIGHT.arrow--next(@click='setCurrentItem("next")')
-  +e.name-img.text-uppercase {{ curItem.img }}
-  img-cropper(:imgData='curItem', @img-data='setImgDataResult($event)')
+  +e.name-img.text-uppercase {{ curItem.screenshotImg }}
+  app-img-cropper(:img='curItem.img', @update:img-data='setImgDataResult($event)')
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import ImgCropper from '@/components/img-cropper/img-cropper.vue';
+import AppImgCropper from '@/components/app-img-cropper/app-img-cropper.vue';
 import { SiteLogoScreenshotParamsType, SiteType, SiteScreenshotType } from '@/types';
 
 type LogoDataForCreateType = {
   siteScreenshotId: SiteScreenshotType['siteScreenshotId'];
-  img: SiteScreenshotType['img'];
+  img: SiteScreenshotType['screenshotImg'];
   color: SiteType['color'];
   params: SiteLogoScreenshotParamsType['logoScreenshotParams'];
   isSend: boolean;
@@ -50,7 +50,7 @@ function SiteLogoScreenshotParamsDefault(): LogoDataForCreateType {
 
 export default defineComponent({
   components: {
-    ImgCropper,
+    AppImgCropper,
   },
   props: {
     // Rating id
@@ -98,6 +98,7 @@ export default defineComponent({
       try {
         let sreens = await this.$api['sites'].getSitesSreens({ ratingId: this.ratingId });
         this.sreens = sreens.map((el: any) => {
+          el.img = el.screenshotImg;
           Object.assign(SiteLogoScreenshotParamsDefault(), el); // add default props
           return el;
         });
@@ -175,7 +176,7 @@ export default defineComponent({
 </script>
 
 <style lang="sass" scoped>
-.tab-images
+.tab-logos
   &__title
     display: flex
     justify-content: space-between

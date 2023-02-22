@@ -173,7 +173,10 @@ export default defineComponent({
 
     // Delete label
     async deleteLabel() {
-      await this.$utils.showDialogConfirmDelete({ message: this.label.name.ru });
+      await this.$utils.showDialogConfirm({
+        message: this.label.name.ru,
+        title: this.$t('Вы действительно хотите удалить?'),
+      });
       if (this.isLoading) return;
       this.isLoading = true;
 

@@ -18,7 +18,6 @@ export default {
 
   // Create item for rating
   createItem: async ({
-    isCreatedScreen,
     isHiden,
     labelsIds,
     name,
@@ -29,7 +28,6 @@ export default {
     let result = await $fetch(`/api/ratings-items`, {
       method: 'POST',
       body: JSON.stringify({
-        isCreatedScreen,
         isHiden,
         labelsIds,
         name,
@@ -44,7 +42,6 @@ export default {
   // Edit item for rating
   editItem: async ({
     ratingItemId,
-    isCreatedScreen,
     isHiden,
     labelsIds,
     name,
@@ -56,7 +53,6 @@ export default {
       method: 'PUT',
       body: JSON.stringify({
         ratingItemId,
-        isCreatedScreen,
         isHiden,
         labelsIds,
         name,

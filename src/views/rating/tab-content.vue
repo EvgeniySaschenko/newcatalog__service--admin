@@ -8,22 +8,24 @@ include /src/mixins.pug
       type='primary',
       @click='toggleDialogRatingItem(true, {})',
       :loading='isLoading'
-    ) {{ $t("Добавить") }}
+    ) {{ $t('Добавить') }}
 
   +e.list
     +e.item(v-for='item of ratingItems')
       +e.row-top
-        +e.box-img(:style='{ backgroundColor: item.site.color }')
-          +e.IMG.img.sites-list__img(:src='item.site.img', :alt='item.name.ru')
+        +e.box-img(:style='{ backgroundColor: item.color }')
+          +e.IMG.img.sites-list__img(:src='item.logoImg', :alt='item.name.ru')
         +e.name 
+          |
           +e.name-text {{ item.name.ru }}
-        +e.A.link(:href='item.url', target='_blank') {{ getHost(item.url) }}
-        div {{ item.site.alexaRank }}
+        +e.A.link(:href='item.url', target='_blank') {{ item.hostname }}
+        div {{ item.alexaRank }}
         br
-        //div {{ (item.site.whois.creationDate || item.site.whois.created || (item.site.whois.createdOn || "").slice(7, 11) || "").slice(0, 4) }}
+        div(v-if='item.dateDomainCreate') {{ item.dateDomainCreate }}
 
         +e.labels
           template(v-for='label in labels') 
+            |
             .label-rating(
               v-if='item.labelsIds[label.labelId]',
               :style='{ backgroundColor: label.color }'
@@ -31,21 +33,21 @@ include /src/mixins.pug
 
       +e.row-bottom
         +e.status
-          +e.EL-TAG.status-item(v-if='item.isHiden', effect='dark', size='small', type='info') {{ $t("Скрыт") }}
+          +e.EL-TAG.status-item(v-if='item.isHiden', effect='dark', size='small', type='info') {{ $t('Скрыт') }}
         +e.EL-BUTTON.btn--edit(
           type='primary',
           @click='toggleDialogRatingItem(true, item)',
           size='small'
-        ) {{ $t("Редактировать") }}
+        ) {{ $t('Редактировать') }}
 
 // Диалоговое окно для редактирования сайта
-dialog-rating-item(
+app-dialog-site(
   v-if='isShowDialogRatingItem',
   :labels='labels',
+  :site='itemCurrent',
   :ratingId='ratingId',
-  :itemCurrent='itemCurrent',
   :labelsIdsLimit='labelsIdsLimit',
-  @rating-item:update='getRatingItems()',
+  @rating-item:update='updateRatingItems($event)',
   @dialog:closed='toggleDialogRatingItem(false, {})'
 )
 </template>
@@ -53,10 +55,12 @@ dialog-rating-item(
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { RatingItemType, LabelType, RatingType } from '@/types';
-
-import DialogRatingItem from './dialog-rating-item.vue';
+import AppDialogSite from '@/components/app-dialog-site/app-dialog-site.vue';
 
 export default defineComponent({
+  components: {
+    AppDialogSite,
+  },
   mounted() {
     this.init();
   },
@@ -85,11 +89,8 @@ export default defineComponent({
     // Rating id
     ratingId: {
       type: Number,
-      default: null,
+      default: 0,
     },
-  },
-  components: {
-    DialogRatingItem,
   },
   methods: {
     // Init
@@ -147,16 +148,21 @@ export default defineComponent({
       }
     },
 
-    // Get host from url
-    getHost(url: string) {
-      let { host } = new URL(url);
-      return host;
-    },
-
     // Toggle dialog rating item
     toggleDialogRatingItem(isShow: boolean, item: RatingItemType) {
       this.isShowDialogRatingItem = isShow;
       this.itemCurrent = item;
+    },
+
+    async updateRatingItems($event: any) {
+      let { ratingItemId, event } = $event;
+
+      await this.getRatingItems();
+      if (event === 'update') {
+        // ratingItemId
+        this.itemCurrent = (this.ratingItems.find((el) => el.ratingItemId === ratingItemId) ||
+          {}) as RatingItemType;
+      }
     },
   },
 });

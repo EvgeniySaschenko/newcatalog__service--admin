@@ -16,15 +16,17 @@ declare module '@vue/runtime-core' {
 //   }
 // }
 
-let defaultParams = {
-  headers: {
-    'Content-Type': 'application/json',
-  },
+let defaultParams = () => {
+  return {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
 };
 
 export let $fetch: FetchType = async (url: string, params?: RequestInit): Promise<Response> => {
   if (params && params.method !== 'GET') {
-    params = Object.assign(defaultParams, params);
+    params = Object.assign(defaultParams(), params);
   }
   let response: any;
   try {
