@@ -8,11 +8,17 @@ include /src/mixins.pug
       span(v-if='sreens.length') {{ curIndex + 1 }} {{ $t('из') }} {{ sreens.length }}
     +e.title-col--2
       +e.EL-TAG.tag-processing-status(:type='curItem.isSend ? "success" : ""') {{ curItem.isSend ? $t('Обработано') : $t('Не обработано') }}
-      el-button(type='primary', @click='createSiteLogo()', :disabled='!curItem.color') {{ $t('Отправить на сервер') }}
-  +e.box-arrow(v-if='sreens.length')
+      el-button(
+        type='primary',
+        @click='createSiteLogo()',
+        :disabled='!curItem.color || curItem.isSend'
+      ) {{ $t('Отправить на сервер') }}
+  +e.row-arrow(v-if='sreens.length')
     +e.EL-ICON-ARROW-LEFT.arrow--prev(@click='setCurrentItem("prev")')
     +e.EL-ICON-ARROW-RIGHT.arrow--next(@click='setCurrentItem("next")')
-  +e.name-img.text-uppercase {{ curItem.screenshotImg }}
+  +e.row-about
+    el-link.text-uppercase(type='primary') {{ curItem.host }}
+    el-button(type='primary', icon='el-icon-refresh', size='small', @click='getSitesSreens()') {{ $t('Обновить список') }}
   app-img-cropper(:img='curItem.img', @update:img-data='setImgDataResult($event)')
 </template>
 
@@ -87,7 +93,6 @@ export default defineComponent({
     // Init
     async init() {
       await this.getSitesSreens();
-      this.setCurrentItem();
     },
 
     // Get sites sreens
@@ -102,6 +107,7 @@ export default defineComponent({
           Object.assign(SiteLogoScreenshotParamsDefault(), el); // add default props
           return el;
         });
+        this.setCurrentItem();
       } catch (errors: any) {
         if (errors.server) {
           this.$utils.showMessageError({ message: errors.server });
@@ -181,9 +187,8 @@ export default defineComponent({
     display: flex
     justify-content: space-between
     padding: 10px
-  &__box-arrow
-    justify-content: space-between
-  &__box-arrow
+  &__row-about,
+  &__row-arrow
     display: flex
     justify-content: space-between
     margin-bottom: 10px
