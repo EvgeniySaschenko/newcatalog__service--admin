@@ -28,10 +28,10 @@ export let $utils = {
     return new Intl.DateTimeFormat('uk', options).format(new Date(date));
   },
   /*
-    Show deletion confirmation dialog
+    Show confirmation dialog
   */
-  showDialogConfirmDelete({
-    title = $t('Вы действительно хотите удалить?'),
+  showDialogConfirm({
+    title = '',
     message = '',
     confirmButtonText = $t('Да'),
     cancelButtonText = $t('Нет'),
@@ -40,6 +40,14 @@ export let $utils = {
       confirmButtonText,
       cancelButtonText,
       type: 'warning',
+    });
+  },
+  /*
+    Show alert dialog
+  */
+  showDialogAlert({ title = '', message = '', confirmButtonText = $t('OK') }) {
+    return ElMessageBox.alert(message, title, {
+      confirmButtonText,
     });
   },
   /*

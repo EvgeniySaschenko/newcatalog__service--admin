@@ -5,16 +5,16 @@ include /src/mixins.pug
   +e.H1.title
     +e.title-col--1
       span {{ $route.name }}&nbsp;
-      span(v-if='items.length') {{ curIndex + 1 }} {{ $t("из") }} {{ items.length }}
+      span(v-if='items.length') {{ curIndex + 1 }} {{ $t('из') }} {{ items.length }}
     +e.title-col--2
-      +e.EL-TAG.tag-processing-status(size='medium', :type='curItem.isSend ? "success" : ""') {{ curItem.isSend ? $t("Обработано") : $t("Не обработано") }}
+      +e.EL-TAG.tag-processing-status(size='medium', :type='curItem.isSend ? "success" : ""') {{ curItem.isSend ? $t('Обработано') : $t('Не обработано') }}
 
       el-button(
         type='primary',
         @click='sendImg()',
         :loading='isSend',
         :disabled='isDisabledBtnSend'
-      ) {{ $t("Отправить на сервер") }}
+      ) {{ $t('Отправить на сервер') }}
 
   +e.EL-ALERT.alert-send-status(
     :type='isErrorSend ? "error" : "success"',
@@ -25,16 +25,16 @@ include /src/mixins.pug
     +e.I.arrow--prev.bi.bi-arrow-left-circle-fill(@click='toggleImg("prev")')
     +e.I.arrow--next.bi.bi-arrow-right-circle-fill(@click='toggleImg("next")')
   +e.name-img.text-uppercase {{ curItem.img }}
-  img-cropper(:imgData='curItem', @img-data='setImgDataResult($event)')
+  app-img-cropper(:imgData='curItem', @img-data='setImgDataResult($event)')
 </template>
 
 <script>
-import ImgCropper from '@/components/img-cropper/img-cropper.vue';
+import AppImgCropper from '@/components/app-img-cropper/app-img-cropper.vue';
 // import { ArrowRight, ArrowLeft } from '@element-plus/icons';
 
 export default {
   components: {
-    ImgCropper,
+    AppImgCropper,
     // ArrowRight,
     // ArrowLeft,
   },

@@ -10,8 +10,10 @@ include /src/mixins.pug
       tab-content(v-if='tabActive == "content"', :ratingId='ratingId')
     el-tab-pane(:label='$t("Ярлыки")', name='labels', :disabled='!ratingId')
       tab-labels(v-if='tabActive == "labels"', :ratingId='ratingId')
-    el-tab-pane(:label='$t("Изображения")', name='images', :disabled='!ratingId')
-      tab-images(v-if='tabActive == "images"', :ratingId='ratingId')
+    el-tab-pane(:label='$t("Создать логотип")', name='logos', :disabled='!ratingId')
+      tab-logos(v-if='tabActive == "logos"', :ratingId='ratingId')
+    el-tab-pane(:label='$t("Скриншоты ошибки")', name='screenshots-errors', :disabled='!ratingId')
+      tab-screenshots-errors(v-if='tabActive == "screenshots-errors"', :ratingId='ratingId')
 </template>
 
 <script lang="ts">
@@ -19,9 +21,10 @@ import { defineComponent } from 'vue';
 import TabMain from './tab-main.vue';
 import TabContent from './tab-content.vue';
 import TabLabels from './tab-labels.vue';
-import TabImages from './tab-images.vue';
+import TabLogos from './tab-logos.vue';
+import TabScreenshotsErrors from './tab-screenshots-errors.vue';
 
-type TabsType = 'main' | 'content' | 'labels' | 'images';
+type TabsType = 'main' | 'content' | 'labels' | 'logos' | 'screenshots-errors';
 
 export default defineComponent({
   name: 'page-rating',
@@ -30,7 +33,8 @@ export default defineComponent({
     TabMain,
     TabContent,
     TabLabels,
-    TabImages,
+    TabLogos,
+    TabScreenshotsErrors,
   },
 
   mounted() {

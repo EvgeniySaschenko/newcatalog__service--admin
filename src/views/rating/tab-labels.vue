@@ -13,7 +13,7 @@ dialog-label-rating(
 el-button(type='primary')(@click='toggleDialogLabelAdd(true)') {{ $t("Добавить ярлык") }}
 
 // Редактировать ярлык
-dialog-label-rating(
+dialog-label(
   v-if='isShowDialogEdit',
   actionType='edit',
   :color='labelCurrent.color',
@@ -43,7 +43,7 @@ el-table(:data='labels')
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { LabelType } from '@/types';
-import DialogLabelRating from './dialog-label-rating.vue';
+import DialogLabelRating from './dialog-label.vue';
 
 export default defineComponent({
   props: {
