@@ -5,7 +5,7 @@ include /src/mixins.pug
 el-dialog(fullscreen, :model-value='true', @closed='$emit("dialog:closed")')
   +b.app-dialog-site.container
     +e.H2.title {{ isModeEdit ? `${$t('Редактировать сайт')}: ${site.hostname}` : $t('Добавить сайт') }}
-    +e.row-top
+    +e.row-top(v-if='isModeEdit')
       el-button(
         type='primary',
         icon='el-icon-refresh',
@@ -42,6 +42,7 @@ export default defineComponent({
   provide() {
     return {
       provideEmitUpdateRatingItem: this.provideEmitUpdateRatingItem,
+      provideEmitDialogClose: this.provideEmitDialogClose,
     };
   },
   computed: {
@@ -90,6 +91,10 @@ export default defineComponent({
         event: 'update',
         ratingItemId: this.site.ratingItemId,
       });
+    },
+
+    provideEmitDialogClose() {
+      this.$emit('dialog:closed');
     },
   },
 });

@@ -39,19 +39,19 @@ include /src/mixins.pug
   el-form-item
     el-input-number(v-model='state.priority', size='small', :placeholder='$t("Приоритет")')
   el-form-item
-    el-checkbox(v-model='state.isHiden') {{ $t("Скрыть") }}
+    el-checkbox(v-model='state.isHiden') {{ $t('Скрыть') }}
   el-form-item
     +e.footer
-      el-button(v-if='isModeEdit', type='danger', @click='deleteRatingItem()') {{ $t("Удалить") }}
-      el-button(v-if='isModeEdit', type='primary', @click='editRatingItem()') {{ $t("Сохранить") }}
-      el-button(v-if='!isModeEdit', type='primary', @click='createRatingItem()') {{ $t("Создать") }}
+      el-button(v-if='isModeEdit', type='danger', @click='deleteRatingItem()') {{ $t('Удалить') }}
+      el-button(v-if='isModeEdit', type='primary', @click='editRatingItem()') {{ $t('Сохранить') }}
+      el-button(v-if='!isModeEdit', type='primary', @click='createRatingItem()') {{ $t('Создать') }}
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { LabelType, LangInit, RatingItemType } from '@/types';
 
 export default defineComponent({
-  inject: ['provideEmitUpdateRatingItem'],
+  inject: ['provideEmitUpdateRatingItem', 'provideEmitDialogClose'],
   data() {
     return {
       // State rating item
@@ -210,7 +210,7 @@ export default defineComponent({
         });
 
         (this.provideEmitUpdateRatingItem as any)();
-        this.$emit('dialog:closed');
+        (this.provideEmitDialogClose as any)();
       } catch (errors: any) {
         if (errors.server) {
           this.$utils.showMessageError({ message: errors.server });

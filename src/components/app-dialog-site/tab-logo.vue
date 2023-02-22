@@ -198,6 +198,7 @@ export default defineComponent({
     async linkDomainImagesToSubdomain() {
       if (this.isLoading) return;
       this.isLoading = true;
+      console.log(this.site);
       try {
         let result = await this.$api.sites.getSiteBySiteId({ siteId: this.site.siteId });
         if (result && result.siteScreenshotId) {
