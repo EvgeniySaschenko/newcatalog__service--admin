@@ -14,7 +14,7 @@ include /src/mixins.pug
       el-table-column(width='200')
         template(#default='scope')
           el-form-item
-            el-button(type='primary', @click='createSection()') {{ $t("Добавить раздел") }}
+            el-button(type='primary', @click='createSection()') {{ $t('Добавить раздел') }}
 
   // Edit
   el-form
@@ -42,7 +42,7 @@ include /src/mixins.pug
       el-table-column(:label='$t("Редактировать")', width='150')
         template(#default='scope')
           el-form-item
-            el-button(type='primary', size='small', @click='editSection(scope.row)') {{ $t("Редактировать") }}
+            el-button(type='primary', size='small', @click='editSection(scope.row)') {{ $t('Редактировать') }}
 
       el-table-column(:label='$t("Удалить")', width='150')
         template(#default='scope')
@@ -51,7 +51,7 @@ include /src/mixins.pug
               type='danger',
               size='small',
               @click='deleteSection({ sectionId: scope.row.sectionId, name: scope.row.name })'
-            ) {{ $t("Удалить") }}
+            ) {{ $t('Удалить') }}
 </template>
 
 <script lang="ts">
@@ -140,8 +140,7 @@ export default defineComponent({
     // Delete section
     async deleteSection({ sectionId, name }: Pick<SectionType, 'sectionId' | 'name'>) {
       await this.$utils.showDialogConfirm({
-        message: name.ru,
-        title: this.$t('Вы действительно хотите удалить?'),
+        title: `${this.$t('Вы действительно хотите удалить?')} "${name.ru}"`,
       });
       if (this.isSendingFormEdit) return;
       this.isSendingFormEdit = true;
@@ -156,6 +155,9 @@ export default defineComponent({
         if (errors.server) {
           this.$utils.showMessageError({ message: errors.server });
           return;
+        }
+        if (errors.errors.section) {
+          this.$utils.showMessageError({ message: errors.errors.section });
         }
       } finally {
         this.isSendingFormEdit = false;

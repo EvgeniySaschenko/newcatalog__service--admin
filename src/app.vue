@@ -3,14 +3,14 @@ include /src/mixins.pug
 
 .wrapper
   header.container
-    menu-main
+    app-menu-main
   router-view(v-loading='isLoading')
   footer.container
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import MenuMain from '@/components/menu-main/menu-main.vue';
+import AppMenuMain from '@/components/app-menu-main/app-menu-main.vue';
 import useSectionsStore from '@/store/sections';
 
 export default defineComponent({
@@ -20,7 +20,7 @@ export default defineComponent({
     };
   },
   components: {
-    MenuMain,
+    AppMenuMain,
   },
   mounted() {
     this.getSections();

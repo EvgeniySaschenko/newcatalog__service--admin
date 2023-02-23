@@ -14,14 +14,14 @@ include /src/mixins.pug
   // else
   template(v-if='!site.isScreenshotProcessCreate')
     +e.row
-      +e.title {{ $t("Скриншот") }}
+      +e.title {{ $t('Скриншот') }}
       +e.content
         +e.col--value
           img(v-if='site.screenshotImg', :src='site.screenshotImg')
           div(v-else)
             el-icon.m-2(size='40')
               el-icon-picture
-            div {{ $t("Для этого сайта нет скриншотов") }}
+            div {{ $t('Для этого сайта нет скриншотов') }}
         +e.col--action
           el-tooltip(
             v-if='!site.screenshotImg && site.isSubdomain',
@@ -30,10 +30,10 @@ include /src/mixins.pug
           )
             el-icon.m-2
               el-icon-question-filled
-          el-button(type='warning', size='small', @click='createSiteScreenshot()') {{ $t("Сделать новый скриншот") }}
+          el-button(type='warning', size='small', @click='createSiteScreenshot()') {{ $t('Сделать новый скриншот') }}
 
     +e.row
-      +e.title {{ $t("Загрузить скриншот вручную") }}
+      +e.title {{ $t('Загрузить скриншот вручную') }}
       +e.content
         +e.col--value
           el-upload(
@@ -48,14 +48,14 @@ include /src/mixins.pug
             div(v-else)
               el-icon(size='40')
                 el-icon-upload-filled
-              div {{ $t("Выбрать скриншот") }}
+              div {{ $t('Выбрать скриншот') }}
         +e.col--action
           el-button(
             type='primary',
             size='small',
             :disabled='!customScreenshotImg',
             @click='uploadCustomSiteScreenshot()'
-          ) {{ $t("Сохранить") }}
+          ) {{ $t('Сохранить') }}
 </template>
 
 <script lang="ts">
@@ -108,7 +108,6 @@ export default defineComponent({
       if (this.isLoading) return;
       if (this.site.siteScreenshotId) {
         await this.$utils.showDialogConfirm({
-          title: this.$t('Сделать новый скриншот'),
           message: this.$t('Для этого сайта уже существует скриншот. Cоздать новый?'),
         });
       }

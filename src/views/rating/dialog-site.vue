@@ -49,12 +49,12 @@ el-dialog.dialog-rating-item(
         el-form-item
           el-input-number(v-model='state.priority', size='small', :placeholder='$t("Приоритет")')
         el-form-item
-          el-checkbox(v-model='state.isHiden') {{ $t("Скрыть") }}
+          el-checkbox(v-model='state.isHiden') {{ $t('Скрыть') }}
         el-form-item
           +e.footer
-            el-button(v-if='!isAddItem', type='danger', @click='deleteRatingItem()') {{ $t("Удалить") }}
-            el-button(v-if='!isAddItem', type='primary', @click='editRatingItem()') {{ $t("Сохранить") }}
-            el-button(v-if='isAddItem', type='primary', @click='createRatingItem()') {{ $t("Создать") }}
+            el-button(v-if='!isAddItem', type='danger', @click='deleteRatingItem()') {{ $t('Удалить') }}
+            el-button(v-if='!isAddItem', type='primary', @click='editRatingItem()') {{ $t('Сохранить') }}
+            el-button(v-if='isAddItem', type='primary', @click='createRatingItem()') {{ $t('Создать') }}
 
     // TAB - screenshot
     el-tab-pane(:label='$t("Скриншот")', name='screenshot')
@@ -69,14 +69,14 @@ el-dialog.dialog-rating-item(
       // else
       +b.tab-screenshot-logo(v-if='!state.isScreenshotProcessCreate')
         +e.row
-          +e.title {{ $t("Скриншот") }}
+          +e.title {{ $t('Скриншот') }}
           +e.content
             +e.col--value
               img(v-if='state.screenshotImg', :src='state.screenshotImg')
               div(v-else)
                 el-icon.m-2(size='40')
                   el-icon-picture
-                div {{ $t("Для этого сайта нет скриншотов") }}
+                div {{ $t('Для этого сайта нет скриншотов') }}
             +e.col--action
               el-tooltip(
                 v-if='!state.screenshotImg && state.isSubdomain',
@@ -85,10 +85,10 @@ el-dialog.dialog-rating-item(
               )
                 el-icon.m-2
                   el-icon-question-filled
-              el-button(type='warning', @click='createSiteScreenshot()', size='small') {{ $t("Сделать новый скриншот") }}
+              el-button(type='warning', @click='createSiteScreenshot()', size='small') {{ $t('Сделать новый скриншот') }}
 
         +e.row
-          +e.title {{ $t("Загрузить скриншот вручную") }}
+          +e.title {{ $t('Загрузить скриншот вручную') }}
           +e.content
             +e.col--value
               el-upload(
@@ -103,14 +103,14 @@ el-dialog.dialog-rating-item(
                 div(v-else)
                   el-icon(size='40')
                     el-icon-upload-filled
-                  div {{ $t("Выбрать скриншот") }}
+                  div {{ $t('Выбрать скриншот') }}
             +e.col--action
               el-button(
                 type='primary',
                 size='small',
                 :disabled='!customScreenshotImg',
                 @click='uploadCustomSiteScreenshot()'
-              ) {{ $t("Сохранить") }}
+              ) {{ $t('Сохранить') }}
 
     // TAB - logo
     el-tab-pane(:label='$t("Логотип")', name='logo')
@@ -132,7 +132,7 @@ el-dialog.dialog-rating-item(
 
         // Show if exist screenshot and logo
         +e.row(v-if='state.siteScreenshotId && state.siteLogoId')
-          +e.title {{ $t("Логотип") }}
+          +e.title {{ $t('Логотип') }}
           +e.content
             +e.col--value(:style='{ backgroundColor: state.color }')
               img(:src='state.logoImg')
@@ -140,20 +140,20 @@ el-dialog.dialog-rating-item(
               el-tooltip(:content='$t("На основе текущего скриншота")', placement='top')
                 el-icon.m-2
                   el-icon-question-filled
-              el-button(type='warning', @click='recreateSiteLogo()', size='small') {{ $t("Переделать логотип") }}
+              el-button(type='warning', @click='recreateSiteLogo()', size='small') {{ $t('Переделать логотип') }}
 
         // Show if exist logo
         +e.row(v-if='state.isLogoExist')
-          +e.title {{ $t("Цвет") }}
+          +e.title {{ $t('Цвет') }}
           +e.content
             +e.col--value(:style='{ backgroundColor: state.color }')
               img(:src='state.logoImg')
             +e.col--action
-              el-button(type='warning', @click='createScreenshotRatingItem()', size='small') {{ $t("Изменить цвет") }}
+              el-button(type='warning', @click='createScreenshotRatingItem()', size='small') {{ $t('Изменить цвет') }}
 
         // Show only from subdomain
         +e.row(v-if='state.isSubdomain')
-          +e.title {{ $t("Логотипа для домена") }}
+          +e.title {{ $t('Логотипа для домена') }}
           +e.content
             +e.col--value(:style='{ backgroundColor: colorDomain }')
               img(v-if='logoDomainImg', :src='logoDomainImg')
@@ -164,7 +164,7 @@ el-dialog.dialog-rating-item(
               )
                 el-icon.m-2
                   el-icon-question-filled
-              el-button(type='primary', @click='createScreenshotRatingItem()', size='small') {{ $t("Проверить наличие логотипа") }}
+              el-button(type='primary', @click='createScreenshotRatingItem()', size='small') {{ $t('Проверить наличие логотипа') }}
 </template>
 
 <script lang="ts">
@@ -342,8 +342,7 @@ export default defineComponent({
     async deleteRatingItem() {
       if (this.isLoading) return;
       await this.$utils.showDialogConfirm({
-        message: this.state.name.ru,
-        title: this.$t('Вы действительно хотите удалить?'),
+        title: `${this.$t('Вы действительно хотите удалить?')} "${this.state.name.ru}"`,
       });
       this.isLoading = true;
 
@@ -370,7 +369,6 @@ export default defineComponent({
       if (this.isLoading) return;
       if (this.state.siteScreenshotId) {
         await this.$utils.showDialogConfirm({
-          title: this.$t('Сделать новый скриншот'),
           message: this.$t('Для этого сайта уже существует скриншот, создать новый?'),
         });
       }
