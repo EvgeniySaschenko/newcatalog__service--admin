@@ -197,8 +197,7 @@ export default defineComponent({
     async deleteRatingItem() {
       if (this.isLoading) return;
       await this.$utils.showDialogConfirm({
-        message: this.state.name.ru,
-        title: this.$t('Вы действительно хотите удалить?'),
+        title: `${this.$t('Вы действительно хотите удалить?')} "${this.state.name.ru}"`,
       });
       this.isLoading = true;
 

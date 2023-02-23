@@ -20,9 +20,9 @@ el-dialog(:title='title', :model-value='true', @closed='$emit("dialog:closed")')
       .label-rating(:style='{ backgroundColor: label.color }') {{ label.name.ua }}
 
   template(#footer)
-    el-button(v-if='actionType == "edit"', type='danger', @click='deleteLabel()') {{ $t("Удалить") }}
-    el-button(v-if='actionType == "edit"', type='primary', @click='editLabel()') {{ $t("Редактировать") }}
-    el-button(v-if='actionType == "create"', type='primary', @click='createLabel()') {{ $t("Создать") }}
+    el-button(v-if='actionType == "edit"', type='danger', @click='deleteLabel()') {{ $t('Удалить') }}
+    el-button(v-if='actionType == "edit"', type='primary', @click='editLabel()') {{ $t('Редактировать') }}
+    el-button(v-if='actionType == "create"', type='primary', @click='createLabel()') {{ $t('Создать') }}
 </template>
 
 <script lang="ts">
@@ -174,8 +174,7 @@ export default defineComponent({
     // Delete label
     async deleteLabel() {
       await this.$utils.showDialogConfirm({
-        message: this.label.name.ru,
-        title: this.$t('Вы действительно хотите удалить?'),
+        title: `${this.$t('Вы действительно хотите удалить?')} "${this.label.name.ru}"`,
       });
       if (this.isLoading) return;
       this.isLoading = true;

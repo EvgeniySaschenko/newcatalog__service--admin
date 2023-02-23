@@ -2,7 +2,7 @@
 include /src/mixins.pug
 
 // Добавить ярлык
-dialog-label-rating(
+dialog-label(
   v-if='isShowDialogAdd',
   actionType='create',
   :ratingId='ratingId',
@@ -10,7 +10,7 @@ dialog-label-rating(
   @dialog:closed='toggleDialogLabelAdd(false)',
   @label:update='getLabels(ratingId)'
 )
-el-button(type='primary')(@click='toggleDialogLabelAdd(true)') {{ $t("Добавить ярлык") }}
+el-button(type='primary')(@click='toggleDialogLabelAdd(true)') {{ $t('Добавить ярлык') }}
 
 // Редактировать ярлык
 dialog-label(
@@ -37,13 +37,13 @@ el-table(:data='labels')
         type='primary',
         @click='toggleDialogLabelEdit(true, { ...scope.row })',
         size='small'
-      ) {{ $t("Редактировать") }}
+      ) {{ $t('Редактировать') }}
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { LabelType } from '@/types';
-import DialogLabelRating from './dialog-label.vue';
+import DialogLabel from './dialog-label.vue';
 
 export default defineComponent({
   props: {
@@ -68,7 +68,7 @@ export default defineComponent({
     };
   },
   components: {
-    DialogLabelRating,
+    DialogLabel,
   },
   mounted() {
     this.init();

@@ -1,7 +1,7 @@
 <template lang="pug">
 include /src/mixins.pug
 
-el-form(v-loading='isLoading', label-position='left', label-width='150px')
++b.EL-FORM.tab-main(v-loading='isLoading', label-position='left', label-width='150px')
   // Разделы 
   el-form-item(:error='errors.sectionsIds', :label='$t("Разделы")', required)
     el-select(
@@ -61,8 +61,10 @@ el-form(v-loading='isLoading', label-position='left', label-width='150px')
   el-form-item(:label='$t("Скрыть")')
     el-checkbox(v-model='rating.isHiden')
 
-  el-button(v-if='!rating.ratingId', type='primary', @click='createRating()') {{ $t("Создать рейтинг") }}
-  el-button(v-else, type='primary', @click='editRating()') {{ $t("Редактировать рейтинг") }}
+  +e.bottom
+    el-button(v-if='!rating.ratingId', type='primary', @click='createRating()') {{ $t('Создать рейтинг') }}
+    el-button(v-if='rating.ratingId', type='primary', @click='editRating()') {{ $t('Редактировать рейтинг') }}
+    el-button(v-if='rating.ratingId', type='danger', @click='deleteRating()') {{ $t('Удалить') }}
 </template>
 
 <script lang="ts">
@@ -255,8 +257,41 @@ export default defineComponent({
         this.isLoading = false;
       }
     },
+
+    // Delete rating
+    async deleteRating() {
+      if (this.isLoading) return;
+      await this.$utils.showDialogConfirm({
+        title: `${this.$t('Вы действительно хотите удалить?')} "${this.rating.name.ru}"`,
+      });
+
+      this.isLoading = true;
+
+      try {
+        await this.$api.ratings.deleteRating({ ratingId: this.ratingId });
+        this.$utils.showMessageSuccess({
+          message: `${this.$t('Рейтинг удалён')}: "${this.rating.name.ru}"`,
+        });
+        this.$router.push({ path: `/ratings` });
+      } catch (errors: any) {
+        if (errors.server) {
+          this.$utils.showMessageError({ message: errors.server });
+          return;
+        }
+        if (errors.errors.rating) {
+          this.$utils.showMessageError({ message: errors.errors.rating });
+        }
+      } finally {
+        this.isLoading = false;
+      }
+    },
   },
 });
 </script>
 
-<style lang="sass" scoped></style>
+<style lang="sass" scoped>
+.tab-main
+  &__bottom
+    display: flex
+    justify-content: space-between
+</style>

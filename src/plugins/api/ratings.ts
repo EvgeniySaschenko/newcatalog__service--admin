@@ -70,4 +70,13 @@ export default {
     });
     return await result.json();
   },
+
+  // Delete rating
+  deleteRating: async ({ ratingId }: { ratingId: RatingType['ratingId'] }) => {
+    let result = await $fetch(`/api/ratings/${ratingId}`, {
+      method: 'DELETE',
+      body: JSON.stringify({ ratingId }),
+    });
+    return await result.json();
+  },
 };
