@@ -14,7 +14,7 @@ export default {
       items: [
         { name: 'Список рейтингов', path: '/ratings' },
         { name: 'Список разделов', path: '/sections' },
-        { name: 'Подготовка логотипов', path: '/logo-processing' },
+        { name: 'Управление кешем', path: '/cache' },
         { name: 'Login', path: '/login' },
       ],
     };

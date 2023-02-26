@@ -21,9 +21,9 @@ let routes = [
     component: () => import('@/views/rating/rating.vue'),
   },
   {
-    path: '/logo-processing',
-    name: 'Подготовка логотипов',
-    component: () => import('@/views/logo-processing/logo-processing.vue'),
+    path: '/cache',
+    name: 'Управление кешем',
+    component: () => import('@/views/cache/cache.vue'),
   },
   {
     path: '/login',
