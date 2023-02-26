@@ -5,12 +5,15 @@ include /src/mixins.pug
 
   // Button create new rating
   router-link.inline-block(:to='`${pathPage}/create`')
-    el-button(type='primary', icon='el-icon-plus') {{ $t("Создать новый рейтинг") }}
+    el-button(type='primary', icon='el-icon-plus') {{ $t('Создать новый рейтинг') }}
   // List ratings
   el-table(:data='ratings', stripe, :scrollbar-always-on='true')
     el-table-column(:label='$t("Название")')
       template(#default='scope')
         router-link(:to='`${pathPage}/${scope.row.ratingId}`') {{ scope.row.name.ua }}
+    el-table-column(:label='$t("Скрыт")', width='100')
+      template(#default='scope')
+        el-tag(type='info', effect='dark', size='size', v-if='scope.row.isHiden') {{ $t('Скрыт') }}
     el-table-column(:label='$t("Дата создания")', width='150')
       template(#default='scope') {{ $utils.date(scope.row.dateCreate) }}
 </template>
