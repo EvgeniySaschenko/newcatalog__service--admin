@@ -4,7 +4,8 @@ include /src/mixins.pug
 .wrapper
   header.container
     app-menu-main
-  router-view(v-loading='isLoading')
+  div(v-loading='isLoading')
+    router-view(v-if='isSectionsRedy')
   footer.container
 </template>
 
@@ -17,13 +18,14 @@ export default defineComponent({
   data() {
     return {
       isLoading: false,
+      isSectionsRedy: false,
     };
   },
   components: {
     AppMenuMain,
   },
-  mounted() {
-    this.getSections();
+  async mounted() {
+    await this.getSections();
   },
 
   methods: {
@@ -35,15 +37,14 @@ export default defineComponent({
         let store = useSectionsStore();
         let sections = await this.$api.sections.getSections();
         store.setSections(sections);
+        this.isSectionsRedy = true;
       } catch (errors: any) {
         if (errors.server) {
           this.$utils.showMessageError({ message: errors.server });
           return;
         }
       } finally {
-        setTimeout(() => {
-          this.isLoading = false;
-        }, 200);
+        this.isLoading = false;
       }
     },
   },

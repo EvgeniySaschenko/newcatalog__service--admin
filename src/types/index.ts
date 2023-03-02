@@ -78,6 +78,10 @@ export type RatingType = {
   typeRating: RatingTypeTypeEnum;
   typeSort: RatingSortTypeEnum;
   dateCreate?: Date;
+  dateCacheCreation: Date | null;
+  dateFirstPublication: Date | null;
+  countRatingItemsTotal: number;
+  countRatingItemsHidden: number;
 };
 
 // Rating item

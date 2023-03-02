@@ -1,7 +1,12 @@
 <template lang="pug">
 include /src/mixins.pug
 
-+b.EL-FORM.tab-main(v-loading='isLoading', label-position='left', label-width='150px')
++b.EL-FORM.tab-main(
+  v-loading='isLoading',
+  label-position='left',
+  label-width='170px',
+  @change='www()'
+)
   // Разделы 
   el-form-item(:error='errors.sectionsIds', :label='$t("Разделы")', required)
     el-select(
@@ -31,7 +36,7 @@ include /src/mixins.pug
       el-radio-button(v-for='item in typesDisplay', :label='item.type', size='small') {{ item.name }}
 
   // Упорядочить контент по
-  el-form-item(:label='$t("Упорядочить контент по:")')
+  el-form-item(:label='$t("Сортировка:")')
     el-radio-group(v-model='rating.typeSort')
       el-radio-button(v-for='item in typesSort', :label='item.type', size='small') {{ item.name }}
 
@@ -59,11 +64,41 @@ include /src/mixins.pug
     )
 
   el-form-item(:label='$t("Скрыть")')
-    el-checkbox(v-model='rating.isHiden')
+    el-checkbox.m-2(v-model='rating.isHiden')
+    el-tooltip(
+      :content='$t("При сохранении раздел будет удалён из кэша. Так же при пересоздании всех кешей не будет опубликован.")',
+      placement='top'
+    )
+      el-icon.m-2
+        el-icon-question-filled
+
+  el-form-item(:label='$t("Убрать с сайта")')
+    el-button(
+      type='danger',
+      @click='deleteCacheRating(rating.ratingId)',
+      :disabled='!rating.dateCacheCreation'
+    ) {{ $t('Удалить из кэша') }}
+
+  el-form-item(:label='$t("Опубликовать")')
+    el-button(
+      type='warning',
+      @click='createCacheRating(rating.ratingId)',
+      :disabled='isCacheUpdateDisabled'
+    ) {{ $t('Добавить в кэш') }}
+    el-tooltip(placement='top', v-if='isCacheUpdateDisabled')
+      template(#content)
+        div {{ $t('Рейтинг нельзя опубликовать:') }}
+        div {{ $t('1. Если рейтинг скрыт') }}
+        div {{ $t('2. Если нём нет контента для публикации, или контент скрыт') }}
+      el-icon.m-2
+        el-icon-question-filled
+
+  el-form-item(:label='$t("Дата публикации")') {{ $utils.date(rating.dateFirstPublication, 'datetime') }}
+  el-form-item(:label='$t("Дата создания кэша")') {{ $utils.date(rating.dateCacheCreation, 'datetime') }}
 
   +e.bottom
     el-button(v-if='!rating.ratingId', type='primary', @click='createRating()') {{ $t('Создать рейтинг') }}
-    el-button(v-if='rating.ratingId', type='primary', @click='editRating()') {{ $t('Редактировать рейтинг') }}
+    el-button(v-if='rating.ratingId', type='primary', @click='editRating()') {{ $t('Сохранить изменения') }}
     el-button(v-if='rating.ratingId', type='danger', @click='deleteRating()') {{ $t('Удалить') }}
 </template>
 
@@ -91,13 +126,19 @@ let ratingInit = (): Omit<RatingType, 'userId'> => {
     // Descriptin rating
     descr: LangInit(),
     // Hidden rating
-    isHiden: true,
+    isHiden: false,
     // Тип рейтинга
     typeRating: RatingTypeTypeEnum.site,
     // Отображать "плиткой" / "списком"
     typeDisplay: RatingDisplayTypeEnum.tile,
     // Порядок вывода елементов рейтинга
     typeSort: RatingSortTypeEnum.alexa,
+    // Количество items всего
+    countRatingItemsTotal: 0,
+    // Количество items скрытых
+    countRatingItemsHidden: 0,
+    dateCacheCreation: null,
+    dateFirstPublication: null,
   };
 };
 
@@ -109,8 +150,19 @@ export default defineComponent({
       default: null,
     },
   },
+  computed: {
+    // If rating visible and no empy
+    isCacheUpdateDisabled(): boolean {
+      if (!(this.rating.countRatingItemsTotal - this.rating.countRatingItemsHidden)) return true;
+      if (this.ratingIsHiden) return true;
+      return false;
+    },
+  },
+
   data() {
     return {
+      initialStateRating: '',
+      ratingIsHiden: true,
       // Rating data
       rating: ratingInit() as RatingType,
       // id sections - needed because the component works with an array, and an object is sent to the server (field "rating")
@@ -180,6 +232,8 @@ export default defineComponent({
       try {
         this.rating = await this.$api.ratings.getRating({ ratingId });
         this.sectionsIds = Object.values(this.rating.sectionsIds) as number[];
+        this.ratingIsHiden = this.rating.isHiden;
+        this.initialStateRating = JSON.stringify(this.rating);
       } catch (errors: any) {
         if (errors.server) {
           this.$utils.showMessageError({ message: errors.server });
@@ -236,17 +290,15 @@ export default defineComponent({
       if (this.isLoading) return;
       this.isLoading = true;
       this.$utils.clearErrors(this.errors, this.errors);
-
+      let isSuccess = false;
       try {
-        let sectionsIds = this.sectionsIds.reduce((a, v) => ({ ...a, [v]: v }), {});
-        await this.$api.ratings.editRating({
-          ...this.rating,
-          sectionsIds,
-        });
+        await this.$api.ratings.editRating(this.preparingRatingDataForSavingEdit());
 
         this.$utils.showMessageSuccess({
           message: `${this.$t('Рейтинг изменён')}: "${this.rating.name.ru}"`,
         });
+
+        isSuccess = true;
       } catch (errors: any) {
         if (errors.server) {
           this.$utils.showMessageError({ message: errors.server });
@@ -256,6 +308,16 @@ export default defineComponent({
       } finally {
         this.isLoading = false;
       }
+
+      if (isSuccess) {
+        await this.getRating(this.rating.ratingId);
+      }
+    },
+
+    // The method is necessary to repeat the preparation algorithm in several places
+    preparingRatingDataForSavingEdit() {
+      let sectionsIds = this.sectionsIds.reduce((a, v) => ({ ...a, [v]: v }), {});
+      return { ...this.rating, sectionsIds };
     },
 
     // Delete rating
@@ -268,7 +330,9 @@ export default defineComponent({
       this.isLoading = true;
 
       try {
+        await this.$api.cache.deleteCacheRating({ ratingId: this.ratingId });
         await this.$api.ratings.deleteRating({ ratingId: this.ratingId });
+
         this.$utils.showMessageSuccess({
           message: `${this.$t('Рейтинг удалён')}: "${this.rating.name.ru}"`,
         });
@@ -283,6 +347,64 @@ export default defineComponent({
         }
       } finally {
         this.isLoading = false;
+      }
+    },
+
+    // Create cache
+    async createCacheRating(ratingId: RatingType['ratingId']) {
+      if (this.initialStateRating !== JSON.stringify(this.preparingRatingDataForSavingEdit())) {
+        this.$utils.showDialogAlert({
+          message: this.$t('Для создания кэша необходимо сохранить изменения.'),
+        });
+        return;
+      }
+
+      let isSuccess = false;
+      if (this.isLoading) return;
+      this.isLoading = true;
+
+      try {
+        isSuccess = await this.$api.cache.createCacheRating({ ratingId });
+        this.$utils.showMessageSuccess({
+          message: this.$t('Рейтинг опубликован'),
+        });
+      } catch (errors: any) {
+        if (errors.server) {
+          this.$utils.showMessageError({ message: errors.server });
+          return;
+        }
+      } finally {
+        this.isLoading = false;
+      }
+
+      if (isSuccess) {
+        await this.getRating(ratingId);
+      }
+    },
+
+    // Delete cache
+    async deleteCacheRating(ratingId: RatingType['ratingId']) {
+      let isSuccess = false;
+      if (this.isLoading) return;
+      this.isLoading = true;
+
+      try {
+        await this.$api.cache.deleteCacheRating({ ratingId });
+        this.$utils.showMessageSuccess({
+          message: this.$t('Рейтинг не отображается на сайте'),
+        });
+        isSuccess = true;
+      } catch (errors: any) {
+        if (errors.server) {
+          this.$utils.showMessageError({ message: errors.server });
+          return;
+        }
+      } finally {
+        this.isLoading = false;
+      }
+
+      if (isSuccess) {
+        await this.getRating(ratingId);
       }
     },
   },

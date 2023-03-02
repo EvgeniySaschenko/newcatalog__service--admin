@@ -12,7 +12,9 @@ export let $utils = {
   /*
     Date formatting
   */
-  date(date: Date, format?: string) {
+  date(date: Date | null, format?: string) {
+    if (!date) return '-';
+
     let options = {
       year: 'numeric',
       month: 'numeric',
