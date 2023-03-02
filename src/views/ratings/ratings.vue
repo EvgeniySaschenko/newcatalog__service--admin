@@ -10,18 +10,23 @@ include /src/mixins.pug
   el-table(:data='ratings', stripe, :scrollbar-always-on='true')
     el-table-column(:label='$t("Название")')
       template(#default='scope')
-        router-link(:to='`${pathPage}/${scope.row.ratingId}`') {{ scope.row.name.ua }}
-    el-table-column(:label='$t("Скрыт")', width='100')
+        router-link.m-1(:to='`${pathPage}/${scope.row.ratingId}`') {{ scope.row.name.ua }}
+        div
+          el-tag.m-1(type='success', effect='plain', v-for='sectionId in scope.row.sectionsIds') {{ sectionsMap[sectionId].name.ua }}
+    el-table-column(:label='$t("Дата первой  публикации")', width='150')
+      template(#default='scope') {{ $utils.date(scope.row.dateFirstPublication) }}
+    el-table-column(:label='$t("Дата публикации (создание кеша)")', width='150')
       template(#default='scope')
-        el-tag(type='info', effect='dark', size='size', v-if='scope.row.isHiden') {{ $t('Скрыт') }}
-    el-table-column(:label='$t("Дата создания")', width='150')
-      template(#default='scope') {{ $utils.date(scope.row.dateCreate) }}
+        span(v-if='scope.row.dateCacheCreation') {{ $utils.date(scope.row.dateCacheCreation, 'datetime') }}
+        el-tag(v-else, type='info', effect='dark') {{ $t('Не опубликован') }}
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import useStoreUser from '@/store/user';
-import { RatingType } from '@/types';
+import useStoreSections from '@/store/sections';
+import { RatingType, SectionType } from '@/types';
+
+type RatingExtendType = RatingType & { sectionsNames: SectionType['name'][] };
 
 export default defineComponent({
   name: 'page-ratings',
@@ -32,18 +37,25 @@ export default defineComponent({
       // Path current page
       pathPage: window.location.pathname,
       // List ratings current user
-      ratings: [] as RatingType[],
+      ratings: [] as RatingExtendType[],
+      // Sections map
+      sectionsMap: {} as SectionType[],
     };
   },
 
   mounted() {
     this.init();
+    // Sections
+    let store = useStoreSections();
+    for (let item of store.$state.items) {
+      this.sectionsMap[item.sectionId] = item;
+    }
   },
 
   methods: {
     // Init
-    init() {
-      this.getRatings();
+    async init() {
+      await this.getRatings();
     },
 
     // Get all ratings User
@@ -52,9 +64,9 @@ export default defineComponent({
       this.isLoading = true;
 
       try {
-        let store = useStoreUser();
-        this.ratings = await this.$api.ratings.getRatingsUser({ userId: store.$state.id });
+        this.ratings = await this.$api.ratings.getRatings();
       } catch (errors: any) {
+        console.log(errors);
         if (errors.server) {
           this.$utils.showMessageError({ message: errors.server });
           return;

@@ -4,8 +4,8 @@ import { RatingType } from '@/types';
 export default {
   // Сейчас используется кука для userId - нужно исправить и на беке
   // Get the ratings of the user who created them
-  getRatingsUser: async ({ userId }: Pick<RatingType, 'userId'>) => {
-    let result = await $fetch(`/api/ratings/user/${userId}`, {
+  getRatings: async () => {
+    let result = await $fetch(`/api/ratings`, {
       method: 'GET',
     });
     return await result.json();
