@@ -12,7 +12,7 @@ include /src/mixins.pug
       template(#default='scope')
         router-link.m-1(:to='`${pathPage}/${scope.row.ratingId}`') {{ scope.row.name.ua }}
         div
-          el-tag.m-1(type='success', effect='plain', v-for='sectionId in scope.row.sectionsIds') {{ sectionsMap[sectionId].name.ua }}
+          el-tag.m-1(type='warning', effect='plain', v-for='sectionId in scope.row.sectionsIds') {{ sectionsMap[sectionId].name.ua }}
     el-table-column(:label='$t("Дата первой  публикации")', width='150')
       template(#default='scope') {{ $utils.date(scope.row.dateFirstPublication) }}
     el-table-column(:label='$t("Дата публикации (создание кеша)")', width='150')
@@ -66,7 +66,6 @@ export default defineComponent({
       try {
         this.ratings = await this.$api.ratings.getRatings();
       } catch (errors: any) {
-        console.log(errors);
         if (errors.server) {
           this.$utils.showMessageError({ message: errors.server });
           return;
