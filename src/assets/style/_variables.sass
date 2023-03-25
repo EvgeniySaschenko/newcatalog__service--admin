@@ -1,14 +1,44 @@
-$sm: 576px
-$md: 768px
-$lg: 992px
-$xl: 1200px
-:root
-  --screen-sm: 576px
-  --screen-md: 768px
-  --screen-lg: 992px
-  --screen-xl: 1200px
+$app-screen-sm: 576px
+$app-screen-md: 768px
+$app-screen-lg: 992px
+$app-screen-xl: 1200px
 
-  --app-border-color: #dcdfe6
-  --app-primary-color: #409eff
+$app-border-color: #dcdfe6
+$app-primary-color: #5a448d
+
+:root
+  --screen-sm: $app-screen-sm
+  --screen-md: $app-screen-md
+  --screen-lg: $app-screen-lg
+  --screen-xl: $app-screen-xl
+
+  --app-border-color: $app-border-color
+  --app-primary-color: $app-primary-color
 
 $danger: #F56C6C
+
+
+// Между max и 1200 = 1140
+@mixin screen-xl
+  @media (min-width: $app-screen-xl) 
+    @content
+
+// Между 1200 и 992px = 960px
+@mixin screen-lg
+  @media (max-width: $app-screen-xl) and (min-width: $app-screen-lg) 
+    @content
+
+// Между 992px и 768px = 720px
+@mixin screen-md
+  @media (max-width: $app-screen-lg) and (min-width: $app-screen-md) 
+    @content
+
+// Между 768px и 576px = 540px
+@mixin screen-sm
+  @media (max-width: $app-screen-md) and (min-width: $app-screen-sm) 
+    @content
+
+// Между 576px и мин = 100%
+@mixin screen-xs
+  @media (max-width: $app-screen-sm)
+    @content

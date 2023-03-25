@@ -1,8 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { VueCookieNext } from 'vue-cookie-next';
-let isAuth = VueCookieNext.getCookie('user');
-
-isAuth = true;
 
 let routes = [
   {
@@ -35,16 +31,6 @@ let routes = [
 let router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
-});
-
-// Если пользователь не авторизирован
-router.beforeEach((to, from, next) => {
-  VueCookieNext.setCookie('user', JSON.stringify({ id: 1 }));
-  if (!isAuth && to.name !== 'Login') {
-    //next({ path: "/login" });
-  } else {
-    next();
-  }
 });
 
 export default router;
