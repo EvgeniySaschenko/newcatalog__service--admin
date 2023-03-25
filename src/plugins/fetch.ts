@@ -39,6 +39,12 @@ export let $fetch: FetchType = async (url: string, params?: RequestInit): Promis
   if (response.status == 400) {
     // Data validation errors
     throw await response.json();
+  } else if (response.status == 401) {
+    let urlLogin = '/login';
+    // If the user is not logged in, redirect to the login page
+    if (window.location.pathname !== urlLogin) {
+      window.location.href = '/login';
+    }
   } else if (response.status == 404) {
     throw { server: 'URL не найден на сервере' };
   } else if (response.status > 400) {

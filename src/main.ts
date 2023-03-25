@@ -11,6 +11,7 @@ import pluginUtils from '@/plugins/utils';
 import pluginElementPlus from '@/plugins/element-plus';
 import pluginI18n from '@/plugins/i18n';
 import pinia from '@/plugins/pinia';
+import user from '@/plugins/user';
 import * as ElementPlusIconsVue from '@element-plus/icons-vue';
 
 let app = createApp(App);
@@ -26,5 +27,6 @@ app
   .use(pluginUtils)
   .use(pluginElementPlus)
   .use(VueCookieNext)
+  .use(user)
   .use(router)
   .mount('#app');

@@ -15,8 +15,7 @@ include /src/mixins.pug
       +e.row-top
         +e.box-img(:style='{ backgroundColor: item.color }')
           +e.IMG.img.sites-list__img(:src='item.logoImg', :alt='item.name.ru')
-        +e.name 
-          |
+        +e.name
           +e.name-text {{ item.name.ru }}
         +e.A.link(:href='item.url', target='_blank') {{ item.hostname }}
         div {{ item.alexaRank }}
@@ -24,8 +23,7 @@ include /src/mixins.pug
         div(v-if='item.dateDomainCreate') {{ item.dateDomainCreate }}
 
         +e.labels
-          template(v-for='label in labels') 
-            |
+          template(v-for='label in labels')
             .label-rating(
               v-if='item.labelsIds[label.labelId]',
               :style='{ backgroundColor: label.color }'
