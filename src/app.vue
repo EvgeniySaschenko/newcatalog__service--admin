@@ -92,9 +92,7 @@ export default defineComponent({
           return;
         }
       } finally {
-        setTimeout(() => {
-          this.isLogOutLoading = false;
-        }, 2000);
+        this.isLogOutLoading = false;
       }
     },
 
