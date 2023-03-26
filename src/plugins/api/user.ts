@@ -1,7 +1,7 @@
 import { $fetch, $utils } from './_core';
 
 type ParamsType = {
-  mail: string;
+  email: string;
   name: string;
   password: string;
   code: string;
@@ -9,10 +9,10 @@ type ParamsType = {
 
 export default {
   // Войти (Pick - позволяет использовать только указанные поля)
-  login: async ({ mail, password }: Pick<ParamsType, 'mail' | 'password'>) => {
+  login: async ({ email, password }: Pick<ParamsType, 'email' | 'password'>) => {
     let response = await $fetch('/api/user/login', {
       method: 'PUT',
-      body: JSON.stringify({ mail, password }),
+      body: JSON.stringify({ email, password }),
     });
     return await response.json();
   },

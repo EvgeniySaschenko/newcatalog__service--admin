@@ -5,10 +5,10 @@ include /src/mixins.pug
   el-form.form-login(label-position='top', v-loading='isLoading')
     +e.H1.title {{ $t('Логин') }}
     // E-mail
-    el-form-item(label='E-mail', required, :error='errors.mail')
+    el-form-item(label='E-mail', required, :error='errors.email')
       el-input(
         placeholder='E-mail',
-        v-model='mail',
+        v-model='email',
         style='width: 100%',
         type='email',
         autocomplete='on',
@@ -41,13 +41,13 @@ import { defineComponent } from 'vue';
 export default defineComponent({
   data() {
     return {
-      mail: '',
+      email: '',
       password: '',
       isLoading: false,
       errors: {
         auth: '',
         password: '',
-        mail: '',
+        email: '',
         countLoginAttempt: '',
       },
     };
@@ -61,7 +61,7 @@ export default defineComponent({
       this.isLoading = true;
       try {
         await this.$api['user'].login({
-          mail: this.mail,
+          email: this.email,
           password: this.password,
         });
 
