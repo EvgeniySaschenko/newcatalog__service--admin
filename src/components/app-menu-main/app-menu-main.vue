@@ -15,6 +15,7 @@ export default {
         { name: 'Список рейтингов', path: '/ratings' },
         { name: 'Список разделов', path: '/sections' },
         { name: 'Управление кешем', path: '/cache' },
+        { name: 'Настройки пользователя', path: '/user' },
       ],
     };
   },
