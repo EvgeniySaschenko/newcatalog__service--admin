@@ -22,9 +22,21 @@ let routes = [
     component: () => import('@/views/cache/cache.vue'),
   },
   {
+    path: '/user',
+    name: 'Настройки пользователя',
+    component: () => import('@/views/user/user.vue'),
+  },
+  {
     path: '/login',
-    name: 'Login',
+    name: 'Логин',
     component: () => import('@/views/login/login.vue'),
+  },
+  {
+    path: '/',
+    name: 'Home',
+    redirect: (to: any) => {
+      return { path: '/ratings' };
+    },
   },
 ];
 
