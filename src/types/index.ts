@@ -13,6 +13,30 @@ export const LangInit = (): LangType => {
   };
 };
 
+// Settings langs iso
+export type LangsIsoType = {
+  code: string;
+  name: string;
+};
+
+// Settings
+export type SettingsType = {
+  'admin-lang-default': keyof LangType;
+  'admin-langs': [keyof LangType][];
+  'site-lang-default': keyof LangType;
+  'site-langs': [keyof LangType][];
+};
+
+export type SettingsLangDefaultType = {
+  name: keyof SettingsType['admin-lang-default'] | keyof SettingsType['site-lang-default'];
+  lang: SettingsType['admin-lang-default'] | SettingsType['site-lang-default'];
+};
+
+export type SettingsLangsListType = {
+  name: keyof SettingsType['admin-langs'] | keyof SettingsType['site-langs'];
+  langs: SettingsType['admin-langs'] | SettingsType['site-langs'];
+};
+
 // Section
 export type SectionType = {
   sectionId: number;

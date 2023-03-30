@@ -5,6 +5,7 @@ import labels from './labels';
 import ratingsItems from './ratings-items';
 import sites from './sites';
 import cache from './cache';
+import settings from './settings';
 
 export let $api = {
   user,
@@ -14,6 +15,7 @@ export let $api = {
   'ratings-items': ratingsItems,
   sites,
   cache,
+  settings,
 };
 
 // Tell TypeScript that this property is global i.e. available in components via "this"

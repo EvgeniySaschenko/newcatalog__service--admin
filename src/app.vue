@@ -21,6 +21,7 @@ include /src/mixins.pug
 import { defineComponent } from 'vue';
 import AppMenuMain from '@/components/app-menu-main/app-menu-main.vue';
 import useSectionsStore from '@/store/sections';
+import useSettingsStore from '@/store/settings';
 
 export default defineComponent({
   data() {
@@ -54,9 +55,13 @@ export default defineComponent({
       if (this.isSectionsLoading) return;
       this.isSectionsLoading = true;
       try {
-        let store = useSectionsStore();
         let sections = await this.$api.sections.getSections();
-        store.setSections(sections);
+        let settings = await this.$api.settings.getSettings();
+
+        useSectionsStore().setSections(sections);
+        useSettingsStore().setSettings(settings);
+
+        console.log(settings);
         this.isSectionsRedy = true;
       } catch (errors: any) {
         if (errors.server) {

@@ -23,8 +23,13 @@ let routes = [
   },
   {
     path: '/user',
-    name: 'Настройки пользователя',
+    name: 'Профиль пользователя',
     component: () => import('@/views/user/user.vue'),
+  },
+  {
+    path: '/settings',
+    name: 'Настройки приложения',
+    component: () => import('@/views/settings/settings.vue'),
   },
   {
     path: '/login',

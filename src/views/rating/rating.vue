@@ -38,7 +38,7 @@ export default defineComponent({
   },
 
   mounted() {
-    this.init();
+    this.setActiveTab();
   },
 
   data() {
@@ -56,11 +56,6 @@ export default defineComponent({
   },
 
   methods: {
-    // Init
-    async init() {
-      this.setActiveTab();
-    },
-
     // Makes tab active depending on query params url
     setActiveTab() {
       let { tab } = this.$route.query;
