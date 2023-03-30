@@ -1,12 +1,7 @@
 <template lang="pug">
 include /src/mixins.pug
 
-+b.EL-FORM.tab-main(
-  v-loading='isLoading',
-  label-position='left',
-  label-width='170px',
-  @change='www()'
-)
++b.EL-FORM.tab-main(v-loading='isLoading', label-position='left', label-width='170px')
   // Разделы 
   el-form-item(:error='errors.sectionsIds', :label='$t("Разделы")', required)
     el-select(
