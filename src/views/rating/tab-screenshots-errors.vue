@@ -3,9 +3,9 @@ include /src/mixins.pug
 
 el-form
   el-table(:data='screenshots', stripe, v-loading='isLoading', :scrollbar-always-on='true')
-    el-table-column(:label='$t("siteScreenshotId")')
+    el-table-column(label='siteScreenshotId')
       template(#default='scope') {{ scope.row.siteScreenshotId }}
-    el-table-column(:label='$t("URL")', :min-width='150')
+    el-table-column(label='URL', :min-width='150')
       template(#default='scope')
         a(:href='scope.row.url', target='_blank') {{ scope.row.url }}
     el-table-column(:label='$t("Текст ошибки")', :min-width='200')
