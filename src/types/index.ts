@@ -13,6 +13,13 @@ export const LangInit = (): LangType => {
   };
 };
 
+export type PaginationType = {
+  page: number;
+  itemsCount: number;
+  maxRecordsPerPage: number;
+  pagesCount: number;
+};
+
 // Settings langs iso
 export type LangsIsoType = {
   code: string;
@@ -36,6 +43,16 @@ export type SettingsLangsListType = {
   name: keyof SettingsType['admin-langs'] | keyof SettingsType['site-langs'];
   langs: SettingsType['admin-langs'] | SettingsType['site-langs'];
 };
+
+// Translation
+export type TranslationType = {
+  translationId: number;
+  text: LangType;
+  key: string;
+};
+
+// Translation types
+export type TranslationTypeNameType = 'service--api' | 'service--admin' | 'service--site';
 
 // Section
 export type SectionType = {

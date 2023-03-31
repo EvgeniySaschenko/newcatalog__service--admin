@@ -44,14 +44,14 @@ export default defineComponent({
       if (isLogin) {
         await this.updateSessionExpiration();
         this.setUserActivityLastTime();
-        await this.getSections();
+        await this.init();
       }
     }
   },
 
   methods: {
     // Get sections
-    async getSections() {
+    async init() {
       if (this.isSectionsLoading) return;
       this.isSectionsLoading = true;
       try {
@@ -61,7 +61,6 @@ export default defineComponent({
         useSectionsStore().setSections(sections);
         useSettingsStore().setSettings(settings);
 
-        console.log(settings);
         this.isSectionsRedy = true;
       } catch (errors: any) {
         if (errors.server) {
