@@ -59,12 +59,12 @@ include /src/mixins.pug
     )
 
   el-form-item(:label='$t("Скрыть")')
-    el-checkbox.m-2(v-model='rating.isHiden')
+    el-checkbox.u-m--10(v-model='rating.isHiden')
     el-tooltip(
       :content='$t("При сохранении раздел будет удалён из кэша. Так же при пересоздании всех кешей не будет опубликован.")',
       placement='top'
     )
-      el-icon.m-2
+      el-icon.u-m--10
         el-icon-question-filled
 
   el-form-item(:label='$t("Убрать с сайта")')
@@ -85,7 +85,7 @@ include /src/mixins.pug
         div {{ $t('Рейтинг нельзя опубликовать:') }}
         div {{ $t('1. Если рейтинг скрыт') }}
         div {{ $t('2. Если нём нет контента для публикации, или контент скрыт') }}
-      el-icon.m-2
+      el-icon.u-m--10
         el-icon-question-filled
 
   el-form-item(:label='$t("Дата публикации")') {{ $utils.date(rating.dateFirstPublication, 'datetime') }}

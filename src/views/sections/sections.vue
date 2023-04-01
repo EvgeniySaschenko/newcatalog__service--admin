@@ -8,8 +8,8 @@ include /src/mixins.pug
       el-table-column
         template(#default='scope')
           el-form-item(:error='errors.formAdd.name', required)
-            el-input(v-model='nameNewSection.ua', :placeholder='$t("Название ua")') 
-            el-input(v-model='nameNewSection.ru', :placeholder='$t("Название ru")') 
+            el-input.u-mb--5(v-model='nameNewSection.ua', :placeholder='$t("Название ua")') 
+            el-input.u-mb--5(v-model='nameNewSection.ru', :placeholder='$t("Название ru")') 
 
       el-table-column(width='200')
         template(#default='scope')
@@ -22,8 +22,16 @@ include /src/mixins.pug
       el-table-column(:label='$t("Название")', :min-width='200')
         template(#default='scope')
           el-form-item(:error='errors.formEdit[`${scope.row.id}_name`]', required)
-            el-input(v-model='scope.row.name.ua', size='small', :placeholder='$t("Название ua")') 
-            el-input(v-model='scope.row.name.ru', size='small', :placeholder='$t("Название ru")') 
+            el-input.u-mb--5(
+              v-model='scope.row.name.ua',
+              size='small',
+              :placeholder='$t("Название ua")'
+            ) 
+            el-input.u-mb--5(
+              v-model='scope.row.name.ru',
+              size='small',
+              :placeholder='$t("Название ru")'
+            ) 
 
       el-table-column(:label='$t("Приоритет")', width='150')
         template(#default='scope')
@@ -42,14 +50,13 @@ include /src/mixins.pug
       el-table-column(:label='$t("Редактировать")', width='150')
         template(#default='scope')
           el-form-item
-            el-button(type='primary', size='small', @click='editSection(scope.row)') {{ $t('Редактировать') }}
+            el-button(type='primary', @click='editSection(scope.row)') {{ $t('Редактировать') }}
 
       el-table-column(:label='$t("Удалить")', width='150')
         template(#default='scope')
           el-form-item
             el-button(
               type='danger',
-              size='small',
               @click='deleteSection({ sectionId: scope.row.sectionId, name: scope.row.name })'
             ) {{ $t('Удалить') }}
 </template>

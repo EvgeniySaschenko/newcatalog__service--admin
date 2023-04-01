@@ -59,7 +59,7 @@ el-dialog.dialog-rating-item(
     // TAB - screenshot
     el-tab-pane(:label='$t("Скриншот")', name='screenshot')
       // if
-      el-alert.mb-2(
+      el-alert.u-mb--5(
         v-if='state.isScreenshotProcessCreate',
         :title='`${$t("Сайт добавлен в очередь для создания скриншота")}`',
         type='warning',
@@ -74,7 +74,7 @@ el-dialog.dialog-rating-item(
             +e.col--value
               img(v-if='state.screenshotImg', :src='state.screenshotImg')
               div(v-else)
-                el-icon.m-2(size='40')
+                el-icon.u-m--10(size='40')
                   el-icon-picture
                 div {{ $t('Для этого сайта нет скриншотов') }}
             +e.col--action
@@ -83,7 +83,7 @@ el-dialog.dialog-rating-item(
                 :content='$t("Для субдоменов скриншоты не создаются атоматически")',
                 placement='top'
               )
-                el-icon.m-2
+                el-icon.u-m--10
                   el-icon-question-filled
               el-button(type='warning', @click='createSiteScreenshot()', size='small') {{ $t('Сделать новый скриншот') }}
 
@@ -115,14 +115,14 @@ el-dialog.dialog-rating-item(
     // TAB - logo
     el-tab-pane(:label='$t("Логотип")', name='logo')
       +b.tab-screenshot-logo
-        el-alert.mb-2(
+        el-alert.u-mb--5(
           v-if='!state.siteScreenshotId',
           :title='`${$t("Необходимо сначала создать скриншот")}`',
           type='warning',
           show-icon,
           :closable='false'
         )
-        el-alert.mb-2(
+        el-alert.u-mb--5(
           v-if='!state.siteScreenshotId && state.isSubdomain',
           :title='`${$t("Для субдомена можно попробовать найти логотип который используется для домена")}`',
           type='warning',
@@ -138,7 +138,7 @@ el-dialog.dialog-rating-item(
               img(:src='state.logoImg')
             +e.col--action
               el-tooltip(:content='$t("На основе текущего скриншота")', placement='top')
-                el-icon.m-2
+                el-icon.u-m--10
                   el-icon-question-filled
               el-button(type='warning', @click='recreateSiteLogo()', size='small') {{ $t('Переделать логотип') }}
 
@@ -162,7 +162,7 @@ el-dialog.dialog-rating-item(
                 :content='$t("Для субдоменов скриншоты не создаються атоматически, потому что логотипы для домена и субдомена могут быть одинаковыми.")',
                 placement='top'
               )
-                el-icon.m-2
+                el-icon.u-m--10
                   el-icon-question-filled
               el-button(type='primary', @click='createScreenshotRatingItem()', size='small') {{ $t('Проверить наличие логотипа') }}
 </template>

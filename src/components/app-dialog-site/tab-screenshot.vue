@@ -5,7 +5,7 @@ include /src/mixins.pug
 +b.tab-screenshot(v-loading='isLoading')
   // if
   template(v-if='site.isScreenshotProcessCreate')
-    el-alert.mb-2(
+    el-alert.u-mb--5(
       :title='$t("Сайт добавлен в очередь для создания скриншота")',
       type='warning',
       show-icon,
@@ -19,7 +19,7 @@ include /src/mixins.pug
         +e.col--value
           img(v-if='site.screenshotImg', :src='site.screenshotImg')
           div(v-else)
-            el-icon.m-2(size='40')
+            el-icon.u-m--10(size='40')
               el-icon-picture
             div {{ $t('Для этого сайта нет скриншотов') }}
         +e.col--action
@@ -28,7 +28,7 @@ include /src/mixins.pug
             :content='$t("Для субдоменов скриншоты не создаются атоматически")',
             placement='top'
           )
-            el-icon.m-2
+            el-icon.u-m--10
               el-icon-question-filled
           el-button(type='warning', size='small', @click='createSiteScreenshot()') {{ $t('Сделать новый скриншот') }}
 
