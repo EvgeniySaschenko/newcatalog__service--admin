@@ -6,15 +6,15 @@ include /src/mixins.pug
   el-descriptions(direction='vertical', :column='2', border, v-loading='isLoading')
     //
     el-descriptions-item {{ $t('Создать кеш разделов') }}
-    el-descriptions-item
+    el-descriptions-item(align='center', width='180')
       el-button(type='primary', @click='createCacheSections()') {{ $t('Создать кеш') }}
     //
     el-descriptions-item {{ $t('Пересоздать кеш для всех элементов') }}
-    el-descriptions-item
+    el-descriptions-item(align='center')
       el-button(type='primary', @click='resetCacheAll()') {{ $t('Создать кеш') }}
     //
     el-descriptions-item {{ $t('Удаляется весь кеш') }}
-    el-descriptions-item
+    el-descriptions-item(align='center')
       el-button(type='danger', @click='clearCacheAll()') {{ $t('Удалить кеш') }}
 </template>
 

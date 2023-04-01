@@ -3,7 +3,7 @@ include /src/mixins.pug
 
 +b.tab-logo(v-loading='isLoading')
   // If not exist screenshot
-  el-alert.mb-2(
+  el-alert.u-mb--5(
     v-if='!site.siteScreenshotId',
     :title='$t("Необходимо сначала создать скриншот")',
     type='warning',
@@ -11,7 +11,7 @@ include /src/mixins.pug
     :closable='false'
   )
   // If there is no screenshot and the site is a subdomain
-  el-alert.mb-2(
+  el-alert.u-mb--5(
     v-if='!site.siteScreenshotId && site.isSubdomain',
     :title='$t("Для субдомена можно попробовать найти логотип который используется для домена")',
     type='warning',
@@ -19,7 +19,7 @@ include /src/mixins.pug
     :closable='false'
   )
   // If exist screenshot and not exist logo
-  el-alert.mb-2(
+  el-alert.u-mb--5(
     v-if='site.siteScreenshotId && !site.siteLogoId',
     :title='$t(`Для создания логотипа, перейдите на вкладку "Создать логотип"`)',
     type='warning',
@@ -36,7 +36,7 @@ include /src/mixins.pug
           img(:src='site.logoImg')
       +e.col--action
         el-tooltip(:content='$t("На основе текущего скриншота")', placement='top')
-          el-icon.m-2
+          el-icon.u-m--10
             el-icon-question-filled
         el-button(type='warning', @click='recreateSiteLogo()', size='small') {{ $t('Внести измения в логотип') }}
 
@@ -59,7 +59,7 @@ include /src/mixins.pug
       +e.col--value
         // If not images
         +e.subdomain(v-if='!domain.logoImg && !domain.screenshotImg')
-          el-icon.m-2(size='40')
+          el-icon.u-m--10(size='40')
             el-icon-picture
         // If exist logo
         +e.subdomain--logo(v-if='domain.logoImg')
@@ -78,7 +78,7 @@ include /src/mixins.pug
             :content='$t("Для субдоменов скриншоты не создаються атоматически, потому что логотипы для домена и субдомена могут быть одинаковыми")',
             placement='top'
           )
-            el-icon.m-2
+            el-icon.u-m--10
               el-icon-question-filled
           el-button(type='primary', @click='checkImagesForSite()', size='small') {{ $t('Проверить наличие') }}
         // If exist screeshot or logo
@@ -87,7 +87,7 @@ include /src/mixins.pug
             :content='`${$t("Изображения домена")} "${site.domain}" ${$t("будут привязаны к субдомену")} "${site.hostname}". ${$t("Это означает что при редактировании логотипа / цвета изменения отбразятся везде где используется этот скриншот")}`',
             placement='top'
           )
-            el-icon.m-2
+            el-icon.u-m--10
               el-icon-question-filled
           el-button(type='primary', @click='linkDomainImagesToSubdomain()', size='small') {{ $t('Привязать изображения к субдомену') }}
 </template>

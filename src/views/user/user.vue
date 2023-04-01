@@ -16,9 +16,8 @@ include /src/mixins.pug
             autocomplete='on',
             name='email'
           )
-      el-descriptions-item
-        el-form-item
-          el-button(type='primary', @click='editEmail()') {{ $t('Изменить E-mail') }}
+      el-descriptions-item(width='200', align='center')
+        el-button(type='primary', @click='editEmail()') {{ $t('Изменить E-mail') }}
 
       // Password
       el-descriptions-item
@@ -30,9 +29,8 @@ include /src/mixins.pug
             type='password',
             name='password'
           )
-      el-descriptions-item
-        el-form-item
-          el-button(type='primary', @click='editPassword()') {{ $t('Изменить пароль') }}
+      el-descriptions-item(align='center')
+        el-button(type='primary', @click='editPassword()') {{ $t('Изменить пароль') }}
 </template>
 
 <script lang="ts">

@@ -15,12 +15,11 @@ el-form.form-login(label-position='top', v-loading='isLoading')
           )
             b [{{ item.code }}] &nbsp;
             span {{ item.name }}
-    el-descriptions-item(width='200')
-      el-form-item
-        el-button(
-          type='primary',
-          @click='editLangsList({ langs: adminLangs, name: settingsNames.adminLangs })'
-        ) {{ $t('Сохранить') }}
+    el-descriptions-item(width='200', align='center')
+      el-button(
+        type='primary',
+        @click='editLangsList({ langs: adminLangs, name: settingsNames.adminLangs })'
+      ) {{ $t('Сохранить') }}
 
     // Admin lang default
     el-descriptions-item
@@ -34,12 +33,11 @@ el-form.form-login(label-position='top', v-loading='isLoading')
           )
             b [{{ item.code }}] &nbsp;
             span {{ item.name }}
-    el-descriptions-item
-      el-form-item
-        el-button(
-          type='primary',
-          @click='editLangDefault({ lang: adminLangDefault, name: settingsNames.adminLangDefault })'
-        ) {{ $t('Сохранить') }}
+    el-descriptions-item(align='center')
+      el-button(
+        type='primary',
+        @click='editLangDefault({ lang: adminLangDefault, name: settingsNames.adminLangDefault })'
+      ) {{ $t('Сохранить') }}
 
     // Site langs list
     el-descriptions-item
@@ -53,12 +51,11 @@ el-form.form-login(label-position='top', v-loading='isLoading')
           )
             b [{{ item.code }}] &nbsp;
             span {{ item.name }}
-    el-descriptions-item
-      el-form-item
-        el-button(
-          type='primary',
-          @click='editLangsList({ langs: siteLangs, name: settingsNames.siteLangs })'
-        ) {{ $t('Сохранить') }}
+    el-descriptions-item(align='center')
+      el-button(
+        type='primary',
+        @click='editLangsList({ langs: siteLangs, name: settingsNames.siteLangs })'
+      ) {{ $t('Сохранить') }}
 
     // Site lang default
     el-descriptions-item
@@ -72,12 +69,11 @@ el-form.form-login(label-position='top', v-loading='isLoading')
           )
             b [{{ item.code }}] &nbsp;
             span {{ item.name }}
-    el-descriptions-item
-      el-form-item
-        el-button(
-          type='primary',
-          @click='editLangDefault({ lang: siteLangDefault, name: settingsNames.siteLangDefault })'
-        ) {{ $t('Сохранить') }}
+    el-descriptions-item(align='center')
+      el-button(
+        type='primary',
+        @click='editLangDefault({ lang: siteLangDefault, name: settingsNames.siteLangDefault })'
+      ) {{ $t('Сохранить') }}
 </template>
 
 <script lang="ts">

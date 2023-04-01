@@ -1,8 +1,8 @@
 <template lang="pug">
 include /src/mixins.pug
 
-el-form.form-login.mb-4(label-position='top', v-loading='isLoading')
-  el-button.mb-2(type='primary', @click='createTranslitions()') {{ $t('Обновить список переводов') }}
+el-form.form-login.u-mb--10(label-position='top', v-loading='isLoading')
+  el-button.u-mb--5(type='primary', @click='createTranslitions()') {{ $t('Обновить список переводов') }}
 
   el-table(:data='translations', stripe, :scrollbar-always-on='true')
     // #
@@ -11,26 +11,28 @@ el-form.form-login.mb-4(label-position='top', v-loading='isLoading')
     // translitions
     el-table-column(:label='$t("Translitions")')
       template(#default='scope')
-        el-link.mb-2(type='warning') {{ scope.row.key }}
+        el-link.u-mb--10(type='warning') {{ scope.row.key }}
 
         el-form-item
           template(v-for='(item, key) in scope.row.text')
-            el-input.mb-2(
+            el-input.u-mb--5(
               v-model='scope.row.text[key]',
               style='width: 100%',
               type='text',
-              name='translation'
+              name='translation',
+              size='small'
             )
               template(#prepend) {{ key }}
 
     // save
-    el-table-column(:label='$t("Сохранить изменения")', width='200')
+    el-table-column(:label='$t("Сохранить изменения")', width='200', align='center')
       template(#default='scope')
         el-button(
           type='primary',
           @click='editText({ translationId: scope.row.translationId, text: scope.row.text })'
         ) {{ $t('Сохранить') }}
-.justify-content-center.d-flex
+
+.u-center
   el-pagination(
     :page-size='pagination.maxRecordsPerPage',
     layout='prev, pager, next',

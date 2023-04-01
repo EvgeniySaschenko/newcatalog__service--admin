@@ -10,9 +10,9 @@ include /src/mixins.pug
   el-table(:data='ratings', stripe, :scrollbar-always-on='true')
     el-table-column(:label='$t("Название")')
       template(#default='scope')
-        router-link.m-1(:to='`${pathPage}/${scope.row.ratingId}`') {{ scope.row.name.ua }}
+        router-link.u-m--5(:to='`${pathPage}/${scope.row.ratingId}`') {{ scope.row.name.ua }}
         div
-          el-tag.m-1(type='warning', effect='plain', v-for='sectionId in scope.row.sectionsIds') {{ sectionsMap[sectionId].name.ua }}
+          el-tag.u-m--5(type='warning', effect='plain', v-for='sectionId in scope.row.sectionsIds') {{ sectionsMap[sectionId].name.ua }}
     el-table-column(:label='$t("Дата первой  публикации")', width='150')
       template(#default='scope') {{ $utils.date(scope.row.dateFirstPublication) }}
     el-table-column(:label='$t("Дата публикации (создание кеша)")', width='150')
