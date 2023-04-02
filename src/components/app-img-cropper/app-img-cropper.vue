@@ -15,7 +15,7 @@ include /src/mixins.pug
     :style='{ height: heightImgCropper }'
   )
 
-  +e.EL-BUTTON.btn-crop-canvas-img(type='primary', @click='cropCanvasImg()') {{ $t('Обрезать') }}
+  +e.EL-BUTTON.btn-crop-canvas-img(type='primary', @click='cropCanvasImg()') {{ $t('Crop') }}
   app-img-color(
     :imgData='{ img: imgBase64, color: color }',
     @update:img-data='emitImgData($event)'

@@ -2,22 +2,21 @@
 include /src/mixins.pug
 +b.tab-descr(label-position='top', v-loading='isLoading')
   +e.box-img(:style='{ backgroundColor: state.color }', v-if='isModeEdit')
-    +e.IMG.img(:src='state.logoImg', :alt='state.name.ru')
-  // Ссылка
-  el-form-item(:error='errors.url', :label='$t("Ссылка")', required)
-    el-input(
-      :placeholder='$t("Ссылка")',
+    +e.IMG.img(:src='state.logoImg', :alt='state.name[$lang]')
+  // Link
+  el-form-item(:error='errors.url', :label='$t("Link")', required)
+    el-input(:placeholder='$t("Link")', size='small', v-model='state.url', :disabled='isModeEdit')
+  // Name   
+  el-form-item(:error='errors.name', :label='$t("Name")')
+    el-input.u-mb--5(
+      :placeholder='$t("Name")',
       size='small',
-      v-model='state.url',
-      :disabled='isModeEdit'
+      v-model='state.name[key]',
+      v-for='(value, key) in $langs'
     )
-  // Название   
-  el-form-item(:error='errors.name', :label='$t("Название ua")')
-    el-input(:placeholder='$t("Название")', size='small', v-model='state.name.ua')
-  el-form-item(:error='errors.name', :label='$t("Название ru")')
-    el-input(:placeholder='$t("Название")', size='small', v-model='state.name.ru')
-  // Ярлыки  
-  el-form-item
+      template(#prepend) {{ key }}
+  // Labels  
+  el-form-item(:label='$t("Labels")')
     el-select(
       size='small',
       multiple,
@@ -27,28 +26,30 @@ include /src/mixins.pug
       default-first-option,
       v-model='labelsIds',
       style='width: 100%',
-      :placeholder='$t("Ярлыки")'
+      :placeholder='$t("Labels")'
     )
       el-option(
         v-for='item in labels',
         :key='item.labelId',
-        :label='item.name.ru',
+        :label='item.name[$lang]',
         :value='item.labelId'
       )
-  // Приоритет  
+  // Priority  
+  el-form-item(:label='$t("Priority")')
+    el-input-number(v-model='state.priority', size='small')
+  // Hide
   el-form-item
-    el-input-number(v-model='state.priority', size='small', :placeholder='$t("Приоритет")')
-  el-form-item
-    el-checkbox(v-model='state.isHiden') {{ $t('Скрыть') }}
+    el-checkbox(v-model='state.isHiden') {{ $t('Hide') }}
+  // Btns
   el-form-item
     +e.footer
-      el-button(v-if='isModeEdit', type='danger', @click='deleteRatingItem()') {{ $t('Удалить') }}
-      el-button(v-if='isModeEdit', type='primary', @click='editRatingItem()') {{ $t('Сохранить') }}
-      el-button(v-if='!isModeEdit', type='primary', @click='createRatingItem()') {{ $t('Создать') }}
+      el-button(v-if='isModeEdit', type='danger', @click='deleteRatingItem()') {{ $t('Delete') }}
+      el-button(v-if='isModeEdit', type='primary', @click='editRatingItem()') {{ $t('Save') }}
+      el-button(v-if='!isModeEdit', type='primary', @click='createRatingItem()') {{ $t('Create') }}
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { LabelType, LangInit, RatingItemType } from '@/types';
+import { LabelType, RatingItemType } from '@/types';
 
 export default defineComponent({
   inject: ['provideEmitUpdateRatingItem', 'provideEmitDialogClose'],
@@ -58,7 +59,7 @@ export default defineComponent({
       state: {
         ratingItemId: 0,
         siteId: 0,
-        name: LangInit(),
+        name: this.$langsInit(),
         url: '',
         labelsIds: {},
         ratingId: 0,
@@ -146,9 +147,7 @@ export default defineComponent({
         });
 
         this.$utils.showMessageSuccess({
-          message: `${this.$t('Добавлен:')}: "${
-            this.state.name.ru ? this.state.name.ru : this.$t('Новый сайт')
-          }"`,
+          message: this.$t('Added'),
         });
 
         (this.provideEmitUpdateRatingItem as any)();
@@ -178,7 +177,7 @@ export default defineComponent({
         });
 
         this.$utils.showMessageSuccess({
-          message: `${this.$t('Изменён:')}: "${this.state.name.ru}"`,
+          message: this.$t('Modified'),
         });
 
         (this.provideEmitUpdateRatingItem as any)();
@@ -197,15 +196,17 @@ export default defineComponent({
     async deleteRatingItem() {
       if (this.isLoading) return;
       await this.$utils.showDialogConfirm({
-        title: `${this.$t('Вы действительно хотите удалить?')} "${this.state.name.ru}"`,
+        title: this.$t('Are you sure you want to delete?'),
       });
       this.isLoading = true;
 
       try {
-        await this.$api['ratings-items'].deleteItem({ ratingItemId: this.state.ratingItemId });
+        await this.$api['ratings-items'].deleteItem({
+          ratingItemId: this.state.ratingItemId,
+        });
 
         this.$utils.showMessageSuccess({
-          message: `${this.$t('Удалён:')}: "${this.state.name.ru}"`,
+          message: this.$t('Removed'),
         });
 
         (this.provideEmitUpdateRatingItem as any)();

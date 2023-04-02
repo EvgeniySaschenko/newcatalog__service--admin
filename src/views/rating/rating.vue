@@ -2,17 +2,21 @@
 include /src/mixins.pug
 
 +b.page--rating.container
-  +e.H1.title {{ ratingId ? $t('Редактировать рейтинг') : $t('Создать новый рейтинг') }}
+  +e.H1.title {{ ratingId ? $t('Edit rating') : $t('Create a new rating') }}
   el-tabs(v-model='tabActive', @tab-change='setTabUrlParam()', type='border-card')
-    el-tab-pane(:label='$t("Основные настройки")', name='main')
+    el-tab-pane(:label='$t("Main Settings")', name='main')
       tab-main(v-if='tabActive == "main"', :ratingId='ratingId')
-    el-tab-pane(:label='$t("Контент")', name='content', :disabled='!ratingId')
+    el-tab-pane(:label='$t("Content")', name='content', :disabled='!ratingId')
       tab-content(v-if='tabActive == "content"', :ratingId='ratingId')
-    el-tab-pane(:label='$t("Ярлыки")', name='labels', :disabled='!ratingId')
+    el-tab-pane(:label='$t("Labels")', name='labels', :disabled='!ratingId')
       tab-labels(v-if='tabActive == "labels"', :ratingId='ratingId')
-    el-tab-pane(:label='$t("Создать логотип")', name='logos', :disabled='!ratingId')
+    el-tab-pane(:label='$t("Create a logo")', name='logos', :disabled='!ratingId')
       tab-logos(v-if='tabActive == "logos"', :ratingId='ratingId')
-    el-tab-pane(:label='$t("Скриншоты ошибки")', name='screenshots-errors', :disabled='!ratingId')
+    el-tab-pane(
+      :label='$t("Screenshots of the error")',
+      name='screenshots-errors',
+      :disabled='!ratingId'
+    )
       tab-screenshots-errors(v-if='tabActive == "screenshots-errors"', :ratingId='ratingId')
 </template>
 

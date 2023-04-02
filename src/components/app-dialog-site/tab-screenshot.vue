@@ -6,7 +6,7 @@ include /src/mixins.pug
   // if
   template(v-if='site.isScreenshotProcessCreate')
     el-alert.u-mb--5(
-      :title='$t("Сайт добавлен в очередь для создания скриншота")',
+      :title='$t("The site has been queued for taking a screenshot")',
       type='warning',
       show-icon,
       :closable='false'
@@ -14,26 +14,26 @@ include /src/mixins.pug
   // else
   template(v-if='!site.isScreenshotProcessCreate')
     +e.row
-      +e.title {{ $t('Скриншот') }}
+      +e.title {{ $t('Screenshot') }}
       +e.content
         +e.col--value
           img(v-if='site.screenshotImg', :src='site.screenshotImg')
           div(v-else)
             el-icon.u-m--10(size='40')
               el-icon-picture
-            div {{ $t('Для этого сайта нет скриншотов') }}
+            div {{ $t('There are no screenshots for this site') }}
         +e.col--action
           el-tooltip(
             v-if='!site.screenshotImg && site.isSubdomain',
-            :content='$t("Для субдоменов скриншоты не создаются атоматически")',
+            :content='$t("Screenshots are not generated automatically for subdomains")',
             placement='top'
           )
             el-icon.u-m--10
               el-icon-question-filled
-          el-button(type='warning', size='small', @click='createSiteScreenshot()') {{ $t('Сделать новый скриншот') }}
+          el-button(type='warning', size='small', @click='createSiteScreenshot()') {{ $t('Take new screenshot') }}
 
     +e.row
-      +e.title {{ $t('Загрузить скриншот вручную') }}
+      +e.title {{ $t('Upload screenshot manually') }}
       +e.content
         +e.col--value
           el-upload(
@@ -48,14 +48,14 @@ include /src/mixins.pug
             div(v-else)
               el-icon(size='40')
                 el-icon-upload-filled
-              div {{ $t('Выбрать скриншот') }}
+              div {{ $t('Select screenshot') }}
         +e.col--action
           el-button(
             type='primary',
             size='small',
             :disabled='!customScreenshotImg',
             @click='uploadCustomSiteScreenshot()'
-          ) {{ $t('Сохранить') }}
+          ) {{ $t('Save') }}
 </template>
 
 <script lang="ts">
@@ -90,7 +90,9 @@ export default defineComponent({
     async selectCustomScreenshot(response: any, uploadFile: any) {
       let mimeType = this.screenshotMimeTypes.includes(uploadFile[0].raw.type);
       if (!mimeType) {
-        this.$utils.showMessageError({ message: this.$t('Выбран недопустимый тип файла') });
+        this.$utils.showMessageError({
+          message: this.$t('An invalid file type has been selected'),
+        });
         return;
       }
       this.customScreenshotImg = URL.createObjectURL(uploadFile[0].raw);
@@ -108,7 +110,7 @@ export default defineComponent({
       if (this.isLoading) return;
       if (this.site.siteScreenshotId) {
         await this.$utils.showDialogConfirm({
-          message: this.$t('Для этого сайта уже существует скриншот. Cоздать новый?'),
+          message: this.$t('There is already a screenshot for this site. Create new?'),
         });
       }
 
@@ -119,7 +121,7 @@ export default defineComponent({
         await this.$api.sites.createSiteScreenshot({ siteId, url });
 
         this.$utils.showMessageSuccess({
-          message: `${this.$t('Сайт добавлен в очередь на создание скриншота')}`,
+          message: `${this.$t('The site has been added to the queue for taking a screenshot')}`,
         });
         (this.provideEmitUpdateRatingItem as any)();
       } catch (errors: any) {
@@ -144,7 +146,7 @@ export default defineComponent({
         });
 
         this.$utils.showMessageSuccess({
-          message: `${this.$t('Скриншот загружен')}`,
+          message: `${this.$t('Screenshot uploaded')}`,
         });
 
         (this.$refs['screenshot-upload'] as any).clearFiles();

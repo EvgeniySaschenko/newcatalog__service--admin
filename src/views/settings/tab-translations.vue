@@ -2,7 +2,7 @@
 include /src/mixins.pug
 
 el-form.form-login.u-mb--10(label-position='top', v-loading='isLoading')
-  el-button.u-mb--5(type='primary', @click='createTranslitions()') {{ $t('Обновить список переводов') }}
+  el-button.u-mb--5(type='primary', @click='createTranslitions()') {{ $t('Update list of translations') }}
 
   el-table(:data='translations', stripe, :scrollbar-always-on='true')
     // #
@@ -14,7 +14,7 @@ el-form.form-login.u-mb--10(label-position='top', v-loading='isLoading')
         el-link.u-mb--10(type='warning') {{ scope.row.key }}
 
         el-form-item
-          template(v-for='(item, key) in scope.row.text')
+          template(v-for='(item, key) in $langs')
             el-input.u-mb--5(
               v-model='scope.row.text[key]',
               style='width: 100%',
@@ -25,12 +25,12 @@ el-form.form-login.u-mb--10(label-position='top', v-loading='isLoading')
               template(#prepend) {{ key }}
 
     // save
-    el-table-column(:label='$t("Сохранить изменения")', width='200', align='center')
+    el-table-column(:label='$t("Save your changes")', width='200', align='center')
       template(#default='scope')
         el-button(
           type='primary',
           @click='editText({ translationId: scope.row.translationId, text: scope.row.text })'
-        ) {{ $t('Сохранить') }}
+        ) {{ $t('Save') }}
 
 .u-center
   el-pagination(
@@ -45,7 +45,7 @@ el-form.form-login.u-mb--10(label-position='top', v-loading='isLoading')
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import { TranslationTypeNameType, TranslationType, PaginationType, LangInit } from '@/types';
+import { TranslationTypeNameType, TranslationType, PaginationType } from '@/types';
 
 export default defineComponent({
   props: {
@@ -67,8 +67,6 @@ export default defineComponent({
         maxRecordsPerPage: 0,
         pagesCount: 0,
       } as PaginationType,
-      // Langs
-      langs: LangInit(),
     };
   },
 
@@ -119,7 +117,7 @@ export default defineComponent({
         });
 
         this.$utils.showMessageSuccess({
-          message: this.$t('Перевод отредатирован'),
+          message: this.$t('Translation edited'),
         });
       } catch (errors: any) {
         if (errors.server) {
@@ -143,7 +141,7 @@ export default defineComponent({
         await this.getTranslations();
 
         this.$utils.showMessageSuccess({
-          message: this.$t('Переводы обновлены'),
+          message: this.$t('Translations updated'),
         });
       } catch (errors: any) {
         if (errors.server) {

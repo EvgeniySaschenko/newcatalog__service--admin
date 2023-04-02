@@ -5,7 +5,7 @@ include /src/mixins.pug
   // If not exist screenshot
   el-alert.u-mb--5(
     v-if='!site.siteScreenshotId',
-    :title='$t("Необходимо сначала создать скриншот")',
+    :title='$t("You need to take a screenshot first")',
     type='warning',
     show-icon,
     :closable='false'
@@ -13,7 +13,7 @@ include /src/mixins.pug
   // If there is no screenshot and the site is a subdomain
   el-alert.u-mb--5(
     v-if='!site.siteScreenshotId && site.isSubdomain',
-    :title='$t("Для субдомена можно попробовать найти логотип который используется для домена")',
+    :title='$t("For a subdomain, you can try to find the logo that is used for the domain")',
     type='warning',
     show-icon,
     :closable='false'
@@ -21,7 +21,7 @@ include /src/mixins.pug
   // If exist screenshot and not exist logo
   el-alert.u-mb--5(
     v-if='site.siteScreenshotId && !site.siteLogoId',
-    :title='$t(`Для создания логотипа, перейдите на вкладку "Создать логотип"`)',
+    :title='$t(`To create a logo, go to the "Create Logo" tab`)',
     type='warning',
     show-icon,
     :closable='false'
@@ -29,20 +29,20 @@ include /src/mixins.pug
 
   // Logo
   +e.row(v-if='site.siteLogoId')
-    +e.title {{ $t('Логотип') }}
+    +e.title {{ $t('Logo') }}
     +e.content
       +e.col--value
         +e.box-logo-main(:style='{ backgroundColor: site.color }')
           img(:src='site.logoImg')
       +e.col--action
-        el-tooltip(:content='$t("На основе текущего скриншота")', placement='top')
+        el-tooltip(:content='$t("Based on current screenshot")', placement='top')
           el-icon.u-m--10
             el-icon-question-filled
-        el-button(type='warning', @click='recreateSiteLogo()', size='small') {{ $t('Внести измения в логотип') }}
+        el-button(type='warning', @click='recreateSiteLogo()', size='small') {{ $t('Change the logo') }}
 
   // Color
   +e.row(v-if='site.siteLogoId')
-    +e.title {{ $t('Цвет сайта') }}
+    +e.title {{ $t('Site color') }}
     +e.content
       +e.col--value
         app-img-color(
@@ -50,11 +50,11 @@ include /src/mixins.pug
           @update:img-data='newColor = $event.color'
         )
       +e.col--action
-        el-button(type='warning', @click='editSitesColor()', size='small') {{ $t('Изменить цвет') }}
+        el-button(type='warning', @click='editSitesColor()', size='small') {{ $t('Change color') }}
 
   // Show only from subdomain
   +e.row(v-if='site.isSubdomain')
-    +e.title {{ $t('Логотип или скриншот для домена') }}: {{ site.domain }}
+    +e.title {{ $t('Logo or screenshot for the domain') }}: {{ site.domain }}
     +e.content
       +e.col--value
         // If not images
@@ -63,33 +63,33 @@ include /src/mixins.pug
             el-icon-picture
         // If exist logo
         +e.subdomain--logo(v-if='domain.logoImg')
-          +e.subdomain-title {{ $t('Логотип') }}
+          +e.subdomain-title {{ $t('Logo') }}
           +e.subdomain-box-logo(:style='{ backgroundColor: domain.color }')
             img(:src='domain.logoImg')
         // If exist screeshot
         +e.subdomain--screenshot(v-if='domain.screenshotImg')
-          +e.subdomain-title {{ $t('Скриншот') }}
+          +e.subdomain-title {{ $t('Screeshot') }}
           img(:src='domain.screenshotImg')
 
       +e.col--action
         // Check
         template(v-if='!domain.screenshotImg && !domain.logoImg')
           el-tooltip(
-            :content='$t("Для субдоменов скриншоты не создаються атоматически, потому что логотипы для домена и субдомена могут быть одинаковыми")',
+            :content='$t("For subdomains, screenshots are not generated automatically, because the logos for the domain and subdomain can be the same")',
             placement='top'
           )
             el-icon.u-m--10
               el-icon-question-filled
-          el-button(type='primary', @click='checkImagesForSite()', size='small') {{ $t('Проверить наличие') }}
+          el-button(type='primary', @click='checkImagesForSite()', size='small') {{ $t('Check for availability') }}
         // If exist screeshot or logo
         template(v-else)
           el-tooltip(
-            :content='`${$t("Изображения домена")} "${site.domain}" ${$t("будут привязаны к субдомену")} "${site.hostname}". ${$t("Это означает что при редактировании логотипа / цвета изменения отбразятся везде где используется этот скриншот")}`',
+            :content='`${$t("The domain images will be linked to the subdomain")}. ${$t("This means that when you edit the logo/color, the changes will show up wherever this screenshot is used")}`',
             placement='top'
           )
             el-icon.u-m--10
               el-icon-question-filled
-          el-button(type='primary', @click='linkDomainImagesToSubdomain()', size='small') {{ $t('Привязать изображения к субдомену') }}
+          el-button(type='primary', @click='linkDomainImagesToSubdomain()', size='small') {{ $t('Link images to a subdomain') }}
 </template>
 
 <script lang="ts">
@@ -140,7 +140,7 @@ export default defineComponent({
         });
 
         this.$utils.showMessageSuccess({
-          message: this.$t('Логотип можно создать на вкладке "Создать логотип"'),
+          message: this.$t('A logo can be created on the "Create a logo" tab'),
         });
         (this.provideEmitUpdateRatingItem as any)();
       } catch (errors: any) {
@@ -165,16 +165,16 @@ export default defineComponent({
 
         if (isNotExistImages) {
           await this.$utils.showDialogAlert({
-            title: `${this.$t('Домен')}: ${domain}`,
-            message: this.$t('Для этого домена нет логотипов или скриншотов'),
+            title: `${this.$t('Domain')}: ${domain}`,
+            message: this.$t('There are no logos or screenshots for this domain'),
           });
           return;
         }
 
         if (isScreenshotProcessCreate) {
           await this.$utils.showDialogAlert({
-            title: `${this.$t('Проверка')}: ${domain}`,
-            message: this.$t('Скриншот для этого домена находися в процессе создания'),
+            title: `${this.$t('Check')}: ${domain}`,
+            message: this.$t('A screenshot for this domain is in the process of being created'),
           });
           return;
         }
@@ -200,12 +200,15 @@ export default defineComponent({
       this.isLoading = true;
       console.log(this.site);
       try {
-        let result = await this.$api.sites.getSiteBySiteId({ siteId: this.site.siteId });
+        let result = await this.$api.sites.getSiteBySiteId({
+          siteId: this.site.siteId,
+        });
         if (result && result.siteScreenshotId) {
           await this.$utils.showDialogConfirm({
-            message: `${this.$t('К домену')} "${this.site.hostname}" 
-            ${this.$t('уже привязано другое изображение')} 
-            ${this.$t('Привязать это изображение?')}`,
+            // eslint-disable-next-line prettier/prettier
+            message: `${this.$t(
+              'There is already another image associated with the domain'
+            )} ${this.$t('Link this image?')}`,
           });
         }
 
@@ -215,7 +218,7 @@ export default defineComponent({
         });
 
         this.$utils.showMessageSuccess({
-          message: this.$t('Изображения домена привязаны к субдомену'),
+          message: this.$t('Domain images are tied to a subdomain'),
         });
 
         this.domain = {
@@ -246,7 +249,7 @@ export default defineComponent({
         });
 
         this.$utils.showMessageSuccess({
-          message: this.$t('Цвет сайта обновлён'),
+          message: this.$t('Site color updated'),
         });
 
         (this.provideEmitUpdateRatingItem as any)();

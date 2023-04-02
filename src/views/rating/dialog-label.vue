@@ -3,11 +3,17 @@ include /src/mixins.pug
 
 el-dialog(:title='title', :model-value='true', @closed='$emit("dialog:closed")')
   +b.EL-FORM.dialog-label-rating(label-position='top', v-loading='isLoading')
-    el-form-item(:error='errors.name', :label='$t("Название ua")')
-      el-input(:placeholder='$t("Текст ярлыка")', v-model='label.name.ua', required)
-    el-form-item(:error='errors.name', :label='$t("Название ru")')
-      el-input(:placeholder='$t("Текст ярлыка")', v-model='label.name.ru', required)
-    el-form-item(:error='errors.color', :label='$t("Цвет ярлыка")')
+    // text
+    el-form-item(:error='errors.name', :label='$t("Name")')
+      el-input.u-mb--5(
+        :placeholder='$t("Label text")',
+        v-model='label.name[key]',
+        required,
+        v-for='(item, key) in $langs'
+      )
+        template(#prepend) {{ key }}
+    // bcolor
+    el-form-item(:error='errors.color', :label='$t("Label color")')
       +e.colors
         +e.colors-item(
           v-for='item in colorsDefault',
@@ -16,17 +22,18 @@ el-dialog(:title='title', :model-value='true', @closed='$emit("dialog:closed")')
           @click='setColor(item)'
         )
         el-color-picker(v-model='label.color')
-    el-form-item(:label='$t("Ярлык")')
-      .label-rating(:style='{ backgroundColor: label.color }') {{ label.name.ua }}
+    el-form-item(:label='$t("Label")')
+      .label-rating(:style='{ backgroundColor: label.color }') {{ label.name[$lang] }}
 
   template(#footer)
-    el-button(v-if='actionType == "edit"', type='danger', @click='deleteLabel()') {{ $t('Удалить') }}
-    el-button(v-if='actionType == "edit"', type='primary', @click='editLabel()') {{ $t('Редактировать') }}
-    el-button(v-if='actionType == "create"', type='primary', @click='createLabel()') {{ $t('Создать') }}
+    el-button(v-if='actionType == "edit"', type='danger', @click='deleteLabel()') {{ $t('Delete') }}
+    el-button(v-if='actionType == "edit"', type='primary', @click='editLabel()') {{ $t('Edit') }}
+    el-button(v-if='actionType == "create"', type='primary', @click='createLabel()') {{ $t('Create') }}
 </template>
 
 <script lang="ts">
-import { LangType, LangInit } from '@/types';
+import { $langsInit } from '@/plugins/translations';
+import { LangType } from '@/types';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
@@ -36,7 +43,7 @@ export default defineComponent({
     name: {
       type: Object,
       default: () => {
-        return LangInit();
+        return $langsInit();
       },
     },
     // Label color
@@ -77,7 +84,7 @@ export default defineComponent({
       isLoading: false,
       // Rating label
       label: {
-        name: LangInit(),
+        name: this.$langsInit(),
         color: '',
       },
       // Default colors
@@ -126,7 +133,7 @@ export default defineComponent({
         });
 
         this.$utils.showMessageSuccess({
-          message: `${this.$t('Ярлык создан')}: "${name.ru}"`,
+          message: this.$t('Label created'),
         });
 
         this.$emit('label:update', { event: 'create' });
@@ -156,7 +163,7 @@ export default defineComponent({
         });
 
         this.$utils.showMessageSuccess({
-          message: `${this.$t('Ярлык изменён')}: "${this.label.name.ru}"`,
+          message: this.$t('Label changed'),
         });
 
         this.$emit('label:update', { event: 'edit' });
@@ -174,7 +181,7 @@ export default defineComponent({
     // Delete label
     async deleteLabel() {
       await this.$utils.showDialogConfirm({
-        title: `${this.$t('Вы действительно хотите удалить?')} "${this.label.name.ru}"`,
+        title: this.$t('Are you sure you want to delete?'),
       });
       if (this.isLoading) return;
       this.isLoading = true;
@@ -186,7 +193,7 @@ export default defineComponent({
         });
 
         this.$utils.showMessageSuccess({
-          message: `${this.$t('Ярлык удалён')}: "${this.label.name.ru}"`,
+          message: this.$t('Label removed'),
         });
 
         this.$emit('label:update', { event: 'delete' });

@@ -8,7 +8,7 @@ include /src/mixins.pug
         +e.ROUTER-LINK.logo(to='/ratings')
           +e.IMG.logo-img(src='@/assets/img/logo.png')
 
-        +e.EL-BUTTON.log-out-btn(type='primary', @click='logOut()') {{ $t('Выйти') }}
+        +e.EL-BUTTON.log-out-btn(type='primary', @click='logOut()') {{ $t('Exit') }}
     +e.row--menu
       .container
         app-menu-main

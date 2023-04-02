@@ -5,20 +5,20 @@ include /src/mixins.pug
 
   // Button create new rating
   router-link.inline-block(:to='`${pathPage}/create`')
-    el-button(type='primary', icon='el-icon-plus') {{ $t('Создать новый рейтинг') }}
+    el-button(type='primary', icon='el-icon-plus') {{ $t('Create a new rating') }}
   // List ratings
   el-table(:data='ratings', stripe, :scrollbar-always-on='true')
-    el-table-column(:label='$t("Название")')
+    el-table-column(:label='$t("Name")')
       template(#default='scope')
-        router-link.u-m--5(:to='`${pathPage}/${scope.row.ratingId}`') {{ scope.row.name.ua }}
+        router-link.u-m--5(:to='`${pathPage}/${scope.row.ratingId}`') {{ scope.row.name[$lang] }}
         div
-          el-tag.u-m--5(type='warning', effect='plain', v-for='sectionId in scope.row.sectionsIds') {{ sectionsMap[sectionId].name.ua }}
-    el-table-column(:label='$t("Дата первой  публикации")', width='150')
+          el-tag.u-m--5(type='warning', effect='plain', v-for='sectionId in scope.row.sectionsIds') {{ sectionsMap[sectionId].name[$lang] }}
+    el-table-column(:label='$t("Date of first publication")', width='150')
       template(#default='scope') {{ $utils.date(scope.row.dateFirstPublication) }}
-    el-table-column(:label='$t("Дата публикации (создание кеша)")', width='150')
+    el-table-column(:label='$t("Publication date (cached)")', width='150')
       template(#default='scope')
         span(v-if='scope.row.dateCacheCreation') {{ $utils.date(scope.row.dateCacheCreation, 'datetime') }}
-        el-tag(v-else, type='info', effect='dark') {{ $t('Не опубликован') }}
+        el-tag(v-else, type='info', effect='dark') {{ $t('Not published') }}
 </template>
 
 <script lang="ts">

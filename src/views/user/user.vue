@@ -17,20 +17,20 @@ include /src/mixins.pug
             name='email'
           )
       el-descriptions-item(width='200', align='center')
-        el-button(type='primary', @click='editEmail()') {{ $t('Изменить E-mail') }}
+        el-button(type='primary', @click='editEmail()') {{ $t('Change E-mail') }}
 
       // Password
       el-descriptions-item
         el-form-item(:error='errors.password')
           el-input(
-            :placeholder='$t("Пароль")',
+            :placeholder='$t("Password")',
             v-model='password',
             style='width: 100%',
             type='password',
             name='password'
           )
       el-descriptions-item(align='center')
-        el-button(type='primary', @click='editPassword()') {{ $t('Изменить пароль') }}
+        el-button(type='primary', @click='editPassword()') {{ $t('Change password') }}
 </template>
 
 <script lang="ts">
@@ -65,7 +65,7 @@ export default defineComponent({
 
         if (response) {
           this.$utils.showMessageSuccess({
-            message: this.$t('E-mail обновлён'),
+            message: this.$t('E-mail updated'),
           });
           return;
         }
@@ -92,7 +92,7 @@ export default defineComponent({
 
         if (response) {
           this.$utils.showMessageSuccess({
-            message: this.$t('Пароль обновлён'),
+            message: this.$t('Password updated'),
           });
           return;
         }

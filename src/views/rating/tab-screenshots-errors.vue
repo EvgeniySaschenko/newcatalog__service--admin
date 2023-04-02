@@ -8,10 +8,10 @@ el-form
     el-table-column(label='URL', :min-width='150')
       template(#default='scope')
         a(:href='scope.row.url', target='_blank') {{ scope.row.url }}
-    el-table-column(:label='$t("Текст ошибки")', :min-width='200')
+    el-table-column(:label='$t("Error text")', :min-width='200')
       template(#default='scope')
         div {{ scope.row.errorMessage }}
-    el-table-column(:label='$t("Дата ошибки")', width='150')
+    el-table-column(:label='$t("Error date")', width='150')
       template(#default='scope') {{ $utils.date(scope.row.dateScreenshotError) }}
 </template>
 

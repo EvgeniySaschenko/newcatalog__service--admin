@@ -6,13 +6,7 @@ export type LangType = {
   ru: string;
 };
 
-export const LangInit = (): LangType => {
-  return {
-    ua: '',
-    ru: '',
-  };
-};
-
+// Pagination
 export type PaginationType = {
   page: number;
   itemsCount: number;

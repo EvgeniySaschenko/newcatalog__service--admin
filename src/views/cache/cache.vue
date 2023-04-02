@@ -5,17 +5,17 @@ include /src/mixins.pug
   +e.H1.title {{ $route.name }}
   el-descriptions(direction='vertical', :column='2', border, v-loading='isLoading')
     //
-    el-descriptions-item {{ $t('Создать кеш разделов') }}
+    el-descriptions-item {{ $t('Create cache for sections') }}
     el-descriptions-item(align='center', width='180')
-      el-button(type='primary', @click='createCacheSections()') {{ $t('Создать кеш') }}
+      el-button(type='primary', @click='createCacheSections()') {{ $t('Create cache') }}
     //
-    el-descriptions-item {{ $t('Пересоздать кеш для всех элементов') }}
+    el-descriptions-item {{ $t('Rebuild all cache') }}
     el-descriptions-item(align='center')
-      el-button(type='primary', @click='resetCacheAll()') {{ $t('Создать кеш') }}
+      el-button(type='primary', @click='resetCacheAll()') {{ $t('Create cache') }}
     //
-    el-descriptions-item {{ $t('Удаляется весь кеш') }}
+    el-descriptions-item {{ $t('Delete all cache') }}
     el-descriptions-item(align='center')
-      el-button(type='danger', @click='clearCacheAll()') {{ $t('Удалить кеш') }}
+      el-button(type='danger', @click='clearCacheAll()') {{ $t('Delete cache') }}
 </template>
 
 <script lang="ts">
@@ -41,7 +41,7 @@ export default defineComponent({
 
         if (response) {
           this.$utils.showMessageSuccess({
-            message: this.$t('Кеш создан'),
+            message: this.$t('Cache created'),
           });
           return;
         }
@@ -65,7 +65,7 @@ export default defineComponent({
 
         if (response) {
           this.$utils.showMessageSuccess({
-            message: this.$t('Кеш удалён'),
+            message: this.$t('Cache deleted'),
           });
           return;
         }
@@ -87,7 +87,7 @@ export default defineComponent({
       try {
         await this.$api.cache.createCacheSections();
         this.$utils.showMessageSuccess({
-          message: this.$t('Кеш создан'),
+          message: this.$t('Cache created'),
         });
       } catch (errors: any) {
         if (errors.server) {

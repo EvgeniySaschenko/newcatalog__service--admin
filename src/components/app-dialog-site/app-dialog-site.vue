@@ -1,20 +1,20 @@
 <template lang="pug">
 include /src/mixins.pug
 
-// Диалоговое окно для редактирования / создания элемента рейтинга
+// Dialog box for editing / creating a rating element
 el-dialog(fullscreen, :model-value='true', @closed='$emit("dialog:closed")')
   +b.app-dialog-site.container
-    +e.H2.title {{ isModeEdit ? `${$t('Редактировать сайт')}: ${site.hostname}` : $t('Добавить сайт') }}
+    +e.H2.title {{ isModeEdit ? `${$t('Edit site')}: ${site.hostname}` : $t('Add site') }}
     +e.row-top(v-if='isModeEdit')
       el-button(
         type='primary',
         icon='el-icon-refresh',
         size='small',
         @click='provideEmitUpdateRatingItem()'
-      ) {{ $t('Обновить') }}
+      ) {{ $t('Update') }}
     el-tabs(v-model='tabActive', type='border-card')
       // TAB - main
-      el-tab-pane(:label='$t("Оисание")', name='main')
+      el-tab-pane(:label='$t("Description")', name='main')
         tab-main(
           :ratingId='ratingId',
           :labels='labels',
@@ -23,16 +23,16 @@ el-dialog(fullscreen, :model-value='true', @closed='$emit("dialog:closed")')
           :isModeEdit='isModeEdit'
         )
       // TAB - screenshot
-      el-tab-pane(:label='$t("Скриншот")', name='screenshot', v-if='isModeEdit')
+      el-tab-pane(:label='$t("Screenshot")', name='screenshot', v-if='isModeEdit')
         tab-screenshot(:site='site')
       // TAB - logo
-      el-tab-pane(:label='$t("Логотип")', name='logo', v-if='isModeEdit')
+      el-tab-pane(:label='$t("Logo")', name='logo', v-if='isModeEdit')
         tab-logo(:site='site')
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { LabelType, LangInit, RatingItemType } from '@/types';
+import { LabelType } from '@/types';
 import TabMain from './tab-main.vue';
 import TabScreenshot from './tab-screenshot.vue';
 import TabLogo from './tab-logo.vue';

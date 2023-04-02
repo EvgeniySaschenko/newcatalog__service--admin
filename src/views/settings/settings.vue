@@ -4,13 +4,13 @@ include /src/mixins.pug
 +b.page--settings.container
   +e.H1.title {{ $route.name }}
   el-tabs(v-model='tabActive', @tab-change='setTabUrlParam()', type='border-card')
-    el-tab-pane(:label='$t("Основные")', name='main')
+    el-tab-pane(:label='$t("Main")', name='main')
       tab-main(v-if='tabActive == "main"')
-    el-tab-pane(:label='$t("Переводы - Сайт")', name='translations-site')
+    el-tab-pane(:label='$t("Translations - Website")', name='translations-site')
       tab-translations(v-if='tabActive == "translations-site"', type-name='service--site')
-    el-tab-pane(:label='$t("Переводы - Админка")', name='translations-admin')
+    el-tab-pane(:label='$t("Translations - Admin")', name='translations-admin')
       tab-translations(v-if='tabActive == "translations-admin"', type-name='service--admin')
-    el-tab-pane(:label='$t("Переводы - API сервер")', name='translations-api')
+    el-tab-pane(:label='$t("Translations - API server")', name='translations-api')
       tab-translations(v-if='tabActive == "translations-api"', type-name='service--api')
 </template>
 
