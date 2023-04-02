@@ -1,18 +1,18 @@
 <template lang="pug">
 include /src/mixins.pug
 
-// Добавить ярлык
+// Add Label
 dialog-label(
   v-if='isShowDialogAdd',
   actionType='create',
   :ratingId='ratingId',
-  :title='$t("Добавить ярлык")',
+  :title='$t("Add Label")',
   @dialog:closed='toggleDialogLabelAdd(false)',
   @label:update='getLabels(ratingId)'
 )
-el-button(type='primary')(@click='toggleDialogLabelAdd(true)') {{ $t('Добавить ярлык') }}
+el-button(type='primary')(@click='toggleDialogLabelAdd(true)') {{ $t('Add Label') }}
 
-// Редактировать ярлык
+// Edit Label
 dialog-label(
   v-if='isShowDialogEdit',
   actionType='edit',
@@ -20,24 +20,21 @@ dialog-label(
   :name='labelCurrent.name',
   :labelId='labelCurrent.labelId',
   :ratingId='ratingId',
-  :title='$t("Редактировать ярлык")',
+  :title='$t("Edit Label")',
   @dialog:closed='toggleDialogLabelEdit(false, {})',
   @label:update='getLabels(ratingId)'
 )
 
-// Список ярлыков
+// Shortcut List
 el-table(:data='labels')
-  el-table-column(:label='$t("Ярлык")')
+  el-table-column(:label='$t("Label")')
     template(#default='scope')
-      .label-rating(:style='{ backgroundColor: scope.row.color }') {{ scope.row.name.ua }}
-      .label-rating(:style='{ backgroundColor: scope.row.color }') {{ scope.row.name.ru }}
-  el-table-column(:label='$t("Редактировать")', fixed='right', width='180')
+      div(v-for='(value, key) in $langs')
+        el-tag.u-mr--10 {{ key }}
+        .label-rating(:style='{ backgroundColor: scope.row.color }') {{ scope.row.name[key] }}
+  el-table-column(:label='$t("Edit")', fixed='right', width='180')
     template(#default='scope')
-      el-button(
-        type='primary',
-        @click='toggleDialogLabelEdit(true, { ...scope.row })',
-        size='small'
-      ) {{ $t('Редактировать') }}
+      el-button(type='primary', @click='toggleDialogLabelEdit(true, { ...scope.row })') {{ $t('Edit') }}
 </template>
 
 <script lang="ts">

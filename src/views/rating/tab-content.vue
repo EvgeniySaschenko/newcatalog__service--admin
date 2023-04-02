@@ -8,15 +8,15 @@ include /src/mixins.pug
       type='primary',
       @click='toggleDialogRatingItem(true, {})',
       :loading='isLoading'
-    ) {{ $t('Добавить') }}
+    ) {{ $t('Add') }}
 
   +e.list
     +e.item(v-for='item of ratingItems')
       +e.row-top
         +e.box-img(:style='{ backgroundColor: item.color }')
-          +e.IMG.img.sites-list__img(:src='item.logoImg', :alt='item.name.ru')
+          +e.IMG.img.sites-list__img(:src='item.logoImg', :alt='item.name[$lang]')
         +e.name
-          +e.name-text {{ item.name.ru }}
+          +e.name-text {{ item.name[$lang] }}
         +e.A.link(:href='item.url', target='_blank') {{ item.hostname }}
         div {{ item.alexaRank }}
         br
@@ -27,18 +27,14 @@ include /src/mixins.pug
             .label-rating(
               v-if='item.labelsIds[label.labelId]',
               :style='{ backgroundColor: label.color }'
-            ) {{ label.name.ru }}
+            ) {{ label.name[$lang] }}
 
       +e.row-bottom
         +e.status
-          +e.EL-TAG.status-item(v-if='item.isHiden', effect='dark', size='small', type='info') {{ $t('Скрыт') }}
-        +e.EL-BUTTON.btn--edit(
-          type='primary',
-          @click='toggleDialogRatingItem(true, item)',
-          size='small'
-        ) {{ $t('Редактировать') }}
+          +e.EL-TAG.status-item(v-if='item.isHiden', effect='dark', size='small', type='info') {{ $t('Is hidden') }}
+        +e.EL-BUTTON.btn--edit(type='primary', @click='toggleDialogRatingItem(true, item)') {{ $t('Edit') }}
 
-// Диалоговое окно для редактирования сайта
+// Dialog box for editing the site
 app-dialog-site(
   v-if='isShowDialogRatingItem',
   :labels='labels',

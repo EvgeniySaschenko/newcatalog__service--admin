@@ -2,11 +2,11 @@
 include /src/mixins.pug
 +b.app-img-color
   +e.col
-    +e.title {{ $t('Цвет') }}
+    +e.title {{ $t('Color') }}
     +e.value
       el-color-picker(v-model='color', size='large', @change='setColor()')
   +e.col
-    +e.title {{ $t('Превью') }}
+    +e.title {{ $t('Preview') }}
     +e.value
       +e.preview-box-canvas(:style='{ backgroundColor: color }')
         +e.CANVAS.canvas(
@@ -111,6 +111,7 @@ export default defineComponent({
       });
     },
 
+    // Set color
     setColor() {
       this.$emit('update:img-data', {
         color: this.color,

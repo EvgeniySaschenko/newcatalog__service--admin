@@ -1,4 +1,4 @@
-import { $t } from '@/plugins/i18n';
+import { $t } from '@/plugins/translations';
 import { ElMessage, ElMessageBox } from 'element-plus';
 
 // Tell TypeScript that this property is global i.e. available in components via "this"
@@ -35,8 +35,8 @@ export let $utils = {
   showDialogConfirm({
     title = '',
     message = '',
-    confirmButtonText = $t('Да'),
-    cancelButtonText = $t('Нет'),
+    confirmButtonText = $t('Yes'),
+    cancelButtonText = $t('No'),
   }) {
     return ElMessageBox.confirm(message, title, {
       confirmButtonText,

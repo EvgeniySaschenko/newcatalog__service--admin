@@ -2,8 +2,8 @@
 include /src/mixins.pug
 
 +b.EL-FORM.tab-main(v-loading='isLoading', label-position='left', label-width='170px')
-  // Разделы 
-  el-form-item(:error='errors.sectionsIds', :label='$t("Разделы")', required)
+  // Sections 
+  el-form-item(:error='errors.sectionsIds', :label='$t("Sections")', required)
     el-select(
       size='small',
       multiple,
@@ -12,89 +12,91 @@ include /src/mixins.pug
       :multiple-limit='sectionsIdsLimit',
       default-first-option,
       v-model='sectionsIds',
-      :placeholder='$t("Разделы")'
+      :placeholder='$t("Sections")'
     )
       el-option(
         v-for='item in sections',
         :key='item.sectionId',
-        :label='item.name.ua',
+        :label='item.name[$lang]',
         :value='item.sectionId'
       )
-  // Тип рейтинга
-  el-form-item(:label='$t("Тип рейтинга")')
+  // Rating type
+  el-form-item(:label='$t("Rating type")')
     el-radio-group(v-model='rating.typeRating')
       el-radio-button(v-for='item in typesRating', :label='item.type', size='small') {{ item.name }}
 
-  // Отображение
-  el-form-item(:label='$t("Отображение")')
+  // Display
+  el-form-item(:label='$t("Display")')
     el-radio-group(v-model='rating.typeDisplay')
       el-radio-button(v-for='item in typesDisplay', :label='item.type', size='small') {{ item.name }}
 
-  // Упорядочить контент по
-  el-form-item(:label='$t("Сортировка:")')
+  // Sort content by
+  el-form-item(:label='$t("Sorting")')
     el-radio-group(v-model='rating.typeSort')
       el-radio-button(v-for='item in typesSort', :label='item.type', size='small') {{ item.name }}
 
-  // Название
-  el-form-item(:error='errors.name', :label='$t("Название ua")', required)
-    el-input(v-model='rating.name.ua', :placeholder='$t("Название")', :maxlength='nameMaxLength') 
-  el-form-item(:error='errors.name', :label='$t("Название ru")', required)
-    el-input(v-model='rating.name.ru', :placeholder='$t("Название")', :maxlength='nameMaxLength') 
-  // Описание
-  el-form-item(:error='errors.descr', :label='$t("Описание ua")')
-    el-input(
-      show-word-limit,
-      v-model='rating.descr.ua',
-      :placeholder='$t("Описание")',
-      type='textarea',
-      :maxlength='descrMaxLength'
+  // Name
+  el-form-item(:error='errors.name', :label='$t("Name")', required)
+    el-input.u-mb--5(
+      v-model='rating.name[key]',
+      :placeholder='$t("Name")',
+      v-for='(value, key) in $langs'
     )
-  el-form-item(:error='errors.descr', :label='$t("Описание ru")')
+      template(#prepend) {{ key }}
+
+  // Description
+  el-form-item(
+    :error='errors.descr',
+    :label='`${$t("Description")} (${key})`',
+    v-for='(value, key) in $langs'
+  )
     el-input(
       show-word-limit,
-      v-model='rating.descr.ru',
-      :placeholder='$t("Описание")',
-      type='textarea',
-      :maxlength='descrMaxLength'
+      v-model='rating.descr[key]',
+      :placeholder='$t("Description")',
+      type='textarea'
     )
 
-  el-form-item(:label='$t("Скрыть")')
+  // Hide
+  el-form-item(:label='$t("Hide")')
     el-checkbox.u-m--10(v-model='rating.isHiden')
     el-tooltip(
-      :content='$t("При сохранении раздел будет удалён из кэша. Так же при пересоздании всех кешей не будет опубликован.")',
+      :content='$t("When you save the section will be removed from the cache. Also when recreating all caches will not be published")',
       placement='top'
     )
       el-icon.u-m--10
         el-icon-question-filled
 
-  el-form-item(:label='$t("Убрать с сайта")')
+  // Remove from site
+  el-form-item(:label='$t("Remove from site")')
     el-button(
       type='danger',
       @click='deleteCacheRating(rating.ratingId)',
       :disabled='!rating.dateCacheCreation'
-    ) {{ $t('Удалить из кэша') }}
+    ) {{ $t('Delete from cache') }}
 
-  el-form-item(:label='$t("Опубликовать")')
+  // Add to cache
+  el-form-item(:label='$t("Publish")')
     el-button(
       type='warning',
       @click='createCacheRating(rating.ratingId)',
       :disabled='isCacheUpdateDisabled'
-    ) {{ $t('Добавить в кэш') }}
+    ) {{ $t('Add to cache') }}
     el-tooltip(placement='top', v-if='isCacheUpdateDisabled')
       template(#content)
-        div {{ $t('Рейтинг нельзя опубликовать:') }}
-        div {{ $t('1. Если рейтинг скрыт') }}
-        div {{ $t('2. Если нём нет контента для публикации, или контент скрыт') }}
+        div {{ $t('The rating cannot be published if:') }}
+        div 1. {{ $t('If the rating is hidden') }}
+        div 2. {{ $t('If there is no content to post, or the content is hidden') }}
       el-icon.u-m--10
         el-icon-question-filled
 
-  el-form-item(:label='$t("Дата публикации")') {{ $utils.date(rating.dateFirstPublication, 'datetime') }}
-  el-form-item(:label='$t("Дата создания кэша")') {{ $utils.date(rating.dateCacheCreation, 'datetime') }}
+  el-form-item(:label='$t("Publication date")') {{ $utils.date(rating.dateFirstPublication, 'datetime') }}
+  el-form-item(:label='$t("Cache Creation Date")') {{ $utils.date(rating.dateCacheCreation, 'datetime') }}
 
   +e.bottom
-    el-button(v-if='!rating.ratingId', type='primary', @click='createRating()') {{ $t('Создать рейтинг') }}
-    el-button(v-if='rating.ratingId', type='primary', @click='editRating()') {{ $t('Сохранить изменения') }}
-    el-button(v-if='rating.ratingId', type='danger', @click='deleteRating()') {{ $t('Удалить') }}
+    el-button(v-if='!rating.ratingId', type='primary', @click='createRating()') {{ $t('Create rating') }}
+    el-button(v-if='rating.ratingId', type='primary', @click='editRating()') {{ $t('Save your changes') }}
+    el-button(v-if='rating.ratingId', type='danger', @click='deleteRating()') {{ $t('Delete') }}
 </template>
 
 <script lang="ts">
@@ -106,10 +108,10 @@ import {
   RatingDisplayTypeEnum,
   RatingSortTypeEnum,
   ValueOfType,
-  LangInit,
 } from '@/types';
 import { defineComponent } from 'vue';
 import useStoreSections from '@/store/sections';
+import { $langsInit } from '@/plugins/translations';
 
 let ratingInit = (): Omit<RatingType, 'userId'> => {
   return {
@@ -117,22 +119,24 @@ let ratingInit = (): Omit<RatingType, 'userId'> => {
     // Selected sections
     sectionsIds: {},
     // Name rating
-    name: LangInit(),
+    name: $langsInit(),
     // Descriptin rating
-    descr: LangInit(),
+    descr: $langsInit(),
     // Hidden rating
     isHiden: false,
-    // Тип рейтинга
+    // Rating type
     typeRating: RatingTypeTypeEnum.site,
-    // Отображать "плиткой" / "списком"
+    // Display "tile" / "list"
     typeDisplay: RatingDisplayTypeEnum.tile,
-    // Порядок вывода елементов рейтинга
+    // The order of output of rating elements
     typeSort: RatingSortTypeEnum.alexa,
-    // Количество items всего
+    // Number of items total
     countRatingItemsTotal: 0,
-    // Количество items скрытых
+    // Number of items hidden
     countRatingItemsHidden: 0,
+    // Date cache creation
     dateCacheCreation: null,
+    // Date first publication
     dateFirstPublication: null,
   };
 };
@@ -175,17 +179,11 @@ export default defineComponent({
       labels: [] as LabelType[],
       // Sections
       sections: [] as SectionType[],
-      // Максимьное количество разделов
+      // Maximum number of partitions
       sectionsIdsLimit: 2,
-      // Максимальное количество символов
-      nameMaxLength: 150,
-      // Минимальное количество символов
-      nameMinLength: 15,
-      // Максимальная длина описания
-      descrMaxLength: 1000,
       // isLoading
       isLoading: false,
-      // Сообщения
+      // Messages
       errors: {
         name: '',
         descr: '',
@@ -201,13 +199,13 @@ export default defineComponent({
     async init() {
       // Types params rating
       this.typesDisplay = [
-        { type: RatingDisplayTypeEnum.tile, name: this.$t('Плитка') },
-        { type: RatingDisplayTypeEnum.inline, name: this.$t('Линия') },
+        { type: RatingDisplayTypeEnum.tile, name: this.$t('Tile') },
+        { type: RatingDisplayTypeEnum.inline, name: this.$t('Line') },
       ];
-      this.typesRating = [{ type: RatingTypeTypeEnum.site, name: this.$t('Сайты') }];
+      this.typesRating = [{ type: RatingTypeTypeEnum.site, name: this.$t('Sites') }];
       this.typesSort = [
         { type: RatingSortTypeEnum.alexa, name: this.$t('Alexa Rank') },
-        { type: RatingSortTypeEnum.click, name: this.$t('Клики') },
+        { type: RatingSortTypeEnum.click, name: this.$t('Clicks') },
       ];
 
       // Sections
@@ -253,7 +251,7 @@ export default defineComponent({
         });
 
         this.$utils.showMessageSuccess({
-          message: `${this.$t('Рейтинг создан')}: "${name.ru}"`,
+          message: this.$t('Rating created'),
         });
 
         ratingIdNew = ratingId;
@@ -290,7 +288,7 @@ export default defineComponent({
         await this.$api.ratings.editRating(this.preparingRatingDataForSavingEdit());
 
         this.$utils.showMessageSuccess({
-          message: `${this.$t('Рейтинг изменён')}: "${this.rating.name.ru}"`,
+          message: this.$t('Rating changed'),
         });
 
         isSuccess = true;
@@ -319,7 +317,7 @@ export default defineComponent({
     async deleteRating() {
       if (this.isLoading) return;
       await this.$utils.showDialogConfirm({
-        title: `${this.$t('Вы действительно хотите удалить?')} "${this.rating.name.ru}"`,
+        title: this.$t('Are you sure you want to delete?'),
       });
 
       this.isLoading = true;
@@ -329,7 +327,7 @@ export default defineComponent({
         await this.$api.ratings.deleteRating({ ratingId: this.ratingId });
 
         this.$utils.showMessageSuccess({
-          message: `${this.$t('Рейтинг удалён')}: "${this.rating.name.ru}"`,
+          message: this.$t('Rating removed'),
         });
         this.$router.push({ path: `/ratings` });
       } catch (errors: any) {
@@ -349,7 +347,7 @@ export default defineComponent({
     async createCacheRating(ratingId: RatingType['ratingId']) {
       if (this.initialStateRating !== JSON.stringify(this.preparingRatingDataForSavingEdit())) {
         this.$utils.showDialogAlert({
-          message: this.$t('Для создания кэша необходимо сохранить изменения.'),
+          message: this.$t('To create a cache, you need to save changes'),
         });
         return;
       }
@@ -361,7 +359,7 @@ export default defineComponent({
       try {
         isSuccess = await this.$api.cache.createCacheRating({ ratingId });
         this.$utils.showMessageSuccess({
-          message: this.$t('Рейтинг опубликован'),
+          message: this.$t('Rating published'),
         });
       } catch (errors: any) {
         if (errors.server) {
@@ -386,7 +384,7 @@ export default defineComponent({
       try {
         await this.$api.cache.deleteCacheRating({ ratingId });
         this.$utils.showMessageSuccess({
-          message: this.$t('Рейтинг не отображается на сайте'),
+          message: this.$t('The rating is not displayed on the website'),
         });
         isSuccess = true;
       } catch (errors: any) {

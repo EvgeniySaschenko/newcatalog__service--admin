@@ -8,63 +8,61 @@ include /src/mixins.pug
       el-table-column
         template(#default='scope')
           el-form-item(:error='errors.formAdd.name', required)
-            el-input.u-mb--5(v-model='nameNewSection.ua', :placeholder='$t("Название ua")') 
-            el-input.u-mb--5(v-model='nameNewSection.ru', :placeholder='$t("Название ru")') 
+            el-input.u-mb--5(
+              v-model='nameNewSection[key]',
+              :placeholder='$t("Name")',
+              v-for='(item, key) in $langs'
+            )
+              template(#prepend) {{ key }}
 
       el-table-column(width='200')
         template(#default='scope')
           el-form-item
-            el-button(type='primary', @click='createSection()') {{ $t('Добавить раздел') }}
+            el-button(type='primary', @click='createSection()') {{ $t('Add Section') }}
 
   // Edit
   el-form
     el-table(:data='items', stripe, v-loading='isSendingFormEdit', :scrollbar-always-on='true')
-      el-table-column(:label='$t("Название")', :min-width='200')
+      el-table-column(:label='$t("Name")', :min-width='200')
         template(#default='scope')
           el-form-item(:error='errors.formEdit[`${scope.row.id}_name`]', required)
             el-input.u-mb--5(
-              v-model='scope.row.name.ua',
+              v-model='scope.row.name[key]',
               size='small',
-              :placeholder='$t("Название ua")'
-            ) 
-            el-input.u-mb--5(
-              v-model='scope.row.name.ru',
-              size='small',
-              :placeholder='$t("Название ru")'
-            ) 
+              :placeholder='$t("Name")',
+              v-for='(item, key) in $langs'
+            )
+              template(#prepend) {{ key }}
 
-      el-table-column(:label='$t("Приоритет")', width='150')
+      el-table-column(:label='$t("Priority")', width='150')
         template(#default='scope')
           el-form-item
             el-input-number(
               v-model='scope.row.priority',
               size='small',
-              :placeholder='$t("Приоритет")'
+              :placeholder='$t("Priority")'
             ) 
 
-      el-table-column(:label='$t("Скрыть")', width='90')
+      el-table-column(:label='$t("Hide")', width='90')
         template(#default='scope')
           el-form-item
             el-checkbox(v-model='scope.row.isHiden')
 
-      el-table-column(:label='$t("Редактировать")', width='150')
+      el-table-column(:label='$t("Edit")', width='150')
         template(#default='scope')
           el-form-item
-            el-button(type='primary', @click='editSection(scope.row)') {{ $t('Редактировать') }}
+            el-button(type='primary', @click='editSection(scope.row)') {{ $t('Edit') }}
 
-      el-table-column(:label='$t("Удалить")', width='150')
+      el-table-column(:label='$t("Delete")', width='150')
         template(#default='scope')
           el-form-item
-            el-button(
-              type='danger',
-              @click='deleteSection({ sectionId: scope.row.sectionId, name: scope.row.name })'
-            ) {{ $t('Удалить') }}
+            el-button(type='danger', @click='deleteSection({ sectionId: scope.row.sectionId })') {{ $t('Delete') }}
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 import useStoreSections from '@/store/sections';
-import { SectionType, LangInit } from '@/types';
+import { SectionType } from '@/types';
 
 export default defineComponent({
   name: 'page-sections',
@@ -77,7 +75,7 @@ export default defineComponent({
       // List sections
       items: [] as SectionType[],
       // Name new section
-      nameNewSection: LangInit(),
+      nameNewSection: this.$langsInit(),
       // Errors messages
       errors: {
         formAdd: {
@@ -125,14 +123,14 @@ export default defineComponent({
       this.$utils.clearErrors(this.errors.formAdd, this.errors.formAdd);
 
       try {
-        let response = await this.$api.sections.createSection({
+        await this.$api.sections.createSection({
           name: this.nameNewSection,
         });
         await this.getSections();
         this.$utils.showMessageSuccess({
-          message: `${this.$t('Раздел добавлен')}: "${response.name.ru}"`,
+          message: this.$t('Section added'),
         });
-        this.nameNewSection = LangInit();
+        this.nameNewSection = this.$langsInit();
       } catch (errors: any) {
         if (errors.server) {
           this.$utils.showMessageError({ message: errors.server });
@@ -145,9 +143,9 @@ export default defineComponent({
     },
 
     // Delete section
-    async deleteSection({ sectionId, name }: Pick<SectionType, 'sectionId' | 'name'>) {
+    async deleteSection({ sectionId }: Pick<SectionType, 'sectionId'>) {
       await this.$utils.showDialogConfirm({
-        title: `${this.$t('Вы действительно хотите удалить?')} "${name.ru}"`,
+        title: this.$t('Are you sure you want to delete?'),
       });
       if (this.isSendingFormEdit) return;
       this.isSendingFormEdit = true;
@@ -156,7 +154,7 @@ export default defineComponent({
         await this.$api.sections.deleteSection({ sectionId: +sectionId });
         await this.getSections();
         this.$utils.showMessageSuccess({
-          message: `${this.$t('Раздел удалён')}: "${name.ru}"`,
+          message: this.$t('Section deleted'),
         });
       } catch (errors: any) {
         if (errors.server) {
@@ -185,7 +183,7 @@ export default defineComponent({
         await this.$api.sections.editSection(section);
         await this.getSections();
         this.$utils.showMessageSuccess({
-          message: `${this.$t('Раздел отредакирован')}: "${section.name.ru}"`,
+          message: this.$t('Section edited'),
         });
       } catch (errors: any) {
         if (errors.server) {

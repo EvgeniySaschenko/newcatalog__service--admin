@@ -5,20 +5,20 @@ include /src/mixins.pug
   +e.title(ref='title')
     +e.title-col--1
       span {{ $route.name }}&nbsp;
-      span(v-if='sreens.length') {{ curIndex + 1 }} {{ $t('из') }} {{ sreens.length }}
+      span(v-if='sreens.length') {{ curIndex + 1 }} {{ $t('from') }} {{ sreens.length }}
     +e.title-col--2
-      +e.EL-TAG.tag-processing-status(:type='curItem.isSend ? "success" : ""') {{ curItem.isSend ? $t('Обработано') : $t('Не обработано') }}
+      +e.EL-TAG.tag-processing-status(:type='curItem.isSend ? "success" : ""') {{ curItem.isSend ? $t('Processed') : $t('Not processed') }}
       el-button(
         type='primary',
         @click='createSiteLogo()',
         :disabled='!curItem.color || curItem.isSend'
-      ) {{ $t('Отправить на сервер') }}
+      ) {{ $t('Save') }}
   +e.row-arrow(v-if='sreens.length')
     +e.EL-ICON-ARROW-LEFT.arrow--prev(@click='setCurrentItem("prev")')
     +e.EL-ICON-ARROW-RIGHT.arrow--next(@click='setCurrentItem("next")')
   +e.row-about
     el-link.text-uppercase(type='primary') {{ curItem.host }}
-    el-button(type='primary', icon='el-icon-refresh', size='small', @click='getSitesSreens()') {{ $t('Обновить список') }}
+    el-button(type='primary', icon='el-icon-refresh', size='small', @click='getSitesSreens()') {{ $t('Update list') }}
   app-img-cropper(:img='curItem.img', @update:img-data='setImgDataResult($event)')
 </template>
 
@@ -135,7 +135,7 @@ export default defineComponent({
         this.sreens[this.curIndex] = this.curItem;
 
         this.$utils.showMessageSuccess({
-          message: `${this.$t('Логотип добавлен')}`,
+          message: `${this.$t('Logo added')}`,
         });
       } catch (errors: any) {
         if (errors.server) {

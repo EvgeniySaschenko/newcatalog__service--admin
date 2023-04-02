@@ -8,7 +8,7 @@ import { VueCookieNext } from 'vue-cookie-next';
 import pluginApi from '@/plugins/api';
 import pluginUtils from '@/plugins/utils';
 import pluginElementPlus from '@/plugins/element-plus';
-import pluginI18n from '@/plugins/i18n';
+import pluginTranslations from '@/plugins/translations';
 import pinia from '@/plugins/pinia';
 import user from '@/plugins/user';
 import * as ElementPlusIconsVue from '@element-plus/icons-vue';
@@ -21,7 +21,7 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 
 app
   .use(pinia)
-  .use(pluginI18n)
+  .use(pluginTranslations)
   .use(pluginApi)
   .use(pluginUtils)
   .use(pluginElementPlus)

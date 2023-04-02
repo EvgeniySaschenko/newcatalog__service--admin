@@ -3,7 +3,7 @@ include /src/mixins.pug
 
 +b.page--login
   el-form.form-login(label-position='top', v-loading='isLoading')
-    +e.H1.title {{ $t('Логин') }}
+    +e.H1.title {{ $t('Login') }}
     // E-mail
     el-form-item(label='E-mail', required, :error='errors.email')
       el-input(
@@ -15,16 +15,16 @@ include /src/mixins.pug
         name='email'
       )
     // password
-    el-form-item(:label='$t("Пароль")', required, :error='errors.password')
+    el-form-item(:label='$t("Password")', required, :error='errors.password')
       el-input(
-        :placeholder='$t("Пароль")',
+        :placeholder='$t("Password")',
         v-model='password',
         style='width: 100%',
         type='password'
       )
 
     el-form-item
-      el-button(type='primary', @click='send()', style='width: 100%') {{ $t('Отправить') }}
+      el-button(type='primary', @click='send()', style='width: 100%') {{ $t('Send') }}
 
     el-alert(:title='errors.auth', type='error', center, v-if='errors.auth') 
     el-alert(

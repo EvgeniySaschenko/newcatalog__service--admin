@@ -5,7 +5,10 @@ el-form.form-login(label-position='top', v-loading='isLoading')
   el-descriptions(direction='vertical', :column='2', border)
     // Admin langs list
     el-descriptions-item
-      el-form-item(:label='$t("Список языков админки")', :error='errors["admin-langs"]')
+      el-form-item(
+        :label='$t("List of languages of the admin panel")',
+        :error='errors["admin-langs"]'
+      )
         el-select(v-model='adminLangs', multiple)
           el-option(
             v-for='item in langsIso',
@@ -19,11 +22,14 @@ el-form.form-login(label-position='top', v-loading='isLoading')
       el-button(
         type='primary',
         @click='editLangsList({ langs: adminLangs, name: settingsNames.adminLangs })'
-      ) {{ $t('Сохранить') }}
+      ) {{ $t('Save') }}
 
     // Admin lang default
     el-descriptions-item
-      el-form-item(:label='$t("Язык админки поумолчанию")', :error='errors["admin-lang-default"]')
+      el-form-item(
+        :label='$t("Admin panel language by default")',
+        :error='errors["admin-lang-default"]'
+      )
         el-select(v-model='adminLangDefault')
           el-option(
             v-for='item in langsIso',
@@ -37,11 +43,11 @@ el-form.form-login(label-position='top', v-loading='isLoading')
       el-button(
         type='primary',
         @click='editLangDefault({ lang: adminLangDefault, name: settingsNames.adminLangDefault })'
-      ) {{ $t('Сохранить') }}
+      ) {{ $t('Save') }}
 
     // Site langs list
     el-descriptions-item
-      el-form-item(:label='$t("Список языков сайта")', :error='errors["site-langs"]')
+      el-form-item(:label='$t("List of site languages")', :error='errors["site-langs"]')
         el-select(v-model='siteLangs', multiple)
           el-option(
             v-for='item in langsIso',
@@ -55,11 +61,11 @@ el-form.form-login(label-position='top', v-loading='isLoading')
       el-button(
         type='primary',
         @click='editLangsList({ langs: siteLangs, name: settingsNames.siteLangs })'
-      ) {{ $t('Сохранить') }}
+      ) {{ $t('Save') }}
 
     // Site lang default
     el-descriptions-item
-      el-form-item(:label='$t("Язык сайта поумолчанию")', :error='errors["site-lang-default"]')
+      el-form-item(:label='$t("Site default language")', :error='errors["site-lang-default"]')
         el-select(v-model='siteLangDefault')
           el-option(
             v-for='item in langsIso',
@@ -73,7 +79,7 @@ el-form.form-login(label-position='top', v-loading='isLoading')
       el-button(
         type='primary',
         @click='editLangDefault({ lang: siteLangDefault, name: settingsNames.siteLangDefault })'
-      ) {{ $t('Сохранить') }}
+      ) {{ $t('Save') }}
 </template>
 
 <script lang="ts">
@@ -137,7 +143,7 @@ export default defineComponent({
 
         if (response) {
           this.$utils.showMessageSuccess({
-            message: this.$t('Язык изменён'),
+            message: this.$t('Language changed'),
           });
           return;
         }
@@ -164,7 +170,7 @@ export default defineComponent({
 
         if (response) {
           this.$utils.showMessageSuccess({
-            message: this.$t('Список языков изменён'),
+            message: this.$t('Language list changed'),
           });
           return;
         }
