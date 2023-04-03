@@ -122,9 +122,13 @@ export default defineComponent({
 
   methods: {
     init() {
-      let { langsIso, settings }: { langsIso: LangsIsoType[]; settings: SettingsType } = JSON.parse(
-        JSON.stringify(useSettingsStore().settings)
-      );
+      let {
+        langsIso,
+        settings,
+      }: {
+        langsIso: LangsIsoType[];
+        settings: SettingsType;
+      } = JSON.parse(JSON.stringify(useSettingsStore().settings));
 
       this.langsIso = langsIso;
       this.adminLangDefault = settings['admin-lang-default'];

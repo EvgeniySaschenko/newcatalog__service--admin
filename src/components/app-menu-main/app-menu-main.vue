@@ -7,20 +7,22 @@ include /src/mixins.pug
 </template>
 
 <script lang="ts">
-export default {
+import { defineComponent } from 'vue';
+
+export default defineComponent({
   name: 'menu-main',
   data() {
     return {
       items: [
-        { name: 'Список рейтингов', path: '/ratings' },
-        { name: 'Список разделов', path: '/sections' },
-        { name: 'Управление кешем', path: '/cache' },
-        { name: 'Профиль пользователя', path: '/user' },
-        { name: 'Настойки приложения', path: '/settings' },
+        { name: this.$t('Ratings list'), path: '/ratings' },
+        { name: this.$t('Sections list'), path: '/sections' },
+        { name: this.$t('Cache control'), path: '/cache' },
+        { name: this.$t('User profile'), path: '/user' },
+        { name: this.$t('App Settings'), path: '/settings' },
       ],
     };
   },
-};
+});
 </script>
 
 <style lang="sass">
