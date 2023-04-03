@@ -204,11 +204,9 @@ export default defineComponent({
           siteId: this.site.siteId,
         });
         if (result && result.siteScreenshotId) {
+          let text = this.$t('There is already another image associated with the domain');
           await this.$utils.showDialogConfirm({
-            // eslint-disable-next-line prettier/prettier
-            message: `${this.$t(
-              'There is already another image associated with the domain'
-            )} ${this.$t('Link this image?')}`,
+            message: `${text} ${this.$t('Link this image?')}`,
           });
         }
 

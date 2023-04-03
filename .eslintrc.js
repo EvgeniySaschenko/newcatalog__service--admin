@@ -26,6 +26,7 @@ module.exports = {
     '@typescript-eslint/no-empty-function': 'warn',
     'vue/return-in-computed-property': 'warn',
     'vue/multi-word-component-names': 'off',
+    'function-paren-newline': ['error', 'multiline-arguments'],
   },
   overrides: [
     {

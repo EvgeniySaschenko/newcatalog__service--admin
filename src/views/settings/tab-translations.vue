@@ -34,11 +34,13 @@ el-form.form-login.u-mb--10(label-position='top', v-loading='isLoading')
 
 .u-center
   el-pagination(
+    v-if='pagination.pagesCount > 1',
     :page-size='pagination.maxRecordsPerPage',
     layout='prev, pager, next',
     :total='pagination.itemsCount',
     background,
-    @current-change='changePage($event)'
+    @current-change='changePage($event)',
+    v-model:current-page='pagination.page'
   )
 </template>
 
@@ -138,7 +140,7 @@ export default defineComponent({
           typeName: this.typeName,
         });
 
-        await this.getTranslations();
+        await this.changePage(1);
 
         this.$utils.showMessageSuccess({
           message: this.$t('Translations updated'),
