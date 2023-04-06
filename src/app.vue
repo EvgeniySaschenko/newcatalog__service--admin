@@ -1,75 +1,86 @@
 <template lang="pug">
 include /src/mixins.pug
 
-.wrapper(v-loading='isLogOutLoading')
-  +b.HEADER.header(v-if='!$user.isPageLogin')
-    +e.row--top
-      .container
-        +e.ROUTER-LINK.logo(to='/ratings')
-          +e.IMG.logo-img(src='@/assets/img/logo.png')
-
-        +e.EL-BUTTON.log-out-btn(type='primary', @click='logOut()') {{ $t('Exit') }}
-    +e.row--menu
-      .container
-        app-menu-main
-  div(v-loading='isSectionsLoading')
-    router-view(v-if='isSectionsRedy || $user.isPageLogin')
+.wrapper(v-loading='isLoading')
+  app-header(v-if='isInitRedy')
+  router-view(v-if='isInitRedy || $user.isPageLogin')
   footer.container
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import AppMenuMain from '@/components/app-menu-main/app-menu-main.vue';
+import { SettingsEnum, SettingsType, ServicesShortEnum, ServicesEnum } from '@/types';
+import AppHeader from '@/components/app-header/app-header.vue';
 import useSectionsStore from '@/store/sections';
 import useSettingsStore from '@/store/settings';
 
 export default defineComponent({
+  provide() {
+    return {
+      provideLogOut: this.logOut,
+    };
+  },
   data() {
     return {
-      isSectionsLoading: false,
-      isLogOutLoading: false,
-      isSectionsRedy: false,
+      isLoading: false,
+      isInitRedy: false,
       lastActivityTime: Date.now(),
     };
   },
 
   components: {
-    AppMenuMain,
+    AppHeader,
   },
 
   async created() {
-    if (!this.$user.isPageLogin) {
-      // This request is made to check if the user is logged in.
-      let isLogin: any = await this.refreshAuth();
-      if (isLogin) {
-        await this.updateSessionExpiration();
-        this.setUserActivityLastTime();
-        await this.init();
-      }
-    }
+    await this.init();
   },
 
   methods: {
     // Get sections
     async init() {
-      if (this.isSectionsLoading) return;
-      this.isSectionsLoading = true;
+      if (this.$user.isPageLogin) return;
+      if (this.isLoading) return;
+      this.isLoading = true;
+
       try {
+        // This request is made to check if the user is logged in.
+        let isLogin: any = await this.refreshAuth();
+        if (!isLogin) return;
+        await this.updateSessionExpiration();
+        this.setUserActivityLastTime();
         let sections = await this.$api.sections.getSections();
         let settings = await this.$api.settings.getSettings();
 
         useSectionsStore().setSections(sections);
         useSettingsStore().setSettings(settings);
+        let translations = await this.$api.translations.getTranslationsForFunctionTranslate({
+          serviceTypeName: ServicesEnum.admin,
+        });
 
-        this.isSectionsRedy = true;
+        this.$setTranslationsList({ translations });
+        this.setLangsApp(settings.settings);
+        this.isInitRedy = true;
       } catch (errors: any) {
         if (errors.server) {
           this.$utils.showMessageError({ message: errors.server });
           return;
         }
       } finally {
-        this.isSectionsLoading = false;
+        this.isLoading = false;
       }
+    },
+
+    // Set langs
+    setLangsApp(settings: SettingsType) {
+      // site
+      let siteLangs = settings[SettingsEnum.siteLangs].reduce((a, v) => ({ ...a, [v]: '' }), {});
+      this.$setLangs({ langs: siteLangs, type: ServicesShortEnum.site });
+      this.$setLangDefault({ lang: settings[SettingsEnum.siteLang], type: ServicesShortEnum.site });
+      // admin
+      let adminLangs = settings[SettingsEnum.adminLangs].reduce((a, v) => ({ ...a, [v]: '' }), {});
+      this.$setLangs({ langs: adminLangs, type: ServicesShortEnum.admin });
+      this.$setLangDefaultLocalAdmin({ lang: settings[SettingsEnum.adminLang] });
     },
 
     // Check session expiration
@@ -86,8 +97,8 @@ export default defineComponent({
 
     // Log out
     async logOut() {
-      if (this.isLogOutLoading) return;
-      this.isLogOutLoading = true;
+      if (this.isLoading) return;
+      this.isLoading = true;
       try {
         return await this.$api.user.logOut();
       } catch (errors: any) {
@@ -96,7 +107,7 @@ export default defineComponent({
           return;
         }
       } finally {
-        this.isLogOutLoading = false;
+        this.isLoading = false;
       }
     },
 
@@ -134,22 +145,4 @@ export default defineComponent({
 
 <style lang="sass">
 @import "@/assets/style/_style.sass"
-
-.header
-  &__logo
-    max-width: 270px
-    display: inline-flex
-    @media (max-width: $app-screen-sm)
-      margin-bottom: 10px
-    &-img
-      width: 100%
-  &__row--top
-    padding: 10px 0
-    background-color: $app-primary-color
-    .container
-      display: flex
-      justify-content: space-between
-      align-items: center
-      @media (max-width: $app-screen-sm)
-        flex-direction: column
 </style>

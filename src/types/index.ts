@@ -1,10 +1,24 @@
+import { LangsListType } from './langs-list';
+
 export type ValueOfType<T> = T[keyof T];
 
+// App types (for short entry in translations)
+export enum ServicesShortEnum {
+  site = 'site',
+  admin = 'admin',
+}
+
+// Services types
+export enum ServicesEnum {
+  api = 'service--api',
+  admin = 'service--admin',
+  site = 'service--site',
+}
+export type ServicesType = ServicesEnum.api | ServicesEnum.admin | ServicesEnum.site;
+
 // Lang
-export type LangType = {
-  ua: string;
-  ru: string;
-};
+export type AppType = keyof typeof ServicesShortEnum;
+export type LangType = LangsListType;
 
 // Pagination
 export type PaginationType = {
@@ -21,21 +35,28 @@ export type LangsIsoType = {
 };
 
 // Settings
+export enum SettingsEnum {
+  adminLang = 'admin-lang-default',
+  adminLangs = 'admin-langs',
+  siteLang = 'site-lang-default',
+  siteLangs = 'site-langs',
+}
+
 export type SettingsType = {
-  'admin-lang-default': keyof LangType;
-  'admin-langs': [keyof LangType][];
-  'site-lang-default': keyof LangType;
-  'site-langs': [keyof LangType][];
+  [SettingsEnum.adminLang]: keyof LangType;
+  [SettingsEnum.adminLangs]: (keyof LangType)[];
+  [SettingsEnum.siteLang]: keyof LangType;
+  [SettingsEnum.siteLangs]: (keyof LangType)[];
 };
 
 export type SettingsLangDefaultType = {
-  name: keyof SettingsType['admin-lang-default'] | keyof SettingsType['site-lang-default'];
-  lang: SettingsType['admin-lang-default'] | SettingsType['site-lang-default'];
+  type: SettingsEnum.adminLang | SettingsEnum.siteLang;
+  lang: SettingsType[SettingsEnum.adminLang] | SettingsType[SettingsEnum.siteLang];
 };
 
 export type SettingsLangsListType = {
-  name: keyof SettingsType['admin-langs'] | keyof SettingsType['site-langs'];
-  langs: SettingsType['admin-langs'] | SettingsType['site-langs'];
+  type: SettingsEnum.adminLangs | SettingsEnum.siteLangs;
+  langs: SettingsType[SettingsEnum.adminLangs] | SettingsType[SettingsEnum.siteLangs];
 };
 
 // Translation
@@ -44,9 +65,6 @@ export type TranslationType = {
   text: LangType;
   key: string;
 };
-
-// Translation types
-export type TranslationTypeNameType = 'service--api' | 'service--admin' | 'service--site';
 
 // Section
 export type SectionType = {

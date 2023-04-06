@@ -1,25 +1,44 @@
-import { $fetch, $utils } from './_core';
-import { TranslationTypeNameType, TranslationType, PaginationType } from '@/types';
+import { $fetch } from './_core';
+import { ServicesType, TranslationType, PaginationType } from '@/types';
 
 export default {
-  // Get translations for service
-  getTranslations: async ({
-    typeName,
+  // Get part translations for service
+  getTranslationsPartList: async ({
+    serviceTypeName,
     page,
   }: {
-    typeName: TranslationTypeNameType;
+    serviceTypeName: ServicesType;
     page: PaginationType['page'];
   }) => {
-    let result = await $fetch(`/api/translations/${typeName}?page=${page}`, {
-      method: 'GET',
-    });
+    let result = await $fetch(
+      `/api/translations/part-list/?page=${page}&serviceTypeName=${serviceTypeName}`,
+      {
+        method: 'GET',
+      }
+    );
     return await result.json();
   },
 
-  // Create translitions for service
-  createTranslitions: async ({ typeName }: { typeName: TranslationTypeNameType }) => {
-    let response = await $fetch(`/api/translations/create-for-service/${typeName}`, {
+  // Get translations for function translate
+  getTranslationsForFunctionTranslate: async ({
+    serviceTypeName,
+  }: {
+    serviceTypeName: ServicesType;
+  }) => {
+    let result = await $fetch(
+      `/api/translations/function-translate/?serviceTypeName=${serviceTypeName}`,
+      {
+        method: 'GET',
+      }
+    );
+    return await result.json();
+  },
+
+  // Create translations for service
+  createTranslations: async ({ serviceTypeName }: { serviceTypeName: ServicesType }) => {
+    let response = await $fetch(`/api/translations/create-for-service`, {
       method: 'POST',
+      body: JSON.stringify({ serviceTypeName }),
     });
     return await response.json();
   },

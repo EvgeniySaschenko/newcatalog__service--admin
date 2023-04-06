@@ -14,9 +14,9 @@ include /src/mixins.pug
     +e.item(v-for='item of ratingItems')
       +e.row-top
         +e.box-img(:style='{ backgroundColor: item.color }')
-          +e.IMG.img.sites-list__img(:src='item.logoImg', :alt='item.name[$lang]')
+          +e.IMG.img.sites-list__img(:src='item.logoImg', :alt='item.name[$langDefault("site")]')
         +e.name
-          +e.name-text {{ item.name[$lang] }}
+          +e.name-text {{ item.name[$langDefault('site')] }}
         +e.A.link(:href='item.url', target='_blank') {{ item.hostname }}
         div {{ item.alexaRank }}
         br
@@ -27,7 +27,7 @@ include /src/mixins.pug
             .label-rating(
               v-if='item.labelsIds[label.labelId]',
               :style='{ backgroundColor: label.color }'
-            ) {{ label.name[$lang] }}
+            ) {{ label.name[$langDefault('site')] }}
 
       +e.row-bottom
         +e.status
