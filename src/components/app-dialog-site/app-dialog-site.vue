@@ -13,9 +13,9 @@ el-dialog(fullscreen, :model-value='true', @closed='$emit("dialog:closed")')
         @click='provideEmitUpdateRatingItem()'
       ) {{ $t('Update') }}
     el-tabs(v-model='tabActive', type='border-card')
-      // TAB - main
-      el-tab-pane(:label='$t("Description")', name='main')
-        tab-main(
+      // TAB - descr
+      el-tab-pane(:label='$t("Description")', name='descr')
+        tab-descr(
           :ratingId='ratingId',
           :labels='labels',
           :site='site',
@@ -33,7 +33,7 @@ el-dialog(fullscreen, :model-value='true', @closed='$emit("dialog:closed")')
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { LabelType } from '@/types';
-import TabMain from './tab-main.vue';
+import TabDescr from './tab-descr.vue';
 import TabScreenshot from './tab-screenshot.vue';
 import TabLogo from './tab-logo.vue';
 
@@ -53,11 +53,11 @@ export default defineComponent({
   data() {
     return {
       // Tab current
-      tabActive: 'main',
+      tabActive: 'descr',
     };
   },
   components: {
-    TabMain,
+    TabDescr,
     TabScreenshot,
     TabLogo,
   },

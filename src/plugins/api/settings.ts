@@ -1,4 +1,4 @@
-import { $fetch, $utils } from './_core';
+import { $fetch } from './_core';
 import { SettingsLangDefaultType, SettingsLangsListType } from '@/types';
 
 export default {
@@ -11,19 +11,19 @@ export default {
   },
 
   // Edit lang default
-  editLangDefault: async ({ name, lang }: SettingsLangDefaultType) => {
+  editLangDefault: async ({ type, lang }: SettingsLangDefaultType) => {
     let response = await $fetch('/api/settings/lang-default', {
       method: 'PUT',
-      body: JSON.stringify({ name, lang }),
+      body: JSON.stringify({ type, lang }),
     });
     return await response.json();
   },
 
   // Edit lang list
-  editLangsList: async ({ name, langs }: SettingsLangsListType) => {
+  editLangsList: async ({ type, langs }: SettingsLangsListType) => {
     let response = await $fetch('/api/settings/langs-list', {
       method: 'PUT',
-      body: JSON.stringify({ name, langs }),
+      body: JSON.stringify({ type, langs }),
     });
     return await response.json();
   },

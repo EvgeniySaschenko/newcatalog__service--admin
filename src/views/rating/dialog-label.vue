@@ -9,7 +9,7 @@ el-dialog(:title='title', :model-value='true', @closed='$emit("dialog:closed")')
         :placeholder='$t("Label text")',
         v-model='label.name[key]',
         required,
-        v-for='(item, key) in $langs'
+        v-for='(item, key) in $langs("site")'
       )
         template(#prepend) {{ key }}
     // bcolor
@@ -23,7 +23,7 @@ el-dialog(:title='title', :model-value='true', @closed='$emit("dialog:closed")')
         )
         el-color-picker(v-model='label.color')
     el-form-item(:label='$t("Label")')
-      .label-rating(:style='{ backgroundColor: label.color }') {{ label.name[$lang] }}
+      .label-rating(:style='{ backgroundColor: label.color }') {{ label.name[$langDefault('site')] }}
 
   template(#footer)
     el-button(v-if='actionType == "edit"', type='danger', @click='deleteLabel()') {{ $t('Delete') }}
@@ -32,7 +32,7 @@ el-dialog(:title='title', :model-value='true', @closed='$emit("dialog:closed")')
 </template>
 
 <script lang="ts">
-import { $langsInit } from '@/plugins/translations';
+import { $langs } from '@/plugins/translations';
 import { LangType } from '@/types';
 import { defineComponent } from 'vue';
 
@@ -43,7 +43,7 @@ export default defineComponent({
     name: {
       type: Object,
       default: () => {
-        return $langsInit();
+        return $langs('site');
       },
     },
     // Label color
@@ -84,7 +84,7 @@ export default defineComponent({
       isLoading: false,
       // Rating label
       label: {
-        name: this.$langsInit(),
+        name: this.$langs('site'),
         color: '',
       },
       // Default colors
@@ -109,7 +109,7 @@ export default defineComponent({
       ],
     };
   },
-  mounted() {
+  created() {
     this.label.name = { ...(this.name as LangType) };
     this.label.color = this.color;
   },
@@ -126,7 +126,7 @@ export default defineComponent({
       this.$utils.clearErrors(this.errors, this.errors);
 
       try {
-        let { name } = await this.$api['labels'].createLabel({
+        await this.$api['labels'].createLabel({
           color: this.label.color,
           name: this.label.name,
           ratingId: this.ratingId,

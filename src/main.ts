@@ -2,7 +2,6 @@ import { createApp } from 'vue';
 import App from '@/app.vue';
 import '@/registerServiceWorker';
 import router from '@/router';
-import { VueCookieNext } from 'vue-cookie-next';
 
 // Plugins
 import pluginApi from '@/plugins/api';
@@ -25,7 +24,6 @@ app
   .use(pluginApi)
   .use(pluginUtils)
   .use(pluginElementPlus)
-  .use(VueCookieNext)
   .use(user)
   .use(router)
   .mount('#app');

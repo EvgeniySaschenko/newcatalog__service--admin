@@ -2,19 +2,27 @@
 include /src/mixins.pug
 
 el-form.form-login.u-mb--10(label-position='top', v-loading='isLoading')
-  el-button.u-mb--5(type='primary', @click='createTranslitions()') {{ $t('Update list of translations') }}
+  .u-mb--10
+    el-alert(
+      :title='$t(`To see the changes in the admin panel, you need to refresh the page`)',
+      type='warning',
+      show-icon,
+      :closable='false'
+    )
+
+  el-button.u-mb--5(type='primary', @click='createTranslations()') {{ $t('Update list of translations') }}
 
   el-table(:data='translations', stripe, :scrollbar-always-on='true')
     // #
     el-table-column(label='#', type='index', :index='calcNumberRecord')
 
-    // translitions
-    el-table-column(:label='$t("Translitions")')
+    // translations
+    el-table-column(:label='$t("Translations")')
       template(#default='scope')
         el-link.u-mb--10(type='warning') {{ scope.row.key }}
 
         el-form-item
-          template(v-for='(item, key) in $langs')
+          template(v-for='(item, key) in $langs("site")')
             el-input.u-mb--5(
               v-model='scope.row.text[key]',
               style='width: 100%',
@@ -47,18 +55,19 @@ el-form.form-login.u-mb--10(label-position='top', v-loading='isLoading')
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import { TranslationTypeNameType, TranslationType, PaginationType } from '@/types';
+import { ServicesType, TranslationType, PaginationType } from '@/types';
 
 export default defineComponent({
   props: {
-    typeName: {
-      type: String as () => TranslationTypeNameType,
+    serviceTypeName: {
+      type: String as () => ServicesType,
       required: true,
     },
   },
 
   data() {
     return {
+      isChanges: false,
       isLoading: false,
       // List translations
       translations: [] as TranslationType[],
@@ -76,20 +85,29 @@ export default defineComponent({
     await this.init();
   },
 
+  unmounted() {
+    // Refresh the page so that the changes are applied to the entire admin panel
+    if (this.isChanges) {
+      setTimeout(() => {
+        location.reload();
+      }, 200);
+    }
+  },
+
   methods: {
     // init
     async init() {
       this.isLoading = true;
-      await this.getTranslations();
+      await this.getTranslationsPartList();
       this.isLoading = false;
     },
 
     // Get translations
-    async getTranslations() {
+    async getTranslationsPartList() {
       try {
         let { items, itemsCount, maxRecordsPerPage, pagesCount, page } =
-          await this.$api.translations.getTranslations({
-            typeName: this.typeName,
+          await this.$api.translations.getTranslationsPartList({
+            serviceTypeName: this.serviceTypeName,
             page: this.pagination.page,
           });
 
@@ -121,6 +139,8 @@ export default defineComponent({
         this.$utils.showMessageSuccess({
           message: this.$t('Translation edited'),
         });
+
+        this.isChanges = true;
       } catch (errors: any) {
         if (errors.server) {
           this.$utils.showMessageError({ message: errors.server });
@@ -131,13 +151,13 @@ export default defineComponent({
       }
     },
 
-    // Create translitions for service
-    async createTranslitions() {
+    // Create translations for service
+    async createTranslations() {
       if (this.isLoading) return;
       this.isLoading = true;
       try {
-        await this.$api.translations.createTranslitions({
-          typeName: this.typeName,
+        await this.$api.translations.createTranslations({
+          serviceTypeName: this.serviceTypeName,
         });
 
         await this.changePage(1);
@@ -145,6 +165,8 @@ export default defineComponent({
         this.$utils.showMessageSuccess({
           message: this.$t('Translations updated'),
         });
+
+        this.isChanges = true;
       } catch (errors: any) {
         if (errors.server) {
           this.$utils.showMessageError({ message: errors.server });
@@ -159,7 +181,7 @@ export default defineComponent({
     async changePage(page: number) {
       this.isLoading = true;
       this.pagination.page = page;
-      await this.getTranslations();
+      await this.getTranslationsPartList();
       window.scrollTo({
         top: 0,
         behavior: 'smooth',

@@ -17,7 +17,7 @@ include /src/mixins.pug
       el-option(
         v-for='item in sections',
         :key='item.sectionId',
-        :label='item.name[$lang]',
+        :label='item.name[$langDefault("site")]',
         :value='item.sectionId'
       )
   // Rating type
@@ -40,7 +40,7 @@ include /src/mixins.pug
     el-input.u-mb--5(
       v-model='rating.name[key]',
       :placeholder='$t("Name")',
-      v-for='(value, key) in $langs'
+      v-for='(value, key) in $langs("site")'
     )
       template(#prepend) {{ key }}
 
@@ -48,7 +48,7 @@ include /src/mixins.pug
   el-form-item(
     :error='errors.descr',
     :label='`${$t("Description")} (${key})`',
-    v-for='(value, key) in $langs'
+    v-for='(value, key) in $langs("site")'
   )
     el-input(
       show-word-limit,
@@ -111,7 +111,7 @@ import {
 } from '@/types';
 import { defineComponent } from 'vue';
 import useStoreSections from '@/store/sections';
-import { $langsInit } from '@/plugins/translations';
+import { $langs } from '@/plugins/translations';
 
 let ratingInit = (): Omit<RatingType, 'userId'> => {
   return {
@@ -119,9 +119,9 @@ let ratingInit = (): Omit<RatingType, 'userId'> => {
     // Selected sections
     sectionsIds: {},
     // Name rating
-    name: $langsInit(),
+    name: $langs('site'),
     // Descriptin rating
-    descr: $langsInit(),
+    descr: $langs('site'),
     // Hidden rating
     isHiden: false,
     // Rating type

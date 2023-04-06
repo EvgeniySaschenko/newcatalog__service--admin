@@ -11,7 +11,7 @@ include /src/mixins.pug
             el-input.u-mb--5(
               v-model='nameNewSection[key]',
               :placeholder='$t("Name")',
-              v-for='(item, key) in $langs'
+              v-for='(item, key) in $langs("site")'
             )
               template(#prepend) {{ key }}
 
@@ -25,12 +25,12 @@ include /src/mixins.pug
     el-table(:data='items', stripe, v-loading='isSendingFormEdit', :scrollbar-always-on='true')
       el-table-column(:label='$t("Name")', :min-width='200')
         template(#default='scope')
-          el-form-item(:error='errors.formEdit[`${scope.row.id}_name`]', required)
+          el-form-item(:error='errors.formEdit[`${scope.row.sectionId}_name`]', required)
             el-input.u-mb--5(
               v-model='scope.row.name[key]',
               size='small',
               :placeholder='$t("Name")',
-              v-for='(item, key) in $langs'
+              v-for='(item, key) in $langs("site")'
             )
               template(#prepend) {{ key }}
 
@@ -75,7 +75,7 @@ export default defineComponent({
       // List sections
       items: [] as SectionType[],
       // Name new section
-      nameNewSection: this.$langsInit(),
+      nameNewSection: this.$langs('site'),
       // Errors messages
       errors: {
         formAdd: {
@@ -127,10 +127,10 @@ export default defineComponent({
           name: this.nameNewSection,
         });
         await this.getSections();
+        this.nameNewSection = this.$langs('site');
         this.$utils.showMessageSuccess({
           message: this.$t('Section added'),
         });
-        this.nameNewSection = this.$langsInit();
       } catch (errors: any) {
         if (errors.server) {
           this.$utils.showMessageError({ message: errors.server });

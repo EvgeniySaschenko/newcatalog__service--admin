@@ -2,7 +2,7 @@
 include /src/mixins.pug
 +b.tab-descr(label-position='top', v-loading='isLoading')
   +e.box-img(:style='{ backgroundColor: state.color }', v-if='isModeEdit')
-    +e.IMG.img(:src='state.logoImg', :alt='state.name[$lang]')
+    +e.IMG.img(:src='state.logoImg', :alt='state.name[$langDefault("site")]')
   // Link
   el-form-item(:error='errors.url', :label='$t("Link")', required)
     el-input(:placeholder='$t("Link")', size='small', v-model='state.url', :disabled='isModeEdit')
@@ -12,7 +12,7 @@ include /src/mixins.pug
       :placeholder='$t("Name")',
       size='small',
       v-model='state.name[key]',
-      v-for='(value, key) in $langs'
+      v-for='(value, key) in $langs("site")'
     )
       template(#prepend) {{ key }}
   // Labels  
@@ -31,7 +31,7 @@ include /src/mixins.pug
       el-option(
         v-for='item in labels',
         :key='item.labelId',
-        :label='item.name[$lang]',
+        :label='item.name[$langDefault("site")]',
         :value='item.labelId'
       )
   // Priority  
@@ -59,7 +59,7 @@ export default defineComponent({
       state: {
         ratingItemId: 0,
         siteId: 0,
-        name: this.$langsInit(),
+        name: this.$langs('site'),
         url: '',
         labelsIds: {},
         ratingId: 0,

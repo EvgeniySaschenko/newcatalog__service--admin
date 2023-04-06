@@ -29,7 +29,7 @@ dialog-label(
 el-table(:data='labels')
   el-table-column(:label='$t("Label")')
     template(#default='scope')
-      div(v-for='(value, key) in $langs')
+      div(v-for='(value, key) in $langs("site")')
         el-tag.u-mr--10 {{ key }}
         .label-rating(:style='{ backgroundColor: scope.row.color }') {{ scope.row.name[key] }}
   el-table-column(:label='$t("Edit")', fixed='right', width='180')
