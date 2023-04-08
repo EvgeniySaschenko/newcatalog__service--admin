@@ -2,23 +2,17 @@ import { LangsListType } from './langs-list';
 
 export type ValueOfType<T> = T[keyof T];
 
-// App types (for short entry in translations)
-export enum ServicesShortEnum {
-  site = 'site',
-  admin = 'admin',
-}
-
 // Services types
 export enum ServicesEnum {
-  api = 'service--api',
-  admin = 'service--admin',
-  site = 'service--site',
+  api = 'api',
+  admin = 'admin',
+  site = 'site',
 }
-export type ServicesType = ServicesEnum.api | ServicesEnum.admin | ServicesEnum.site;
+
+export type ServicesType = keyof typeof ServicesEnum;
 
 // Lang
-export type AppType = keyof typeof ServicesShortEnum;
-export type LangType = LangsListType;
+export type LangType = Partial<LangsListType>;
 
 // Pagination
 export type PaginationType = {

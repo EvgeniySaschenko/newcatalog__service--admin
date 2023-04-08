@@ -60,7 +60,7 @@ import { ServicesType, TranslationType, PaginationType, LangType } from '@/types
 export default defineComponent({
   props: {
     // Name service
-    serviceTypeName: {
+    serviceName: {
       type: String as () => ServicesType,
       required: true,
     },
@@ -113,7 +113,7 @@ export default defineComponent({
       try {
         let { items, itemsCount, maxRecordsPerPage, pagesCount, page } =
           await this.$api.translations.getTranslationsPartList({
-            serviceTypeName: this.serviceTypeName,
+            serviceName: this.serviceName,
             page: this.pagination.page,
           });
 
@@ -163,7 +163,7 @@ export default defineComponent({
       this.isLoading = true;
       try {
         await this.$api.translations.createTranslations({
-          serviceTypeName: this.serviceTypeName,
+          serviceName: this.serviceName,
         });
 
         await this.changePage(1);
