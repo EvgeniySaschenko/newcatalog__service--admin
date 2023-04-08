@@ -8,7 +8,7 @@ let routes = [
   },
   {
     path: '/sections',
-    name: 'Список разделов',
+    name: 'Список разделов сайта',
     component: () => import('@/views/sections/sections.vue'),
   },
   {

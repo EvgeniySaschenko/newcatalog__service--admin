@@ -80,7 +80,7 @@ export default defineComponent({
       // admin
       let adminLangs = settings[SettingsEnum.adminLangs].reduce((a, v) => ({ ...a, [v]: '' }), {});
       this.$setLangs({ langs: adminLangs, type: ServicesShortEnum.admin });
-      this.$setLangDefaultLocalAdmin({ lang: settings[SettingsEnum.adminLang] });
+      this.$setLangDefaultLocal({ lang: settings[SettingsEnum.adminLang] });
     },
 
     // Check session expiration

@@ -22,7 +22,7 @@ el-form.form-login.u-mb--10(label-position='top', v-loading='isLoading')
         el-link.u-mb--10(type='warning') {{ scope.row.key }}
 
         el-form-item
-          template(v-for='(item, key) in $langs("site")')
+          template(v-for='(item, key) in langs')
             el-input.u-mb--5(
               v-model='scope.row.text[key]',
               style='width: 100%',
@@ -55,12 +55,18 @@ el-form.form-login.u-mb--10(label-position='top', v-loading='isLoading')
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import { ServicesType, TranslationType, PaginationType } from '@/types';
+import { ServicesType, TranslationType, PaginationType, LangType } from '@/types';
 
 export default defineComponent({
   props: {
+    // Name service
     serviceTypeName: {
       type: String as () => ServicesType,
+      required: true,
+    },
+    // List langs service
+    langs: {
+      type: Object as () => LangType,
       required: true,
     },
   },

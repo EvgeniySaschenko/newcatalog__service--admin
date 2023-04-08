@@ -14,7 +14,7 @@ el-form.form-login(label-position='top', v-loading='isLoading')
     // Admin langs list
     el-descriptions-item
       el-form-item(
-        :label='$t("List of languages of the admin panel")',
+        :label='$t("List of languages of the admin panel and API server")',
         :error='errors[SettingsEnum.adminLangs]'
       )
         el-select(v-model='adminLangs', multiple, filterable)
@@ -26,6 +26,10 @@ el-form.form-login(label-position='top', v-loading='isLoading')
           )
             b [{{ item.code }}] &nbsp;
             span {{ item.name }}
+
+      el-tag.u-m--5(type='danger', size='small') API SERVER
+      el-tag.u-m--5(type='danger', size='small') ADMIN PANEL
+
     el-descriptions-item(width='200', align='center')
       el-button(
         type='primary',
@@ -35,7 +39,7 @@ el-form.form-login(label-position='top', v-loading='isLoading')
     // Admin lang default
     el-descriptions-item
       el-form-item(
-        :label='$t("Admin panel language by default")',
+        :label='$t("Admin panel and API server, language by default")',
         :error='errors[SettingsEnum.adminLang]'
       )
         el-select(v-model='adminLang', filterable)
@@ -47,6 +51,10 @@ el-form.form-login(label-position='top', v-loading='isLoading')
           )
             b [{{ item.code }}] &nbsp;
             span {{ item.name }}
+
+      el-tag.u-m--5(type='danger', size='small') API SERVER
+      el-tag.u-m--5(type='danger', size='small') ADMIN PANEL
+
     el-descriptions-item(align='center')
       el-button(
         type='primary',
@@ -65,6 +73,8 @@ el-form.form-login(label-position='top', v-loading='isLoading')
           )
             b [{{ item.code }}] &nbsp;
             span {{ item.name }}
+
+      el-tag.u-m--5(type='danger', size='small') WEBSITE
     el-descriptions-item(align='center')
       el-button(
         type='primary',
@@ -83,6 +93,8 @@ el-form.form-login(label-position='top', v-loading='isLoading')
           )
             b [{{ item.code }}] &nbsp;
             span {{ item.name }}
+
+      el-tag.u-m--5(type='danger', size='small') WEBSITE
     el-descriptions-item(align='center')
       el-button(
         type='primary',

@@ -3,7 +3,20 @@ include /src/mixins.pug
 
 +b.page--cache.container
   +e.H1.title {{ $route.name }}
+
+  .u-mb--10
+    el-alert(
+      :title='$t("Creating / deleting a cache implies that these changes will be published on the main site")',
+      type='warning',
+      show-icon,
+      :closable='false'
+    )
+
   el-descriptions(direction='vertical', :column='2', border, v-loading='isLoading')
+    //
+    el-descriptions-item {{ $t('Create cache translations and langs site') }}
+    el-descriptions-item(align='center', width='180')
+      el-button(type='primary', @click='createCacheTranslationsAndLangsSite()') {{ $t('Create cache') }}
     //
     el-descriptions-item {{ $t('Create cache for sections') }}
     el-descriptions-item(align='center', width='180')
@@ -31,6 +44,31 @@ export default defineComponent({
   },
 
   methods: {
+    // Delete cache all
+    async clearCacheAll() {
+      if (this.isLoading) return;
+      this.isLoading = true;
+
+      try {
+        let response = await this.$api.cache.clearCacheAll();
+
+        if (response) {
+          this.$utils.showMessageSuccess({
+            message: this.$t('Cache deleted'),
+          });
+          return;
+        }
+
+        throw { server: this.$t('There were errors while creating the cache') };
+      } catch (errors: any) {
+        if (errors.server) {
+          this.$utils.showMessageError({ message: errors.server });
+        }
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
     // Reset cache
     async resetCacheAll() {
       if (this.isLoading) return;
@@ -45,34 +83,11 @@ export default defineComponent({
           });
           return;
         }
+
+        throw { server: this.$t('There were errors while creating the cache') };
       } catch (errors: any) {
         if (errors.server) {
           this.$utils.showMessageError({ message: errors.server });
-          return;
-        }
-      } finally {
-        this.isLoading = false;
-      }
-    },
-
-    // Clear cache all
-    async clearCacheAll() {
-      if (this.isLoading) return;
-      this.isLoading = true;
-
-      try {
-        let response = await this.$api.cache.clearCacheAll();
-
-        if (response) {
-          this.$utils.showMessageSuccess({
-            message: this.$t('Cache deleted'),
-          });
-          return;
-        }
-      } catch (errors: any) {
-        if (errors.server) {
-          this.$utils.showMessageError({ message: errors.server });
-          return;
         }
       } finally {
         this.isLoading = false;
@@ -85,14 +100,44 @@ export default defineComponent({
       this.isLoading = true;
 
       try {
-        await this.$api.cache.createCacheSections();
-        this.$utils.showMessageSuccess({
-          message: this.$t('Cache created'),
-        });
+        let response = await this.$api.cache.createCacheSections();
+
+        if (response) {
+          this.$utils.showMessageSuccess({
+            message: this.$t('Cache created'),
+          });
+          return;
+        }
+
+        throw { server: this.$t('There were errors while creating the cache') };
       } catch (errors: any) {
         if (errors.server) {
           this.$utils.showMessageError({ message: errors.server });
+        }
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
+    // Create cache translations and langs site
+    async createCacheTranslationsAndLangsSite() {
+      if (this.isLoading) return;
+      this.isLoading = true;
+
+      try {
+        let response = await this.$api.cache.createCacheTranslationsAndLangsSite();
+
+        if (response) {
+          this.$utils.showMessageSuccess({
+            message: this.$t('Cache created'),
+          });
           return;
+        }
+
+        throw { server: this.$t('There were errors while creating the cache') };
+      } catch (errors: any) {
+        if (errors.server) {
+          this.$utils.showMessageError({ message: errors.server });
         }
       } finally {
         this.isLoading = false;
