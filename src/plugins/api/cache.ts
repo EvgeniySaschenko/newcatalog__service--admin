@@ -1,4 +1,4 @@
-import { $fetch, $utils } from './_core';
+import { $fetch } from './_core';
 import { RatingType } from '@/types';
 
 export default {
@@ -39,6 +39,14 @@ export default {
   // Create cache sections
   createCacheSections: async () => {
     let result = await $fetch(`/api/cache/sections`, {
+      method: 'POST',
+    });
+    return await result.json();
+  },
+
+  // Create cache translations and langs site
+  createCacheTranslationsAndLangsSite: async () => {
+    let result = await $fetch(`/api/cache/translations-and-langs-site`, {
       method: 'POST',
     });
     return await result.json();

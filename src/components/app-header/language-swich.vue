@@ -19,7 +19,7 @@ export default defineComponent({
 
   methods: {
     setLangDefault() {
-      this.$setCokieLangDefaultLocalAdmin({ lang: this.adminLang });
+      this.$setCokieLangDefaultLocal({ lang: this.adminLang });
       location.reload();
     },
   },

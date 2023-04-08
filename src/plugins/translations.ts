@@ -63,8 +63,8 @@ export function $setLangDefault({ lang, type }: { lang: keyof LangType; type: Ap
   langDefaultApp[type] = lang;
 }
 
-// Set lang default local admin (cookie-based)
-export function $setLangDefaultLocalAdmin({ lang }: { lang: keyof LangType }) {
+// Set lang default local (admin cookie-based)
+export function $setLangDefaultLocal({ lang }: { lang: keyof LangType }) {
   let langCookie = (cookies as any).get(langNameCookie);
   let isExistInList = Object.keys($langs(ServicesShortEnum.admin)).includes(langCookie);
 
@@ -76,8 +76,8 @@ export function $setLangDefaultLocalAdmin({ lang }: { lang: keyof LangType }) {
   $setLangDefault({ lang, type: ServicesShortEnum.admin });
 }
 
-// Set cookie lang default local
-export function $setCokieLangDefaultLocalAdmin({ lang }: { lang: keyof LangType }) {
+// Set cookie lang default local (admin)
+export function $setCokieLangDefaultLocal({ lang }: { lang: keyof LangType }) {
   let isExistInList = Object.keys($langs(ServicesShortEnum.admin)).includes(lang);
   if (!isExistInList) return;
   (cookies as any).set(langNameCookie, lang, '365d');
@@ -103,8 +103,8 @@ declare module '@vue/runtime-core' {
     $langDefault: typeof $langDefault;
     $setLangs: typeof $setLangs;
     $setLangDefault: typeof $setLangDefault;
-    $setLangDefaultLocalAdmin: typeof $setLangDefaultLocalAdmin;
-    $setCokieLangDefaultLocalAdmin: typeof $setCokieLangDefaultLocalAdmin;
+    $setLangDefaultLocal: typeof $setLangDefaultLocal;
+    $setCokieLangDefaultLocal: typeof $setCokieLangDefaultLocal;
     $setTranslationsList: typeof $setTranslationsList;
   }
 }
@@ -116,8 +116,8 @@ let install = {
     app.config.globalProperties.$langDefault = $langDefault;
     app.config.globalProperties.$setLangs = $setLangs;
     app.config.globalProperties.$setLangDefault = $setLangDefault;
-    app.config.globalProperties.$setLangDefaultLocalAdmin = $setLangDefaultLocalAdmin;
-    app.config.globalProperties.$setCokieLangDefaultLocalAdmin = $setCokieLangDefaultLocalAdmin;
+    app.config.globalProperties.$setLangDefaultLocal = $setLangDefaultLocal;
+    app.config.globalProperties.$setCokieLangDefaultLocal = $setCokieLangDefaultLocal;
     app.config.globalProperties.$setTranslationsList = $setTranslationsList;
   },
 };

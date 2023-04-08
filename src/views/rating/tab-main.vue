@@ -358,13 +358,17 @@ export default defineComponent({
 
       try {
         isSuccess = await this.$api.cache.createCacheRating({ ratingId });
-        this.$utils.showMessageSuccess({
-          message: this.$t('Rating published'),
-        });
+        if (isSuccess) {
+          this.$utils.showMessageSuccess({
+            message: this.$t('Rating published'),
+          });
+          return;
+        }
+
+        throw { server: this.$t('There were errors while creating the cache') };
       } catch (errors: any) {
         if (errors.server) {
           this.$utils.showMessageError({ message: errors.server });
-          return;
         }
       } finally {
         this.isLoading = false;
