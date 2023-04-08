@@ -9,7 +9,7 @@ import {
 
 export default {
   // Get one site
-  getSiteBySiteId: async ({ siteId }: { siteId: SiteType['siteId'] }) => {
+  getSiteBySiteId: async ({ siteId }: Pick<SiteType, 'siteId'>) => {
     let result = await $fetch(`/api/sites/${siteId}`, {
       method: 'GET',
     });
@@ -17,7 +17,7 @@ export default {
   },
 
   // Get screenshots for sites no logo
-  getSitesSreens: async ({ ratingId }: { ratingId: RatingType['ratingId'] }) => {
+  getSitesSreens: async ({ ratingId }: Pick<RatingType, 'ratingId'>) => {
     let result = await $fetch(`/api/sites/screenshots/${ratingId}`, {
       method: 'GET',
     });
@@ -25,7 +25,7 @@ export default {
   },
 
   // Get sites with screenshot error
-  getScrenshotsErrors: async ({ ratingId }: { ratingId: RatingType['ratingId'] }) => {
+  getScrenshotsErrors: async ({ ratingId }: Pick<RatingType, 'ratingId'>) => {
     let result = await $fetch(`/api/sites/screenshots-errors/${ratingId}`, {
       method: 'GET',
     });
@@ -33,13 +33,7 @@ export default {
   },
 
   // Create site screenshot
-  createSiteScreenshot: async ({
-    siteId,
-    url,
-  }: {
-    siteId: RatingItemType['siteId'];
-    url: RatingItemType['url'];
-  }) => {
+  createSiteScreenshot: async ({ siteId, url }: Pick<RatingItemType, 'siteId' | 'url'>) => {
     let result = await $fetch(`/api/sites/screenshot-create`, {
       method: 'POST',
       body: JSON.stringify({
@@ -54,10 +48,7 @@ export default {
   editSitesColor: async ({
     siteScreenshotId,
     color,
-  }: {
-    siteScreenshotId: RatingItemType['siteScreenshotId'];
-    color: RatingItemType['color'];
-  }) => {
+  }: Pick<RatingItemType, 'siteScreenshotId' | 'color'>) => {
     let result = await $fetch(`/api/sites/color`, {
       method: 'PUT',
       body: JSON.stringify({
@@ -91,7 +82,7 @@ export default {
   },
 
   // Recreate logo site
-  recreateSiteLogo: async ({ siteId }: { siteId: RatingItemType['siteId'] }) => {
+  recreateSiteLogo: async ({ siteId }: Pick<RatingItemType, 'siteId'>) => {
     let result = await $fetch(`/api/sites/logo-recreate`, {
       method: 'PUT',
       body: JSON.stringify({

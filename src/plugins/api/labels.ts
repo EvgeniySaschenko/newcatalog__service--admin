@@ -3,7 +3,11 @@ import { LabelType } from '@/types';
 
 export default {
   // Create label for rating
-  createLabel: async ({ name, color, ratingId }: Omit<LabelType, 'labelId'>) => {
+  createLabel: async ({
+    name,
+    color,
+    ratingId,
+  }: Pick<LabelType, 'name' | 'color' | 'ratingId'>) => {
     let result = await $fetch(`/api/labels`, {
       method: 'POST',
       body: JSON.stringify({ name, color, ratingId }),
@@ -12,7 +16,12 @@ export default {
   },
 
   // Edit label for rating
-  editLabel: async ({ labelId, name, color, ratingId }: LabelType) => {
+  editLabel: async ({
+    labelId,
+    name,
+    color,
+    ratingId,
+  }: Pick<LabelType, 'labelId' | 'name' | 'color' | 'ratingId'>) => {
     let result = await $fetch(`/api/labels/${labelId}`, {
       method: 'PUT',
       body: JSON.stringify({ labelId, name, color, ratingId }),

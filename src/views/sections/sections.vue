@@ -111,7 +111,7 @@ export default defineComponent({
     // Get sections
     async getSections() {
       let store = useStoreSections();
-      let sections = await this.$api.sections.getSections();
+      let sections = await this.$api['sections'].getSections();
       store.setSections(sections);
       this.$utils.clearErrors(this.errors.formEdit, this.errors.formEdit);
     },
@@ -123,7 +123,7 @@ export default defineComponent({
       this.$utils.clearErrors(this.errors.formAdd, this.errors.formAdd);
 
       try {
-        await this.$api.sections.createSection({
+        await this.$api['sections'].createSection({
           name: this.nameNewSection,
         });
         await this.getSections();
@@ -151,7 +151,7 @@ export default defineComponent({
       this.isSendingFormEdit = true;
 
       try {
-        await this.$api.sections.deleteSection({ sectionId: +sectionId });
+        await this.$api['sections'].deleteSection({ sectionId: +sectionId });
         await this.getSections();
         this.$utils.showMessageSuccess({
           message: this.$t('Section deleted'),
@@ -180,7 +180,7 @@ export default defineComponent({
       this.$utils.clearErrors(this.errors.formEdit, keysErrors);
 
       try {
-        await this.$api.sections.editSection(section);
+        await this.$api['sections'].editSection(section);
         await this.getSections();
         this.$utils.showMessageSuccess({
           message: this.$t('Section edited'),

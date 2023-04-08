@@ -111,11 +111,12 @@ export default defineComponent({
     // Get translations
     async getTranslationsPartList() {
       try {
-        let { items, itemsCount, maxRecordsPerPage, pagesCount, page } =
-          await this.$api.translations.getTranslationsPartList({
-            serviceName: this.serviceName,
-            page: this.pagination.page,
-          });
+        let { items, itemsCount, maxRecordsPerPage, pagesCount, page } = await this.$api[
+          'translations'
+        ].getTranslationsPartList({
+          serviceName: this.serviceName,
+          page: this.pagination.page,
+        });
 
         this.translations = items;
         this.pagination = {
@@ -137,7 +138,7 @@ export default defineComponent({
       if (this.isLoading) return;
       this.isLoading = true;
       try {
-        await this.$api.translations.editText({
+        await this.$api['translations'].editText({
           translationId,
           text,
         });
@@ -162,7 +163,7 @@ export default defineComponent({
       if (this.isLoading) return;
       this.isLoading = true;
       try {
-        await this.$api.translations.createTranslations({
+        await this.$api['translations'].createTranslations({
           serviceName: this.serviceName,
         });
 

@@ -46,7 +46,7 @@ export default defineComponent({
       email: '',
       // Password
       password: '',
-
+      // Errors
       errors: {
         email: '',
         password: '',
@@ -61,7 +61,7 @@ export default defineComponent({
       this.isLoading = true;
       this.$utils.clearErrors(this.errors, this.errors);
       try {
-        let response = await this.$api.user.editEmail({ email: this.email });
+        let response = await this.$api['user'].editEmail({ email: this.email });
 
         if (response) {
           this.$utils.showMessageSuccess({
@@ -88,7 +88,7 @@ export default defineComponent({
       this.isLoading = true;
       this.$utils.clearErrors(this.errors, this.errors);
       try {
-        let response = await this.$api.user.editPassword({ password: this.password });
+        let response = await this.$api['user'].editPassword({ password: this.password });
 
         if (response) {
           this.$utils.showMessageSuccess({

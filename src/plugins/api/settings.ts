@@ -11,7 +11,7 @@ export default {
   },
 
   // Edit lang default
-  editLangDefault: async ({ type, lang }: SettingsLangDefaultType) => {
+  editLangDefault: async ({ type, lang }: Pick<SettingsLangDefaultType, 'type' | 'lang'>) => {
     let response = await $fetch('/api/settings/lang-default', {
       method: 'PUT',
       body: JSON.stringify({ type, lang }),
@@ -20,7 +20,7 @@ export default {
   },
 
   // Edit lang list
-  editLangsList: async ({ type, langs }: SettingsLangsListType) => {
+  editLangsList: async ({ type, langs }: Pick<SettingsLangsListType, 'type' | 'langs'>) => {
     let response = await $fetch('/api/settings/langs-list', {
       method: 'PUT',
       body: JSON.stringify({ type, langs }),

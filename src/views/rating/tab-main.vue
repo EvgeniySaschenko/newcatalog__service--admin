@@ -223,7 +223,7 @@ export default defineComponent({
       if (this.isLoading) return;
       this.isLoading = true;
       try {
-        this.rating = await this.$api.ratings.getRating({ ratingId });
+        this.rating = await this.$api['ratings'].getRating({ ratingId });
         this.sectionsIds = Object.values(this.rating.sectionsIds) as number[];
         this.ratingIsHiden = this.rating.isHiden;
         this.initialStateRating = JSON.stringify(this.rating);
@@ -245,7 +245,7 @@ export default defineComponent({
 
       try {
         let sectionsIds = this.sectionsIds.reduce((a, v) => ({ ...a, [v]: v }), {});
-        let { ratingId, name } = await this.$api.ratings.createRating({
+        let { ratingId, name } = await this.$api['ratings'].createRating({
           ...this.rating,
           sectionsIds,
         });
@@ -285,7 +285,7 @@ export default defineComponent({
       this.$utils.clearErrors(this.errors, this.errors);
       let isSuccess = false;
       try {
-        await this.$api.ratings.editRating(this.preparingRatingDataForSavingEdit());
+        await this.$api['ratings'].editRating(this.preparingRatingDataForSavingEdit());
 
         this.$utils.showMessageSuccess({
           message: this.$t('Rating changed'),
@@ -323,8 +323,8 @@ export default defineComponent({
       this.isLoading = true;
 
       try {
-        await this.$api.cache.deleteCacheRating({ ratingId: this.ratingId });
-        await this.$api.ratings.deleteRating({ ratingId: this.ratingId });
+        await this.$api['cache'].deleteCacheRating({ ratingId: this.ratingId });
+        await this.$api['ratings'].deleteRating({ ratingId: this.ratingId });
 
         this.$utils.showMessageSuccess({
           message: this.$t('Rating removed'),
@@ -357,7 +357,7 @@ export default defineComponent({
       this.isLoading = true;
 
       try {
-        isSuccess = await this.$api.cache.createCacheRating({ ratingId });
+        isSuccess = await this.$api['cache'].createCacheRating({ ratingId });
         if (isSuccess) {
           this.$utils.showMessageSuccess({
             message: this.$t('Rating published'),
@@ -386,7 +386,7 @@ export default defineComponent({
       this.isLoading = true;
 
       try {
-        await this.$api.cache.deleteCacheRating({ ratingId });
+        await this.$api['cache'].deleteCacheRating({ ratingId });
         this.$utils.showMessageSuccess({
           message: this.$t('The rating is not displayed on the website'),
         });
