@@ -18,6 +18,7 @@ export default defineComponent({
   },
 
   methods: {
+    // Set lang default
     setLangDefault() {
       this.$setCokieLangDefaultLocal({ lang: this.adminLang });
       location.reload();

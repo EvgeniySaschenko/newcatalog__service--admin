@@ -3,7 +3,7 @@ import { RatingType } from '@/types';
 
 export default {
   // Create cache rating
-  createCacheRating: async ({ ratingId }: { ratingId: RatingType['ratingId'] }) => {
+  createCacheRating: async ({ ratingId }: Pick<RatingType, 'ratingId'>) => {
     let result = await $fetch(`/api/cache/rating/${ratingId}`, {
       method: 'POST',
       body: JSON.stringify({ ratingId }),
@@ -12,7 +12,7 @@ export default {
   },
 
   // Delete cache rating
-  deleteCacheRating: async ({ ratingId }: { ratingId: RatingType['ratingId'] }) => {
+  deleteCacheRating: async ({ ratingId }: Pick<RatingType, 'ratingId'>) => {
     let result = await $fetch(`/api/cache/rating/${ratingId}`, {
       method: 'DELETE',
       body: JSON.stringify({ ratingId }),

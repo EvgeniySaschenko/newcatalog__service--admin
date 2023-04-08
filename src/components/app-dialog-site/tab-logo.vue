@@ -135,7 +135,7 @@ export default defineComponent({
       this.isLoading = true;
       try {
         let { siteId } = this.site;
-        await this.$api.sites.recreateSiteLogo({
+        await this.$api['sites'].recreateSiteLogo({
           siteId,
         });
 
@@ -159,7 +159,7 @@ export default defineComponent({
       try {
         let { domain } = this.site;
         let { isNotExistImages, isScreenshotProcessCreate, siteId, logoImg, screenshotImg, color } =
-          await this.$api.sites.checkImagesForSite({
+          await this.$api['sites'].checkImagesForSite({
             host: domain,
           });
 
@@ -200,7 +200,7 @@ export default defineComponent({
       this.isLoading = true;
       console.log(this.site);
       try {
-        let result = await this.$api.sites.getSiteBySiteId({
+        let result = await this.$api['sites'].getSiteBySiteId({
           siteId: this.site.siteId,
         });
         if (result && result.siteScreenshotId) {
@@ -210,7 +210,7 @@ export default defineComponent({
           });
         }
 
-        await this.$api.sites.linkDomainImagesToSubdomain({
+        await this.$api['sites'].linkDomainImagesToSubdomain({
           domainSiteId: this.domain.siteId,
           subdomainSiteId: this.site.siteId,
         });
@@ -241,7 +241,7 @@ export default defineComponent({
       if (this.isLoading) return;
       this.isLoading = true;
       try {
-        await this.$api.sites.editSitesColor({
+        await this.$api['sites'].editSitesColor({
           siteScreenshotId: this.site.siteScreenshotId,
           color: this.newColor,
         });

@@ -20,7 +20,12 @@ export default {
   },
 
   // Edit section
-  editSection: async ({ sectionId, isHiden, name, priority }: SectionType) => {
+  editSection: async ({
+    sectionId,
+    isHiden,
+    name,
+    priority,
+  }: Pick<SectionType, 'sectionId' | 'isHiden' | 'name' | 'priority'>) => {
     let result = await $fetch(`/api/sections/${sectionId}`, {
       method: 'PUT',
       body: JSON.stringify({ sectionId, isHiden, name, priority }),

@@ -64,7 +64,7 @@ export default defineComponent({
       this.isLoading = true;
 
       try {
-        this.ratings = await this.$api.ratings.getRatings();
+        this.ratings = await this.$api['ratings'].getRatings();
       } catch (errors: any) {
         if (errors.server) {
           this.$utils.showMessageError({ message: errors.server });

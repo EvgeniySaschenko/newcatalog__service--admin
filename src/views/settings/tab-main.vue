@@ -170,7 +170,7 @@ export default defineComponent({
       this.isLoading = true;
       this.$utils.clearErrors(this.errors, { [type]: '' });
       try {
-        let response = await this.$api.settings.editLangDefault({ lang, type });
+        let response = await this.$api['settings'].editLangDefault({ lang, type });
         this.isChanges = true;
 
         if (response) {
@@ -197,7 +197,7 @@ export default defineComponent({
       this.isLoading = true;
       this.$utils.clearErrors(this.errors, { [type]: '' });
       try {
-        let response = await this.$api.settings.editLangsList({ langs, type });
+        let response = await this.$api['settings'].editLangsList({ langs, type });
         this.isChanges = true;
         if (response) {
           this.$utils.showMessageSuccess({

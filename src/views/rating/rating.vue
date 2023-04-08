@@ -4,20 +4,20 @@ include /src/mixins.pug
 +b.page--rating.container
   +e.H1.title {{ ratingId ? $t('Edit rating') : $t('Create a new rating') }}
   el-tabs(v-model='tabActive', @tab-change='setTabUrlParam()', type='border-card')
-    el-tab-pane(:label='$t("Main Settings")', name='main')
-      tab-main(v-if='tabActive == "main"', :ratingId='ratingId')
-    el-tab-pane(:label='$t("Content")', name='content', :disabled='!ratingId')
-      tab-content(v-if='tabActive == "content"', :ratingId='ratingId')
-    el-tab-pane(:label='$t("Labels")', name='labels', :disabled='!ratingId')
-      tab-labels(v-if='tabActive == "labels"', :ratingId='ratingId')
-    el-tab-pane(:label='$t("Create a logo")', name='logos', :disabled='!ratingId')
-      tab-logos(v-if='tabActive == "logos"', :ratingId='ratingId')
+    el-tab-pane(:label='$t("Main Settings")', :name='TabsEnum.main')
+      tab-main(v-if='tabActive == TabsEnum.main', :ratingId='ratingId')
+    el-tab-pane(:label='$t("Content")', :name='TabsEnum.content', :disabled='!ratingId')
+      tab-content(v-if='tabActive == TabsEnum.content', :ratingId='ratingId')
+    el-tab-pane(:label='$t("Labels")', :name='TabsEnum.labels', :disabled='!ratingId')
+      tab-labels(v-if='tabActive == TabsEnum.labels', :ratingId='ratingId')
+    el-tab-pane(:label='$t("Create a logo")', :name='TabsEnum.logos', :disabled='!ratingId')
+      tab-logos(v-if='tabActive == TabsEnum.logos', :ratingId='ratingId')
     el-tab-pane(
       :label='$t("Screenshots of the error")',
-      name='screenshots-errors',
+      :name='TabsEnum.screnErrors',
       :disabled='!ratingId'
     )
-      tab-screenshots-errors(v-if='tabActive == "screenshots-errors"', :ratingId='ratingId')
+      tab-screenshots-errors(v-if='tabActive == TabsEnum.screnErrors', :ratingId='ratingId')
 </template>
 
 <script lang="ts">
@@ -28,7 +28,20 @@ import TabLabels from './tab-labels.vue';
 import TabLogos from './tab-logos.vue';
 import TabScreenshotsErrors from './tab-screenshots-errors.vue';
 
-type TabsType = 'main' | 'content' | 'labels' | 'logos' | 'screenshots-errors';
+enum TabsEnum {
+  main = 'main',
+  content = 'content',
+  labels = 'labels',
+  logos = 'logos',
+  screnErrors = 'screenshots-errors',
+}
+
+type TabsType =
+  | TabsEnum.main
+  | TabsEnum.content
+  | TabsEnum.labels
+  | TabsEnum.logos
+  | TabsEnum.screnErrors;
 
 export default defineComponent({
   name: 'page-rating',
@@ -49,6 +62,7 @@ export default defineComponent({
     return {
       // Curent active tab
       tabActive: '' as TabsType,
+      TabsEnum: TabsEnum,
     };
   },
 
@@ -63,7 +77,8 @@ export default defineComponent({
     // Makes tab active depending on query params url
     setActiveTab() {
       let { tab } = this.$route.query;
-      this.tabActive = (tab as TabsType) || 'main';
+
+      this.tabActive = (tab as TabsType) || TabsEnum.main;
     },
 
     // Add query parameters to url when changing tabs

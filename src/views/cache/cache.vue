@@ -50,7 +50,7 @@ export default defineComponent({
       this.isLoading = true;
 
       try {
-        let response = await this.$api.cache.clearCacheAll();
+        let response = await this.$api['cache'].clearCacheAll();
 
         if (response) {
           this.$utils.showMessageSuccess({
@@ -75,7 +75,7 @@ export default defineComponent({
       this.isLoading = true;
 
       try {
-        let response = await this.$api.cache.resetCacheAll();
+        let response = await this.$api['cache'].resetCacheAll();
 
         if (response) {
           this.$utils.showMessageSuccess({
@@ -100,7 +100,7 @@ export default defineComponent({
       this.isLoading = true;
 
       try {
-        let response = await this.$api.cache.createCacheSections();
+        let response = await this.$api['cache'].createCacheSections();
 
         if (response) {
           this.$utils.showMessageSuccess({
@@ -125,7 +125,7 @@ export default defineComponent({
       this.isLoading = true;
 
       try {
-        let response = await this.$api.cache.createCacheTranslationsAndLangsSite();
+        let response = await this.$api['cache'].createCacheTranslationsAndLangsSite();
 
         if (response) {
           this.$utils.showMessageSuccess({

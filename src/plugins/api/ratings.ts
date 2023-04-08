@@ -1,4 +1,4 @@
-import { $fetch, $utils } from './_core';
+import { $fetch } from './_core';
 import { RatingType } from '@/types';
 
 export default {
@@ -28,7 +28,10 @@ export default {
     typeSort,
     typeDisplay,
     typeRating,
-  }: RatingType) => {
+  }: Pick<
+    RatingType,
+    'name' | 'descr' | 'isHiden' | 'sectionsIds' | 'typeSort' | 'typeDisplay' | 'typeRating'
+  >) => {
     let result = await $fetch(`/api/ratings`, {
       method: 'POST',
       body: JSON.stringify({
@@ -54,7 +57,17 @@ export default {
     typeSort,
     typeDisplay,
     typeRating,
-  }: RatingType) => {
+  }: Pick<
+    RatingType,
+    | 'ratingId'
+    | 'name'
+    | 'descr'
+    | 'isHiden'
+    | 'sectionsIds'
+    | 'typeSort'
+    | 'typeDisplay'
+    | 'typeRating'
+  >) => {
     let result = await $fetch(`/api/ratings/${ratingId}`, {
       method: 'PUT',
       body: JSON.stringify({
@@ -72,7 +85,7 @@ export default {
   },
 
   // Delete rating
-  deleteRating: async ({ ratingId }: { ratingId: RatingType['ratingId'] }) => {
+  deleteRating: async ({ ratingId }: Pick<RatingType, 'ratingId'>) => {
     let result = await $fetch(`/api/ratings/${ratingId}`, {
       method: 'DELETE',
       body: JSON.stringify({ ratingId }),

@@ -1,4 +1,4 @@
-import { $fetch, $utils } from './_core';
+import { $fetch } from './_core';
 import { RatingType, RatingItemType, RatingSortTypeEnum } from '@/types';
 
 export default {
@@ -24,7 +24,7 @@ export default {
     priority,
     ratingId,
     url,
-  }: Omit<RatingItemType, 'ratingItemId' | 'img'>) => {
+  }: Pick<RatingItemType, 'isHiden' | 'labelsIds' | 'name' | 'priority' | 'ratingId' | 'url'>) => {
     let result = await $fetch(`/api/ratings-items`, {
       method: 'POST',
       body: JSON.stringify({
@@ -48,7 +48,10 @@ export default {
     priority,
     ratingId,
     url,
-  }: RatingItemType) => {
+  }: Pick<
+    RatingItemType,
+    'ratingItemId' | 'isHiden' | 'labelsIds' | 'name' | 'priority' | 'ratingId' | 'url'
+  >) => {
     let result = await $fetch(`/api/ratings-items/${ratingItemId}`, {
       method: 'PUT',
       body: JSON.stringify({

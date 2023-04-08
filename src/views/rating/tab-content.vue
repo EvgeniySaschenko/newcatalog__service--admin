@@ -99,7 +99,7 @@ export default defineComponent({
       if (this.isLoading) return;
       this.isLoading = true;
       try {
-        this.rating = await this.$api.ratings.getRating({ ratingId: this.ratingId });
+        this.rating = await this.$api['ratings'].getRating({ ratingId: this.ratingId });
       } catch (errors: any) {
         if (errors.server) {
           this.$utils.showMessageError({ message: errors.server });

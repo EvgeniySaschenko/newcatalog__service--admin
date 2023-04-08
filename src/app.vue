@@ -49,12 +49,12 @@ export default defineComponent({
         if (!isLogin) return;
         await this.updateSessionExpiration();
         this.setUserActivityLastTime();
-        let sections = await this.$api.sections.getSections();
-        let settings = await this.$api.settings.getSettings();
+        let sections = await this.$api['sections'].getSections();
+        let settings = await this.$api['settings'].getSettings();
 
         useSectionsStore().setSections(sections);
         useSettingsStore().setSettings(settings);
-        let translations = await this.$api.translations.getTranslationsForFunctionTranslate({
+        let translations = await this.$api['translations'].getTranslationsForFunctionTranslate({
           serviceName: ServicesEnum.admin,
         });
 
@@ -86,7 +86,7 @@ export default defineComponent({
     // Check session expiration
     async refreshAuth() {
       try {
-        return await this.$api.user.refreshAuth();
+        return await this.$api['user'].refreshAuth();
       } catch (errors: any) {
         if (errors.server) {
           this.$utils.showMessageError({ message: errors.server });
@@ -100,7 +100,7 @@ export default defineComponent({
       if (this.isLoading) return;
       this.isLoading = true;
       try {
-        return await this.$api.user.logOut();
+        return await this.$api['user'].logOut();
       } catch (errors: any) {
         if (errors.server) {
           this.$utils.showMessageError({ message: errors.server });

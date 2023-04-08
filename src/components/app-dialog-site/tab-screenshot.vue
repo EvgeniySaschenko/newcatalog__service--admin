@@ -118,7 +118,7 @@ export default defineComponent({
 
       try {
         let { siteId, url } = this.site;
-        await this.$api.sites.createSiteScreenshot({ siteId, url });
+        await this.$api['sites'].createSiteScreenshot({ siteId, url });
 
         this.$utils.showMessageSuccess({
           message: `${this.$t('The site has been added to the queue for taking a screenshot')}`,
@@ -140,7 +140,7 @@ export default defineComponent({
 
       try {
         let { siteId } = this.site;
-        await this.$api.sites.uploadCustomSiteScreenshot({
+        await this.$api['sites'].uploadCustomSiteScreenshot({
           siteId,
           screenshotFile: this.customScreenshotFile as File,
         });
