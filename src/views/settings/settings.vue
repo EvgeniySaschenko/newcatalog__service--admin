@@ -9,19 +9,19 @@ include /src/mixins.pug
     el-tab-pane(:label='$t("Translations - Website")', :name='TabsEnum.tSite')
       tab-translations(
         v-if='tabActive == TabsEnum.tSite',
-        :service-type-name='ServicesEnum.site',
+        :serviceName='ServicesEnum.site',
         :langs='$langs("site")'
       )
     el-tab-pane(:label='$t("Translations - Admin panel")', :name='TabsEnum.tAdmin')
       tab-translations(
         v-if='tabActive == TabsEnum.tAdmin',
-        :service-type-name='ServicesEnum.admin',
+        :serviceName='ServicesEnum.admin',
         :langs='$langs("admin")'
       )
     el-tab-pane(:label='$t("Translations - API server")', :name='TabsEnum.tApi')
       tab-translations(
         v-if='tabActive == TabsEnum.tApi',
-        :service-type-name='ServicesEnum.api',
+        :serviceName='ServicesEnum.api',
         :langs='$langs("admin")'
       )
 </template>

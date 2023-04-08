@@ -9,7 +9,7 @@ include /src/mixins.pug
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { SettingsEnum, SettingsType, ServicesShortEnum, ServicesEnum } from '@/types';
+import { SettingsEnum, SettingsType, ServicesEnum } from '@/types';
 import AppHeader from '@/components/app-header/app-header.vue';
 import useSectionsStore from '@/store/sections';
 import useSettingsStore from '@/store/settings';
@@ -55,7 +55,7 @@ export default defineComponent({
         useSectionsStore().setSections(sections);
         useSettingsStore().setSettings(settings);
         let translations = await this.$api.translations.getTranslationsForFunctionTranslate({
-          serviceTypeName: ServicesEnum.admin,
+          serviceName: ServicesEnum.admin,
         });
 
         this.$setTranslationsList({ translations });
@@ -75,11 +75,11 @@ export default defineComponent({
     setLangsApp(settings: SettingsType) {
       // site
       let siteLangs = settings[SettingsEnum.siteLangs].reduce((a, v) => ({ ...a, [v]: '' }), {});
-      this.$setLangs({ langs: siteLangs, type: ServicesShortEnum.site });
-      this.$setLangDefault({ lang: settings[SettingsEnum.siteLang], type: ServicesShortEnum.site });
+      this.$setLangs({ langs: siteLangs, type: ServicesEnum.site });
+      this.$setLangDefault({ lang: settings[SettingsEnum.siteLang], type: ServicesEnum.site });
       // admin
       let adminLangs = settings[SettingsEnum.adminLangs].reduce((a, v) => ({ ...a, [v]: '' }), {});
-      this.$setLangs({ langs: adminLangs, type: ServicesShortEnum.admin });
+      this.$setLangs({ langs: adminLangs, type: ServicesEnum.admin });
       this.$setLangDefaultLocal({ lang: settings[SettingsEnum.adminLang] });
     },
 
