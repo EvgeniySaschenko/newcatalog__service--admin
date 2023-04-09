@@ -1,3 +1,5 @@
+import { $t } from '@/plugins/translations';
+
 export interface FetchType {
   (url: string, params?: RequestInit): Promise<Response>;
 }
@@ -8,13 +10,6 @@ declare module '@vue/runtime-core' {
     $fetch: FetchType;
   }
 }
-
-// Доступ к $fetch через this в "pinia"
-// declare module 'pinia' {
-//   interface PiniaCustomProperties {
-//     $fetch: FetchType;
-//   }
-// }
 
 let defaultParams = () => {
   return {
@@ -34,7 +29,7 @@ export let $fetch: FetchType = async (url: string, params?: RequestInit): Promis
   } catch (error) {
     // Unexpected Errors
     console.error(error);
-    throw { server: 'Ошибка сервера' };
+    throw { server: $t('Server error') };
   }
   if (response.status == 400) {
     // Data validation errors
@@ -46,11 +41,11 @@ export let $fetch: FetchType = async (url: string, params?: RequestInit): Promis
       window.location.href = '/login';
     }
   } else if (response.status == 404) {
-    throw { server: 'URL не найден на сервере' };
+    throw { server: $t('URL not found on server') };
   } else if (response.status > 400) {
     // Other server errors
     console.error(response);
-    throw { server: 'Ошибка сервера' };
+    throw { server: $t('Server error') };
   }
   return response;
 };

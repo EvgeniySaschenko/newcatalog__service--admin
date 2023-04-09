@@ -1,7 +1,7 @@
 <template lang="pug">
 include /src/mixins.pug
 +b.page--ratings.container
-  +e.H1.title {{ $route.name }}
+  +e.H1.title {{ $t($route.name) }}
 
   // Button create new rating
   router-link.inline-block(:to='`${pathPage}/create`')

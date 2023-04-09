@@ -2,7 +2,7 @@
 include /src/mixins.pug
 
 +b.page--cache.container
-  +e.H1.title {{ $route.name }}
+  +e.H1.title {{ $t($route.name) }}
 
   .u-mb--10
     el-alert(

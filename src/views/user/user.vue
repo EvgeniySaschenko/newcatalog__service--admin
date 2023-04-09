@@ -2,7 +2,7 @@
 include /src/mixins.pug
 
 +b.page--cache.container
-  +e.H1.title {{ $route.name }}
+  +e.H1.title {{ $t($route.name) }}
   el-form.form-login(label-position='top', v-loading='isLoading')
     el-descriptions(direction='vertical', :column='2', border)
       // E-mail

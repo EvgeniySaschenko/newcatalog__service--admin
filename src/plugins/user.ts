@@ -6,7 +6,7 @@ let pageDefault = '/ratings';
 // Login page
 let pageLogin = '/login';
 // Time after which it is necessary to refresh the token
-let refreshTockenTime = 120; // sec
+let refreshTockenTime = 300; // sec
 // If the user has been idle this time, you must log out
 let userIdleTime = 1200; // sec
 
