@@ -1,4 +1,5 @@
 import { LangsListType } from './langs-list';
+import { $t } from '@/plugins/translations';
 
 export type ValueOfType<T> = T[keyof T];
 
@@ -30,10 +31,10 @@ export type LangsIsoType = {
 
 // Settings
 export enum SettingsEnum {
-  adminLang = 'admin-lang-default',
-  adminLangs = 'admin-langs',
-  siteLang = 'site-lang-default',
-  siteLangs = 'site-langs',
+  adminLang = 'admin--lang-default',
+  adminLangs = 'admin--langs',
+  siteLang = 'site--lang-default',
+  siteLangs = 'site--langs',
 }
 
 export type SettingsType = {
@@ -153,3 +154,22 @@ export type LabelType = {
   color: string;
   ratingId: number;
 };
+
+/*
+  Pages - This is instead of enum, because enum cannot be used $t(). 
+  The $t function is needed here for parsing.
+  Usage example: $t(PagesKeys['Ratings list'])
+*/
+export let PagesKeys = (() => {
+  return {
+    'Ratings list': $t('Ratings list'),
+    'Sections list': $t('Sections list'),
+    'Create a new rating': $t('Create a new rating'),
+    'Edit rating': $t('Edit rating'),
+    'Cache control': $t('Cache control'),
+    'User profile': $t('User profile'),
+    'App Settings': $t('App Settings'),
+    Home: $t('Home'),
+    Login: $t('Login'),
+  };
+})();

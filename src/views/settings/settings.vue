@@ -2,7 +2,7 @@
 include /src/mixins.pug
 
 +b.page--settings.container
-  +e.H1.title {{ $route.name }}
+  +e.H1.title {{ $t($route.name) }}
   el-tabs(v-model='tabActive', @tab-change='setTabUrlParam()', type='border-card')
     el-tab-pane(:label='$t("Main")', :name='TabsEnum.main')
       tab-main(v-if='tabActive == TabsEnum.main')

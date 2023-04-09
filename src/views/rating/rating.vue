@@ -2,7 +2,7 @@
 include /src/mixins.pug
 
 +b.page--rating.container
-  +e.H1.title {{ ratingId ? $t('Edit rating') : $t('Create a new rating') }}
+  +e.H1.title {{ $t($route.name) }}
   el-tabs(v-model='tabActive', @tab-change='setTabUrlParam()', type='border-card')
     el-tab-pane(:label='$t("Main Settings")', :name='TabsEnum.main')
       tab-main(v-if='tabActive == TabsEnum.main', :ratingId='ratingId')

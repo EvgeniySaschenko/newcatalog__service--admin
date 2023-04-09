@@ -1,44 +1,50 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import { PagesKeys } from '@/types';
 
 let routes = [
   {
     path: '/ratings',
-    name: 'Список рейтингов',
+    name: PagesKeys['Ratings list'],
     component: () => import('@/views/ratings/ratings.vue'),
   },
   {
     path: '/sections',
-    name: 'Список разделов сайта',
+    name: PagesKeys['Sections list'],
     component: () => import('@/views/sections/sections.vue'),
   },
   {
+    path: '/ratings/create',
+    name: PagesKeys['Create a new rating'],
+    component: () => import('@/views/rating/rating.vue'),
+  },
+  {
     path: '/ratings/:ratingId',
-    name: 'Редактировать рейтинг',
+    name: PagesKeys['Edit rating'],
     component: () => import('@/views/rating/rating.vue'),
   },
   {
     path: '/cache',
-    name: 'Управление кешем',
+    name: PagesKeys['Cache control'],
     component: () => import('@/views/cache/cache.vue'),
   },
   {
     path: '/user',
-    name: 'Профиль пользователя',
+    name: PagesKeys['User profile'],
     component: () => import('@/views/user/user.vue'),
   },
   {
     path: '/settings',
-    name: 'Настройки приложения',
+    name: PagesKeys['App Settings'],
     component: () => import('@/views/settings/settings.vue'),
   },
   {
     path: '/login',
-    name: 'Логин',
+    name: PagesKeys['Login'],
     component: () => import('@/views/login/login.vue'),
   },
   {
     path: '/',
-    name: 'Home',
+    name: PagesKeys['Home'],
     redirect: (to: any) => {
       return { path: '/ratings' };
     },

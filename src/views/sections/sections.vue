@@ -1,7 +1,7 @@
 <template lang="pug">
 include /src/mixins.pug
 +b.page--sections.container
-  +e.H1.title {{ $route.name }}
+  +e.H1.title {{ $t($route.name) }}
   // Add
   el-form(v-loading='isSendingFormAdd')
     el-table(:data='[1]')

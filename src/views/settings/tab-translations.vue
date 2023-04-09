@@ -21,7 +21,7 @@ el-form.form-login.u-mb--10(label-position='top', v-loading='isLoading')
       template(#default='scope')
         el-link.u-mb--10(type='warning') {{ scope.row.key }}
 
-        el-form-item
+        el-form-item(:error='errors[`${scope.row.translationId}_text`]')
           template(v-for='(item, key) in langs')
             el-input.u-mb--5(
               v-model='scope.row.text[key]',
@@ -84,6 +84,7 @@ export default defineComponent({
         maxRecordsPerPage: 0,
         pagesCount: 0,
       } as PaginationType,
+      errors: {} as any,
     };
   },
 
@@ -137,6 +138,12 @@ export default defineComponent({
     async editText({ translationId, text }: Pick<TranslationType, 'translationId' | 'text'>) {
       if (this.isLoading) return;
       this.isLoading = true;
+
+      let keysErrors = {
+        [`${translationId}_text`]: '',
+      };
+      this.$utils.clearErrors(this.errors, keysErrors);
+
       try {
         await this.$api['translations'].editText({
           translationId,
@@ -153,6 +160,9 @@ export default defineComponent({
           this.$utils.showMessageError({ message: errors.server });
           return;
         }
+
+        let { text } = errors.errors;
+        this.errors[`${translationId}_text`] = text;
       } finally {
         this.isLoading = false;
       }

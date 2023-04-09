@@ -8,17 +8,18 @@ include /src/mixins.pug
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { PagesKeys } from '@/types';
 
 export default defineComponent({
   name: 'menu-main',
   data() {
     return {
       items: [
-        { name: this.$t('Ratings list'), path: '/ratings' },
-        { name: this.$t('Sections list'), path: '/sections' },
-        { name: this.$t('Cache control'), path: '/cache' },
-        { name: this.$t('User profile'), path: '/user' },
-        { name: this.$t('App Settings'), path: '/settings' },
+        { name: this.$t(PagesKeys['Ratings list']), path: '/ratings' },
+        { name: this.$t(PagesKeys['Sections list']), path: '/sections' },
+        { name: this.$t(PagesKeys['Cache control']), path: '/cache' },
+        { name: this.$t(PagesKeys['User profile']), path: '/user' },
+        { name: this.$t(PagesKeys['App Settings']), path: '/settings' },
       ],
     };
   },

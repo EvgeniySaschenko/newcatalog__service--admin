@@ -4,7 +4,7 @@ include /src/mixins.pug
 +b.EL-FORM.tab-logos(v-loading='isLoading')
   +e.title(ref='title')
     +e.title-col--1
-      span {{ $route.name }}&nbsp;
+      span {{ $t($route.name) }}&nbsp;
       span(v-if='sreens.length') {{ curIndex + 1 }} {{ $t('from') }} {{ sreens.length }}
     +e.title-col--2
       +e.EL-TAG.tag-processing-status(:type='curItem.isSend ? "success" : ""') {{ curItem.isSend ? $t('Processed') : $t('Not processed') }}
