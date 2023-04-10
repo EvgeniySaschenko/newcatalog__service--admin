@@ -1,5 +1,5 @@
 import { $fetch } from './_core';
-import { SettingsLangDefaultType, SettingsLangsListType } from '@/types';
+import { SettingsServicesType } from '@/types';
 
 export default {
   // Get settings
@@ -10,20 +10,15 @@ export default {
     return await result.json();
   },
 
-  // Edit lang default
-  editLangDefault: async ({ type, lang }: Pick<SettingsLangDefaultType, 'type' | 'lang'>) => {
-    let response = await $fetch('/api/settings/lang-default', {
+  // Edit setting
+  editSetting: async ({
+    settingName,
+    serviceName,
+    settingValue,
+  }: SettingsServicesType[keyof SettingsServicesType]) => {
+    let response = await $fetch(`/api/settings/${settingName}`, {
       method: 'PUT',
-      body: JSON.stringify({ type, lang }),
-    });
-    return await response.json();
-  },
-
-  // Edit lang list
-  editLangsList: async ({ type, langs }: Pick<SettingsLangsListType, 'type' | 'langs'>) => {
-    let response = await $fetch('/api/settings/langs-list', {
-      method: 'PUT',
-      body: JSON.stringify({ type, langs }),
+      body: JSON.stringify({ settingName, serviceName, settingValue }),
     });
     return await response.json();
   },

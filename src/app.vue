@@ -9,7 +9,7 @@ include /src/mixins.pug
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { SettingsEnum, SettingsType, ServicesEnum } from '@/types';
+import { SettingsType, ServicesLangsEnum } from '@/types';
 import AppHeader from '@/components/app-header/app-header.vue';
 import useSectionsStore from '@/store/sections';
 import useSettingsStore from '@/store/settings';
@@ -55,11 +55,11 @@ export default defineComponent({
         useSectionsStore().setSections(sections);
         useSettingsStore().setSettings(settings);
         let translations = await this.$api['translations'].getTranslationsForFunctionTranslate({
-          serviceName: ServicesEnum.admin,
+          serviceName: ServicesLangsEnum.admin,
         });
 
-        this.$setTranslationsList({ translations });
-        this.setLangsApp(settings.settings);
+        this.$setTranslations({ translations });
+        this.setLangs(settings.settings);
         this.isInitRedy = true;
       } catch (errors: any) {
         if (errors.server) {
@@ -72,15 +72,21 @@ export default defineComponent({
     },
 
     // Set langs
-    setLangsApp(settings: SettingsType) {
+    setLangs(settings: SettingsType) {
       // site
-      let siteLangs = settings[SettingsEnum.siteLangs].reduce((a, v) => ({ ...a, [v]: '' }), {});
-      this.$setLangs({ langs: siteLangs, type: ServicesEnum.site });
-      this.$setLangDefault({ lang: settings[SettingsEnum.siteLang], type: ServicesEnum.site });
+      let siteLangs = settings['langs'].site.reduce((a, v) => ({ ...a, [v]: '' }), {});
+      this.$setLangs({ langs: siteLangs, serviceName: ServicesLangsEnum.site });
+      this.$setLangDefault({
+        langDefault: settings['langDefault'].site,
+        serviceName: ServicesLangsEnum.site,
+      });
       // admin
-      let adminLangs = settings[SettingsEnum.adminLangs].reduce((a, v) => ({ ...a, [v]: '' }), {});
-      this.$setLangs({ langs: adminLangs, type: ServicesEnum.admin });
-      this.$setLangDefaultLocal({ lang: settings[SettingsEnum.adminLang] });
+      let langsAdmin = settings['langs'].admin.reduce((a, v) => ({ ...a, [v]: '' }), {});
+      this.$setLangs({ langs: langsAdmin, serviceName: ServicesLangsEnum.admin });
+      this.$setLangDefault({
+        langDefault: settings['langDefault'].admin,
+        serviceName: ServicesLangsEnum.admin,
+      });
     },
 
     // Check session expiration
