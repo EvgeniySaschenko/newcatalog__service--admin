@@ -3,7 +3,7 @@ import { $t } from '@/plugins/translations';
 
 export type ValueOfType<T> = T[keyof T];
 
-// Services types
+// Services
 export enum ServicesEnum {
   api = 'api',
   admin = 'admin',
@@ -12,46 +12,40 @@ export enum ServicesEnum {
 
 export type ServicesType = keyof typeof ServicesEnum;
 
-// Lang
-export type LangType = Partial<LangsListType>;
+// ServicesLangs - only for services whose languages are configured
+export enum ServicesLangsEnum {
+  admin = 'admin',
+  site = 'site',
+}
 
-// Pagination
-export type PaginationType = {
-  page: number;
-  itemsCount: number;
-  maxRecordsPerPage: number;
-  pagesCount: number;
-};
-
-// Settings langs iso
-export type LangsIsoType = {
-  code: string;
-  name: string;
-};
+export type ServicesLangsType = keyof typeof ServicesLangsEnum;
 
 // Settings
 export enum SettingsEnum {
-  adminLang = 'admin--lang-default',
-  adminLangs = 'admin--langs',
-  siteLang = 'site--lang-default',
-  siteLangs = 'site--langs',
+  langDefault = 'langDefault',
+  langs = 'langs',
 }
 
 export type SettingsType = {
-  [SettingsEnum.adminLang]: keyof LangType;
-  [SettingsEnum.adminLangs]: (keyof LangType)[];
-  [SettingsEnum.siteLang]: keyof LangType;
-  [SettingsEnum.siteLangs]: (keyof LangType)[];
+  [SettingsEnum.langDefault]: Record<keyof typeof ServicesLangsEnum, keyof LangType>;
+  [SettingsEnum.langs]: Record<keyof typeof ServicesLangsEnum, (keyof LangType)[]>;
 };
 
-export type SettingsLangDefaultType = {
-  type: SettingsEnum.adminLang | SettingsEnum.siteLang;
-  lang: SettingsType[SettingsEnum.adminLang] | SettingsType[SettingsEnum.siteLang];
+export type SettingsServicesType = {
+  [Key in keyof SettingsType]: {
+    settingName: Key;
+    settingValue: SettingsType[Key][keyof typeof ServicesLangsEnum];
+    serviceName: keyof SettingsType[Key];
+  };
 };
 
-export type SettingsLangsListType = {
-  type: SettingsEnum.adminLangs | SettingsEnum.siteLangs;
-  langs: SettingsType[SettingsEnum.adminLangs] | SettingsType[SettingsEnum.siteLangs];
+// Lang
+export type LangType = Partial<LangsListType>;
+
+// Langs iso
+export type LangsIsoType = {
+  code: string;
+  name: string;
 };
 
 // Translation
@@ -153,6 +147,14 @@ export type LabelType = {
   name: LangType;
   color: string;
   ratingId: number;
+};
+
+// Pagination
+export type PaginationType = {
+  page: number;
+  itemsCount: number;
+  maxRecordsPerPage: number;
+  pagesCount: number;
 };
 
 /*

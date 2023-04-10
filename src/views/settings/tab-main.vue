@@ -11,13 +11,13 @@ el-form.form-login(label-position='top', v-loading='isLoading')
     )
 
   el-descriptions(direction='vertical', :column='2', border)
-    // Admin langs list
+    // Admin + API langs
     el-descriptions-item
       el-form-item(
         :label='$t("List of languages of the admin panel and API server")',
-        :error='errors[SettingsEnum.adminLangs]'
+        :error='errors[ErrorsKeys.langsAdmin]'
       )
-        el-select(v-model='adminLangs', multiple, filterable)
+        el-select(v-model='langsAdmin', multiple, filterable)
           el-option(
             v-for='item in langsIso',
             :key='item.code',
@@ -33,16 +33,16 @@ el-form.form-login(label-position='top', v-loading='isLoading')
     el-descriptions-item(width='200', align='center')
       el-button(
         type='primary',
-        @click='editLangsList({ langs: adminLangs, type: SettingsEnum.adminLangs })'
+        @click='editLangs({ langs: langsAdmin, serviceName: ServicesLangsEnum.admin, errorKey: ErrorsKeys.langsAdmin })'
       ) {{ $t('Save') }}
 
-    // Admin lang default
+    // Admin + API lang default
     el-descriptions-item
       el-form-item(
         :label='$t("Admin panel and API server, language by default")',
-        :error='errors[SettingsEnum.adminLang]'
+        :error='errors[ErrorsKeys.langDefaultAdmin]'
       )
-        el-select(v-model='adminLang', filterable)
+        el-select(v-model='langDefaultAdmin', filterable)
           el-option(
             v-for='item in langsIso',
             :key='item.code',
@@ -51,6 +51,13 @@ el-form.form-login(label-position='top', v-loading='isLoading')
           )
             b [{{ item.code }}] &nbsp;
             span {{ item.name }}
+
+        el-tooltip(
+          :content='$t("Note! This setting is global, so it may not be the same as the language switcher")',
+          placement='top'
+        )
+          el-icon.u-m--10
+            el-icon-question-filled
 
       el-tag.u-m--5(type='danger', size='small') API SERVER
       el-tag.u-m--5(type='danger', size='small') ADMIN PANEL
@@ -58,13 +65,13 @@ el-form.form-login(label-position='top', v-loading='isLoading')
     el-descriptions-item(align='center')
       el-button(
         type='primary',
-        @click='editLangDefault({ lang: adminLang, type: SettingsEnum.adminLang })'
+        @click='editLangDefault({ langDefault: langDefaultAdmin, serviceName: ServicesLangsEnum.admin, errorKey: ErrorsKeys.langDefaultAdmin })'
       ) {{ $t('Save') }}
 
-    // Site langs list
+    // Site langs
     el-descriptions-item
-      el-form-item(:label='$t("List of site languages")', :error='errors[SettingsEnum.siteLangs]')
-        el-select(v-model='siteLangs', multiple, filterable)
+      el-form-item(:label='$t("List of site languages")', :error='errors[ErrorsKeys.langsSite]')
+        el-select(v-model='langsSite', multiple, filterable)
           el-option(
             v-for='item in langsIso',
             :key='item.code',
@@ -78,13 +85,16 @@ el-form.form-login(label-position='top', v-loading='isLoading')
     el-descriptions-item(align='center')
       el-button(
         type='primary',
-        @click='editLangsList({ langs: siteLangs, type: SettingsEnum.siteLangs })'
+        @click='editLangs({ langs: langsSite, serviceName: ServicesLangsEnum.site, errorKey: ErrorsKeys.langsSite })'
       ) {{ $t('Save') }}
 
     // Site lang default
     el-descriptions-item
-      el-form-item(:label='$t("Site default language")', :error='errors[SettingsEnum.siteLang]')
-        el-select(v-model='siteLang', filterable)
+      el-form-item(
+        :label='$t("Site default language")',
+        :error='errors[ErrorsKeys.langDefaultSite]'
+      )
+        el-select(v-model='langDefaultSite', filterable)
           el-option(
             v-for='item in langsIso',
             :key='item.code',
@@ -98,20 +108,28 @@ el-form.form-login(label-position='top', v-loading='isLoading')
     el-descriptions-item(align='center')
       el-button(
         type='primary',
-        @click='editLangDefault({ lang: siteLang, type: SettingsEnum.siteLang })'
+        @click='editLangDefault({ langDefault: langDefaultSite, serviceName: ServicesLangsEnum.site, errorKey: ErrorsKeys.langDefaultSite })'
       ) {{ $t('S:ave') }}
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 import useSettingsStore from '@/store/settings';
+
 import {
   SettingsType,
   LangsIsoType,
-  SettingsLangDefaultType,
-  SettingsLangsListType,
   SettingsEnum,
+  ServicesLangsEnum,
+  SettingsServicesType,
 } from '@/types';
+
+let ErrorsKeys = {
+  langDefaultAdmin: `${ServicesLangsEnum.admin}--${SettingsEnum.langDefault}`,
+  langDefaultSite: `${ServicesLangsEnum.site}--${SettingsEnum.langDefault}`,
+  langsAdmin: `${ServicesLangsEnum.admin}--${SettingsEnum.langs}`,
+  langsSite: `${ServicesLangsEnum.site}--${SettingsEnum.langs}`,
+};
 
 export default defineComponent({
   data() {
@@ -120,17 +138,21 @@ export default defineComponent({
       isChanges: false,
       isLoading: false,
       SettingsEnum: SettingsEnum,
+      ServicesLangsEnum: ServicesLangsEnum,
       langsIso: [] as LangsIsoType[],
-      adminLang: '' as SettingsType[SettingsEnum.adminLang],
-      adminLangs: [] as SettingsType[SettingsEnum.adminLangs],
-      siteLang: '' as SettingsType[SettingsEnum.siteLang],
-      siteLangs: [] as SettingsType[SettingsEnum.siteLangs],
+      // !!! For services "admin" and "api", used  lang "admin"
+      langDefaultAdmin: '' as SettingsType['langDefault']['admin'],
+      // !!! For services "admin" and "api", used  lang "admin"
+      langsAdmin: [] as SettingsType['langs']['admin'],
+      langDefaultSite: '' as SettingsType['langDefault']['site'],
+      langsSite: [] as SettingsType['langs']['site'],
       errors: {
-        [SettingsEnum.adminLang]: '',
-        [SettingsEnum.adminLangs]: '',
-        [SettingsEnum.siteLang]: '',
-        [SettingsEnum.siteLangs]: '',
+        [ErrorsKeys.langDefaultAdmin]: '',
+        [ErrorsKeys.langDefaultSite]: '',
+        [ErrorsKeys.langsAdmin]: '',
+        [ErrorsKeys.langsSite]: '',
       },
+      ErrorsKeys,
     };
   },
 
@@ -158,19 +180,31 @@ export default defineComponent({
       } = JSON.parse(JSON.stringify(useSettingsStore().settings));
 
       this.langsIso = langsIso;
-      this.adminLang = settings[SettingsEnum.adminLang];
-      this.adminLangs = settings[SettingsEnum.adminLangs];
-      this.siteLang = settings[SettingsEnum.siteLang];
-      this.siteLangs = settings[SettingsEnum.siteLangs];
+      this.langDefaultAdmin = settings['langDefault'].admin;
+      this.langsAdmin = settings['langs'].admin;
+      this.langDefaultSite = settings['langDefault'].site;
+      this.langsSite = settings['langs'].site;
     },
 
     // Edit lang default
-    async editLangDefault({ lang, type }: SettingsLangDefaultType) {
+    async editLangDefault({
+      langDefault,
+      serviceName,
+      errorKey,
+    }: {
+      langDefault: SettingsServicesType['langDefault']['settingValue'];
+      serviceName: SettingsServicesType['langDefault']['serviceName'];
+      errorKey: keyof typeof ErrorsKeys;
+    }) {
       if (this.isLoading) return;
       this.isLoading = true;
-      this.$utils.clearErrors(this.errors, { [type]: '' });
+      this.$utils.clearErrors(this.errors, { [errorKey]: '' });
       try {
-        let response = await this.$api['settings'].editLangDefault({ lang, type });
+        let response = await this.$api['settings'].editSetting({
+          settingName: SettingsEnum.langDefault,
+          serviceName,
+          settingValue: langDefault,
+        });
         this.isChanges = true;
 
         if (response) {
@@ -192,12 +226,24 @@ export default defineComponent({
     },
 
     // Edit lang default
-    async editLangsList({ langs, type }: SettingsLangsListType) {
+    async editLangs({
+      langs,
+      serviceName,
+      errorKey,
+    }: {
+      langs: SettingsServicesType['langs']['settingValue'];
+      serviceName: SettingsServicesType['langs']['serviceName'];
+      errorKey: keyof typeof ErrorsKeys;
+    }) {
       if (this.isLoading) return;
       this.isLoading = true;
-      this.$utils.clearErrors(this.errors, { [type]: '' });
+      this.$utils.clearErrors(this.errors, { [errorKey]: '' });
       try {
-        let response = await this.$api['settings'].editLangsList({ langs, type });
+        let response = await this.$api['settings'].editSetting({
+          settingName: SettingsEnum.langs,
+          serviceName,
+          settingValue: langs,
+        });
         this.isChanges = true;
         if (response) {
           this.$utils.showMessageSuccess({

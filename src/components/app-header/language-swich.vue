@@ -1,8 +1,8 @@
 <template lang="pug">
 include /src/mixins.pug
 .app-language-swich
-  el-select(v-model='adminLang', @change='setLangDefault()')
-    el-option(v-for='item in adminLangs', :key='item', :label='item', :value='item')
+  el-select(v-model='langDefault', @change='setLangDefault()')
+    el-option(v-for='item in langsAdmin', :key='item', :label='item', :value='item')
 </template>
 
 <script lang="ts">
@@ -12,15 +12,15 @@ export default defineComponent({
   name: 'language-swich',
   data() {
     return {
-      adminLang: this.$langDefault('admin'),
-      adminLangs: Object.keys(this.$langs('admin')),
+      langDefault: this.$langDefault('admin'),
+      langsAdmin: Object.keys(this.$langs('admin')),
     };
   },
 
   methods: {
     // Set lang default
     setLangDefault() {
-      this.$setCokieLangDefaultLocal({ lang: this.adminLang });
+      this.$setCokieLangDefault({ langDefault: this.langDefault });
       location.reload();
     },
   },
