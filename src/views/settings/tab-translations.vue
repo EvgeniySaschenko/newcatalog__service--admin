@@ -148,6 +148,7 @@ export default defineComponent({
         await this.$api['translations'].editText({
           translationId,
           text,
+          serviceName: this.serviceName,
         });
 
         this.$utils.showMessageSuccess({

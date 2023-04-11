@@ -37,10 +37,18 @@ export default {
   },
 
   // Update text for translation
-  editText: async ({ translationId, text }: Pick<TranslationType, 'translationId' | 'text'>) => {
+  editText: async ({
+    translationId,
+    text,
+    serviceName,
+  }: {
+    translationId: TranslationType['translationId'];
+    text: TranslationType['text'];
+    serviceName: ServicesType;
+  }) => {
     let response = await $fetch(`/api/translations/text/${translationId}`, {
       method: 'PUT',
-      body: JSON.stringify({ translationId, text }),
+      body: JSON.stringify({ translationId, text, serviceName }),
     });
     return await response.json();
   },
