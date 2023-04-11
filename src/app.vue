@@ -62,10 +62,7 @@ export default defineComponent({
         this.setLangs(settings.settings);
         this.isInitRedy = true;
       } catch (errors: any) {
-        if (errors.server) {
-          this.$utils.showMessageError({ message: errors.server });
-          return;
-        }
+        this.$utils.showMessageError({ message: errors.server, errors });
       } finally {
         this.isLoading = false;
       }
@@ -94,10 +91,7 @@ export default defineComponent({
       try {
         return await this.$api['user'].refreshAuth();
       } catch (errors: any) {
-        if (errors.server) {
-          this.$utils.showMessageError({ message: errors.server });
-          return;
-        }
+        this.$utils.showMessageError({ message: errors.server, errors });
       }
     },
 
@@ -108,10 +102,7 @@ export default defineComponent({
       try {
         return await this.$api['user'].logOut();
       } catch (errors: any) {
-        if (errors.server) {
-          this.$utils.showMessageError({ message: errors.server });
-          return;
-        }
+        this.$utils.showMessageError({ message: errors.server, errors });
       } finally {
         this.isLoading = false;
       }

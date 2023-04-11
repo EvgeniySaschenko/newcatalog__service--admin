@@ -85,9 +85,7 @@ export default defineComponent({
       try {
         this.labels = await this.$api['labels'].getLabels({ ratingId });
       } catch (errors: any) {
-        if (errors.server) {
-          this.$utils.showMessageError({ message: errors.server });
-        }
+        this.$utils.showMessageError({ message: errors.server, errors });
       } finally {
         this.isLoading = false;
       }

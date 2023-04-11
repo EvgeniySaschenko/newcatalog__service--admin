@@ -61,9 +61,7 @@ export default defineComponent({
 
         throw { server: this.$t('There were errors while creating the cache') };
       } catch (errors: any) {
-        if (errors.server) {
-          this.$utils.showMessageError({ message: errors.server });
-        }
+        this.$utils.showMessageError({ message: errors.server, errors });
       } finally {
         this.isLoading = false;
       }
@@ -86,9 +84,7 @@ export default defineComponent({
 
         throw { server: this.$t('There were errors while creating the cache') };
       } catch (errors: any) {
-        if (errors.server) {
-          this.$utils.showMessageError({ message: errors.server });
-        }
+        this.$utils.showMessageError({ message: errors.server, errors });
       } finally {
         this.isLoading = false;
       }
@@ -111,9 +107,7 @@ export default defineComponent({
 
         throw { server: this.$t('There were errors while creating the cache') };
       } catch (errors: any) {
-        if (errors.server) {
-          this.$utils.showMessageError({ message: errors.server });
-        }
+        this.$utils.showMessageError({ message: errors.server, errors });
       } finally {
         this.isLoading = false;
       }
@@ -136,9 +130,7 @@ export default defineComponent({
 
         throw { server: this.$t('There were errors while creating the cache') };
       } catch (errors: any) {
-        if (errors.server) {
-          this.$utils.showMessageError({ message: errors.server });
-        }
+        this.$utils.showMessageError({ message: errors.server, errors });
       } finally {
         this.isLoading = false;
       }

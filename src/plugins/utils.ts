@@ -70,7 +70,11 @@ export let $utils = {
     Use to tell the user when an action failed.
     For example "Server error"
   */
-  showMessageError({ duration = 0, showClose = true, message = '' }) {
+  showMessageError({ duration = 0, showClose = true, message = '', errors = undefined }) {
+    if (!message) {
+      message = $t('Unexpected error');
+      console.error(errors || $t('Unexpected error'));
+    }
     ElMessage({
       duration,
       showClose,
@@ -81,14 +85,18 @@ export let $utils = {
   /* 
     targetObject - mutable object
     keysErrors - Object containing the keys to be changed
+    isForce - If the value is true, add add an error message even if the rkey was not previously in the object
     Adds error messages to "targetObject" if fields are present in "targetObject" and "keysErrors"
   */
-  setErrors(targetObject: any, keysErrors: any) {
+  setErrors(targetObject: any, keysErrors: any, isForce = false) {
+    let isValidationError = false;
     for (let key in keysErrors) {
-      if (key in targetObject) {
+      if (key in targetObject || isForce) {
+        isValidationError = true;
         targetObject[key] = keysErrors[key];
       }
     }
+    return isValidationError;
   },
   /* 
     targetObject - mutable object

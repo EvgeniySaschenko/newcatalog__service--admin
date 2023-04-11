@@ -80,7 +80,6 @@ export default defineComponent({
       errors: {
         img: '',
         color: '',
-        server: '',
       },
     };
   },
@@ -109,9 +108,7 @@ export default defineComponent({
         });
         this.setCurrentItem();
       } catch (errors: any) {
-        if (errors.server) {
-          this.$utils.showMessageError({ message: errors.server });
-        }
+        this.$utils.showMessageError({ message: errors.server, errors });
       } finally {
         this.isLoading = false;
       }
@@ -138,11 +135,7 @@ export default defineComponent({
           message: `${this.$t('Logo added')}`,
         });
       } catch (errors: any) {
-        if (errors.server) {
-          this.$utils.showMessageError({ message: errors.server });
-        } else {
-          console.error(errors);
-        }
+        this.$utils.showMessageError({ message: errors.server, errors });
       } finally {
         this.isLoading = false;
       }
