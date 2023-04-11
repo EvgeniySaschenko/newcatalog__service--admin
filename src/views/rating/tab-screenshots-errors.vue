@@ -49,9 +49,7 @@ export default defineComponent({
           ratingId: this.ratingId,
         });
       } catch (errors: any) {
-        if (errors.server) {
-          this.$utils.showMessageError({ message: errors.server });
-        }
+        this.$utils.showMessageError({ message: errors.server, errors });
       } finally {
         this.isLoading = false;
       }

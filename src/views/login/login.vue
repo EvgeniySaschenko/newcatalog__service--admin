@@ -67,11 +67,9 @@ export default defineComponent({
 
         window.location.href = this.$user.pageDefault;
       } catch (errors: any) {
-        if (errors.server) {
-          this.$utils.showMessageError({ message: errors.server });
-        }
-        if (errors.errors) {
-          this.$utils.setErrors(this.errors, errors.errors);
+        let isValidationError = this.$utils.setErrors(this.errors, errors.errors);
+        if (!isValidationError) {
+          this.$utils.showMessageError({ message: errors.server, errors });
         }
       } finally {
         this.isLoading = false;

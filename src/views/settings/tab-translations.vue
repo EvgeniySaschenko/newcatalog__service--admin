@@ -84,7 +84,7 @@ export default defineComponent({
         maxRecordsPerPage: 0,
         pagesCount: 0,
       } as PaginationType,
-      errors: {} as any,
+      errors: {},
     };
   },
 
@@ -127,10 +127,7 @@ export default defineComponent({
           pagesCount,
         };
       } catch (errors: any) {
-        if (errors.server) {
-          this.$utils.showMessageError({ message: errors.server });
-          return;
-        }
+        this.$utils.showMessageError({ message: errors.server, errors });
       }
     },
 
@@ -139,10 +136,9 @@ export default defineComponent({
       if (this.isLoading) return;
       this.isLoading = true;
 
-      let keysErrors = {
-        [`${translationId}_text`]: '',
-      };
-      this.$utils.clearErrors(this.errors, keysErrors);
+      let errorKey = `${translationId}_text`;
+
+      this.$utils.clearErrors(this.errors, { [errorKey]: '' });
 
       try {
         await this.$api['translations'].editText({
@@ -157,13 +153,13 @@ export default defineComponent({
 
         this.isChanges = true;
       } catch (errors: any) {
-        if (errors.server) {
-          this.$utils.showMessageError({ message: errors.server });
-          return;
+        let errorsMsgs = {
+          [errorKey]: errors.errors?.text,
+        };
+        let isValidationError = this.$utils.setErrors(this.errors, errorsMsgs, true);
+        if (!isValidationError) {
+          this.$utils.showMessageError({ message: errors.server, errors });
         }
-
-        let { text } = errors.errors;
-        this.errors[`${translationId}_text`] = text;
       } finally {
         this.isLoading = false;
       }
@@ -186,10 +182,7 @@ export default defineComponent({
 
         this.isChanges = true;
       } catch (errors: any) {
-        if (errors.server) {
-          this.$utils.showMessageError({ message: errors.server });
-          return;
-        }
+        this.$utils.showMessageError({ message: errors.server, errors });
       } finally {
         this.isLoading = false;
       }

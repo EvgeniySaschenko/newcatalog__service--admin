@@ -144,9 +144,7 @@ export default defineComponent({
         });
         (this.provideEmitUpdateRatingItem as any)();
       } catch (errors: any) {
-        if (errors.server) {
-          this.$utils.showMessageError({ message: errors.server });
-        }
+        this.$utils.showMessageError({ message: errors.server, errors });
       } finally {
         this.isLoading = false;
       }
@@ -186,9 +184,7 @@ export default defineComponent({
           color,
         };
       } catch (errors: any) {
-        if (errors.server) {
-          this.$utils.showMessageError({ message: errors.server });
-        }
+        this.$utils.showMessageError({ message: errors.server, errors });
       } finally {
         this.isLoading = false;
       }
@@ -228,9 +224,7 @@ export default defineComponent({
 
         (this.provideEmitUpdateRatingItem as any)();
       } catch (errors: any) {
-        if (errors.server) {
-          this.$utils.showMessageError({ message: errors.server });
-        }
+        this.$utils.showMessageError({ message: errors.server, errors });
       } finally {
         this.isLoading = false;
       }
@@ -252,9 +246,7 @@ export default defineComponent({
 
         (this.provideEmitUpdateRatingItem as any)();
       } catch (errors: any) {
-        if (errors.server) {
-          this.$utils.showMessageError({ message: errors.server });
-        }
+        this.$utils.showMessageError({ message: errors.server, errors });
       } finally {
         this.isLoading = false;
       }

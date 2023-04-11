@@ -75,7 +75,6 @@ export default defineComponent({
       errors: {
         name: '',
         url: '',
-        server: '',
       },
     };
   },
@@ -152,11 +151,10 @@ export default defineComponent({
 
         (this.provideEmitUpdateRatingItem as any)();
       } catch (errors: any) {
-        if (errors.server) {
-          this.$utils.showMessageError({ message: errors.server });
-          return;
+        let isValidationError = this.$utils.setErrors(this.errors, errors.errors);
+        if (!isValidationError) {
+          this.$utils.showMessageError({ message: errors.server, errors });
         }
-        this.$utils.setErrors(this.errors, errors.errors);
       } finally {
         this.isLoading = false;
       }
@@ -182,11 +180,10 @@ export default defineComponent({
 
         (this.provideEmitUpdateRatingItem as any)();
       } catch (errors: any) {
-        if (errors.server) {
-          this.$utils.showMessageError({ message: errors.server });
-          return;
+        let isValidationError = this.$utils.setErrors(this.errors, errors.errors);
+        if (!isValidationError) {
+          this.$utils.showMessageError({ message: errors.server, errors });
         }
-        this.$utils.setErrors(this.errors, errors.errors);
       } finally {
         this.isLoading = false;
       }
@@ -212,9 +209,7 @@ export default defineComponent({
         (this.provideEmitUpdateRatingItem as any)();
         (this.provideEmitDialogClose as any)();
       } catch (errors: any) {
-        if (errors.server) {
-          this.$utils.showMessageError({ message: errors.server });
-        }
+        this.$utils.showMessageError({ message: errors.server, errors });
       } finally {
         this.isLoading = false;
       }

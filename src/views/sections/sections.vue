@@ -132,11 +132,10 @@ export default defineComponent({
           message: this.$t('Section added'),
         });
       } catch (errors: any) {
-        if (errors.server) {
-          this.$utils.showMessageError({ message: errors.server });
-          return;
+        let isValidationError = this.$utils.setErrors(this.errors.formAdd, errors.errors);
+        if (!isValidationError) {
+          this.$utils.showMessageError({ message: errors.server, errors });
         }
-        this.$utils.setErrors(this.errors.formAdd, errors.errors);
       } finally {
         this.isSendingFormAdd = false;
       }
@@ -157,13 +156,7 @@ export default defineComponent({
           message: this.$t('Section deleted'),
         });
       } catch (errors: any) {
-        if (errors.server) {
-          this.$utils.showMessageError({ message: errors.server });
-          return;
-        }
-        if (errors.errors.section) {
-          this.$utils.showMessageError({ message: errors.errors.section });
-        }
+        this.$utils.showMessageError({ message: errors.server || errors.errors?.section, errors });
       } finally {
         this.isSendingFormEdit = false;
       }
@@ -173,11 +166,8 @@ export default defineComponent({
     async editSection(section: SectionType) {
       if (this.isSendingFormEdit) return;
       this.isSendingFormEdit = true;
-
-      let keysErrors = {
-        [`${section.sectionId}_name`]: '',
-      };
-      this.$utils.clearErrors(this.errors.formEdit, keysErrors);
+      let errorKey = `${section.sectionId}_name`;
+      this.$utils.clearErrors(this.errors.formEdit, { [errorKey]: '' });
 
       try {
         await this.$api['sections'].editSection(section);
@@ -186,12 +176,13 @@ export default defineComponent({
           message: this.$t('Section edited'),
         });
       } catch (errors: any) {
-        if (errors.server) {
-          this.$utils.showMessageError({ message: errors.server });
-          return;
+        let errorsMsgs = {
+          [errorKey]: errors.errors?.name,
+        };
+        let isValidationError = this.$utils.setErrors(this.errors.formEdit, errorsMsgs, true);
+        if (!isValidationError) {
+          this.$utils.showMessageError({ message: errors.server, errors });
         }
-        let { name } = errors.errors;
-        this.errors.formEdit[`${section.sectionId}_name`] = name;
       } finally {
         this.isSendingFormEdit = false;
       }

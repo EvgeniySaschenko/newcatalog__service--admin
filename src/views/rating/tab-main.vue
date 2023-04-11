@@ -187,7 +187,6 @@ export default defineComponent({
       errors: {
         name: '',
         descr: '',
-        server: '',
         sectionsIds: '',
       },
     };
@@ -228,9 +227,7 @@ export default defineComponent({
         this.ratingIsHiden = this.rating.isHiden;
         this.initialStateRating = JSON.stringify(this.rating);
       } catch (errors: any) {
-        if (errors.server) {
-          this.$utils.showMessageError({ message: errors.server });
-        }
+        this.$utils.showMessageError({ message: errors.server, errors });
       } finally {
         this.isLoading = false;
       }
@@ -256,11 +253,10 @@ export default defineComponent({
 
         ratingIdNew = ratingId;
       } catch (errors: any) {
-        if (errors.server) {
-          this.$utils.showMessageError({ message: errors.server });
-          return;
+        let isValidationError = this.$utils.setErrors(this.errors, errors.errors);
+        if (!isValidationError) {
+          this.$utils.showMessageError({ message: errors.server, errors });
         }
-        this.$utils.setErrors(this.errors, errors.errors);
       } finally {
         this.isLoading = false;
       }
@@ -293,11 +289,10 @@ export default defineComponent({
 
         isSuccess = true;
       } catch (errors: any) {
-        if (errors.server) {
-          this.$utils.showMessageError({ message: errors.server });
-          return;
+        let isValidationError = this.$utils.setErrors(this.errors, errors.errors);
+        if (!isValidationError) {
+          this.$utils.showMessageError({ message: errors.server, errors });
         }
-        this.$utils.setErrors(this.errors, errors.errors);
       } finally {
         this.isLoading = false;
       }
@@ -331,13 +326,7 @@ export default defineComponent({
         });
         this.$router.push({ path: `/ratings` });
       } catch (errors: any) {
-        if (errors.server) {
-          this.$utils.showMessageError({ message: errors.server });
-          return;
-        }
-        if (errors.errors.rating) {
-          this.$utils.showMessageError({ message: errors.errors.rating });
-        }
+        this.$utils.showMessageError({ message: errors.server || errors.errors?.rating, errors });
       } finally {
         this.isLoading = false;
       }
@@ -367,9 +356,7 @@ export default defineComponent({
 
         throw { server: this.$t('There were errors while creating the cache') };
       } catch (errors: any) {
-        if (errors.server) {
-          this.$utils.showMessageError({ message: errors.server });
-        }
+        this.$utils.showMessageError({ message: errors.server, errors });
       } finally {
         this.isLoading = false;
       }
@@ -392,10 +379,7 @@ export default defineComponent({
         });
         isSuccess = true;
       } catch (errors: any) {
-        if (errors.server) {
-          this.$utils.showMessageError({ message: errors.server });
-          return;
-        }
+        this.$utils.showMessageError({ message: errors.server, errors });
       } finally {
         this.isLoading = false;
       }

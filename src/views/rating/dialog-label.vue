@@ -76,7 +76,6 @@ export default defineComponent({
     return {
       // Errors
       errors: {
-        server: '',
         name: '',
         color: '',
       },
@@ -138,11 +137,10 @@ export default defineComponent({
 
         this.$emit('label:update', { event: 'create' });
       } catch (errors: any) {
-        if (errors.server) {
-          this.$utils.showMessageError({ message: errors.server });
-          return;
+        let isValidationError = this.$utils.setErrors(this.errors, errors.errors);
+        if (!isValidationError) {
+          this.$utils.showMessageError({ message: errors.server, errors });
         }
-        this.$utils.setErrors(this.errors, errors.errors);
       } finally {
         this.isLoading = false;
       }
@@ -168,11 +166,10 @@ export default defineComponent({
 
         this.$emit('label:update', { event: 'edit' });
       } catch (errors: any) {
-        if (errors.server) {
-          this.$utils.showMessageError({ message: errors.server });
-          return;
+        let isValidationError = this.$utils.setErrors(this.errors, errors.errors);
+        if (!isValidationError) {
+          this.$utils.showMessageError({ message: errors.server, errors });
         }
-        this.$utils.setErrors(this.errors, errors.errors);
       } finally {
         this.isLoading = false;
       }
@@ -199,9 +196,7 @@ export default defineComponent({
         this.$emit('label:update', { event: 'delete' });
         this.$emit('dialog:closed');
       } catch (errors: any) {
-        if (errors.server) {
-          this.$utils.showMessageError({ message: errors.server });
-        }
+        this.$utils.showMessageError({ message: errors.server, errors });
       } finally {
         this.isLoading = false;
       }
