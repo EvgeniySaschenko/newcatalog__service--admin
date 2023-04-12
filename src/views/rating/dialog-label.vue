@@ -41,7 +41,7 @@ export default defineComponent({
   props: {
     // Label name
     name: {
-      type: Object,
+      type: Object as () => LangType,
       default: () => {
         return $langs('site');
       },
@@ -91,7 +91,7 @@ export default defineComponent({
     };
   },
   created() {
-    this.label.name = { ...(this.name as LangType) };
+    this.label.name = { ...this.name };
     this.label.color = this.color || this.$config['labels'].colorDefault;
   },
   methods: {

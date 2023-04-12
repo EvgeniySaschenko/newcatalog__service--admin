@@ -117,7 +117,7 @@ let ratingInit = (): Omit<RatingType, 'userId'> => {
   return {
     ratingId: 0,
     // Selected sections
-    sectionsIds: {},
+    sectionsIds: {} as Record<string, number>,
     // Name rating
     name: $langs('site'),
     // Descriptin rating

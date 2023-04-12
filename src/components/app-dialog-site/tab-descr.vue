@@ -84,13 +84,13 @@ export default defineComponent({
   props: {
     // List labels
     labels: {
-      type: Array,
-      default: () => [] as LabelType[],
+      type: Array as () => LabelType[],
+      default: () => [],
     },
 
     // Current rating item
     site: {
-      type: Object,
+      type: Object as () => RatingItemType,
       default: () => {},
     },
 

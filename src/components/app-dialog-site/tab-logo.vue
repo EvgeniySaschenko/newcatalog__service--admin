@@ -94,6 +94,7 @@ include /src/mixins.pug
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { RatingItemType } from '@/types';
 import AppImgColor from '@/components/app-img-color/app-img-color.vue';
 
 export default defineComponent({
@@ -123,7 +124,7 @@ export default defineComponent({
   props: {
     // Site
     site: {
-      type: Object,
+      type: Object as () => RatingItemType,
       required: true,
     },
   },

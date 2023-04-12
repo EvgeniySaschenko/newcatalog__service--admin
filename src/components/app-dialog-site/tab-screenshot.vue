@@ -60,6 +60,7 @@ include /src/mixins.pug
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { RatingItemType } from '@/types';
 
 export default defineComponent({
   inject: ['provideEmitUpdateRatingItem'],
@@ -80,7 +81,7 @@ export default defineComponent({
   props: {
     // Site data
     site: {
-      type: Object,
+      type: Object as () => RatingItemType,
       required: true,
     },
   },
