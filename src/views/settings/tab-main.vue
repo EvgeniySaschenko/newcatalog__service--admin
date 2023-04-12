@@ -4,8 +4,24 @@ include /src/mixins.pug
 el-form.form-login(label-position='top', v-loading='isLoading')
   .u-mb--10
     el-alert(
-      :title='$t(`To see the changes in the admin panel, you need to refresh the page`)',
+      :title='$t("To see the changes in the admin panel, you need to refresh the page.")',
       type='warning',
+      show-icon,
+      :closable='false'
+    )
+
+  .u-mb--10
+    el-alert(
+      :title='$t("Sites will be displayed in the language you selected in the language switcher.")',
+      type='info',
+      show-icon,
+      :closable='false'
+    )
+  //
+  .u-mb--10
+    el-alert(
+      :title='`${$t("Texts for the main site, in the admin panel will be displayed in the default language for the main site.")} ${$t("For example rating name or label text will be displayed in the main sat language.")}`',
+      type='info',
       show-icon,
       :closable='false'
     )
@@ -51,13 +67,6 @@ el-form.form-login(label-position='top', v-loading='isLoading')
           )
             b [{{ item.code }}] &nbsp;
             span {{ item.name }}
-
-        el-tooltip(
-          :content='$t("Note! This setting is global, so it may not be the same as the language switcher")',
-          placement='top'
-        )
-          el-icon.u-m--10
-            el-icon-question-filled
 
       el-tag.u-m--5(type='danger', size='small') API SERVER
       el-tag.u-m--5(type='danger', size='small') ADMIN PANEL
