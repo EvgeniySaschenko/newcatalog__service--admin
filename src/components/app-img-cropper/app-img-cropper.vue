@@ -22,12 +22,13 @@ include /src/mixins.pug
   )
 </template>
 
-<script>
+<script lang="ts">
 import 'vue-cropper/dist/index.css';
 import { VueCropper } from 'vue-cropper';
 import AppImgColor from '@/components/app-img-color/app-img-color.vue';
+import { defineComponent } from 'vue';
 
-export default {
+export default defineComponent({
   emits: ['update:img-data'],
   props: {
     img: {
@@ -74,12 +75,12 @@ export default {
   methods: {
     // Crop canvas img
     cropCanvasImg() {
-      this.$refs.cropper.getCropData((imgBase64) => {
+      (this.$refs.cropper as any).getCropData((imgBase64: string) => {
         this.imgBase64 = imgBase64;
       });
     },
 
-    emitImgData($event) {
+    emitImgData($event: { color: string }) {
       this.$emit('update:img-data', {
         params: this.calcCanvasImgParams(),
         color: $event.color,
@@ -89,8 +90,8 @@ export default {
 
     // Calc coordinates and sizes
     calcCanvasImgParams() {
-      let imgAxis = this.$refs.cropper.getImgAxis();
-      let cropAxis = this.$refs.cropper.getCropAxis();
+      let imgAxis = (this.$refs.cropper as any).getImgAxis();
+      let cropAxis = (this.$refs.cropper as any).getCropAxis();
 
       return {
         top: Math.round(Math.abs(imgAxis.y1 - cropAxis.y1)),
@@ -102,7 +103,7 @@ export default {
       };
     },
   },
-};
+});
 </script>
 
 <style lang="sass">

@@ -14,22 +14,29 @@ el-dialog(fullscreen, :model-value='true', @closed='$emit("dialog:closed")')
       ) {{ $t('Update') }}
     el-tabs(v-model='tabActive', type='border-card')
       // TAB - descr
-      el-tab-pane(:label='$t("Description")', name='descr')
+      el-tab-pane(:label='$t("Description")', :name='TabsEnum.descr')
         tab-descr(:ratingId='ratingId', :labels='labels', :site='site', :isModeEdit='isModeEdit')
       // TAB - screenshot
-      el-tab-pane(:label='$t("Screenshot")', name='screenshot', v-if='isModeEdit')
+      el-tab-pane(:label='$t("Screenshot")', :name='TabsEnum.screenshot', v-if='isModeEdit')
         tab-screenshot(:site='site')
       // TAB - logo
-      el-tab-pane(:label='$t("Logo")', name='logo', v-if='isModeEdit')
+      el-tab-pane(:label='$t("Logo")', :name='TabsEnum.logo', v-if='isModeEdit')
         tab-logo(:site='site')
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { LabelType } from '@/types';
+import { LabelType, RatingItemType } from '@/types';
 import TabDescr from './tab-descr.vue';
 import TabScreenshot from './tab-screenshot.vue';
 import TabLogo from './tab-logo.vue';
+
+enum TabsEnum {
+  descr = 'descr',
+  screenshot = 'screenshot',
+  logo = 'logo',
+}
+type TabsType = TabsEnum.descr | TabsEnum.screenshot | TabsEnum.logo;
 
 export default defineComponent({
   emits: ['rating-item:update', 'dialog:closed'],
@@ -47,7 +54,8 @@ export default defineComponent({
   data() {
     return {
       // Tab current
-      tabActive: 'descr',
+      tabActive: TabsEnum.descr as TabsType,
+      TabsEnum: TabsEnum,
     };
   },
   components: {
@@ -59,13 +67,13 @@ export default defineComponent({
   props: {
     // List labels
     labels: {
-      type: Array,
-      default: () => [] as LabelType[],
+      type: Array as () => LabelType[],
+      default: () => [],
     },
 
     // Current rating item
     site: {
-      type: Object,
+      type: Object as () => RatingItemType,
       default: () => {},
     },
 

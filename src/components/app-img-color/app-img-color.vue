@@ -17,7 +17,7 @@ include /src/mixins.pug
         )
 </template>
 
-<script>
+<script lang="ts">
 import rgb2hex from 'rgb2hex';
 import { defineComponent } from 'vue';
 
@@ -28,7 +28,7 @@ export default defineComponent({
   },
   props: {
     imgData: {
-      type: Object,
+      type: Object as () => { img: string; color: string },
       default: () => {
         return {
           img: '',
@@ -65,11 +65,11 @@ export default defineComponent({
 
   methods: {
     // Crop image
-    addCanvasImg(img) {
-      let { canvas } = this.$refs;
+    addCanvasImg(img: string) {
+      let canvas: HTMLCanvasElement = this.$refs.canvas as HTMLCanvasElement;
       let ctx = canvas.getContext('2d');
       let elementImg = document.createElement('img');
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      (ctx as CanvasRenderingContext2D).clearRect(0, 0, canvas.width, canvas.height);
       elementImg.src = img;
 
       elementImg.addEventListener('load', () => {
@@ -77,7 +77,7 @@ export default defineComponent({
         this.canvasHeight = height;
         this.canvasWidth = width;
         this.$nextTick(() => {
-          ctx.drawImage(elementImg, 0, 0, width, height);
+          (ctx as CanvasRenderingContext2D).drawImage(elementImg, 0, 0, width, height);
         });
       });
     },
@@ -87,7 +87,9 @@ export default defineComponent({
       this.canvasWidth = 10;
       this.canvasHeight = 10;
       this.color = '';
-      this.$refs.canvas.getContext('2d').clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+      let canvas: HTMLCanvasElement = this.$refs.canvas as HTMLCanvasElement;
+      let ctx = canvas.getContext('2d');
+      (ctx as CanvasRenderingContext2D).clearRect(0, 0, this.canvasWidth, this.canvasHeight);
     },
 
     // Add image / color to canvas
@@ -98,12 +100,13 @@ export default defineComponent({
     },
 
     // Gets the color of the clicked pixel
-    getCanvasColor(event) {
-      let { canvas } = this.$refs;
-      let bounds = event.target.getBoundingClientRect();
-      let x = event.clientX - bounds.left;
-      let y = event.clientY - bounds.top;
-      let [red, green, blue] = canvas.getContext('2d').getImageData(x, y, 1, 1).data;
+    getCanvasColor($event: { target: Element; clientX: number; clientY: number }) {
+      let canvas: HTMLCanvasElement = this.$refs.canvas as HTMLCanvasElement;
+      let bounds = $event.target.getBoundingClientRect();
+      let x = $event.clientX - bounds.left;
+      let y = $event.clientY - bounds.top;
+      let ctx = canvas.getContext('2d');
+      let [red, green, blue] = (ctx as CanvasRenderingContext2D).getImageData(x, y, 1, 1).data;
       this.color = rgb2hex(`rgb(${red},${green},${blue})`).hex;
       this.$emit('update:img-data', {
         color: this.color,
