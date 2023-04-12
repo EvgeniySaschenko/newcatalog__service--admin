@@ -15,13 +15,7 @@ el-dialog(fullscreen, :model-value='true', @closed='$emit("dialog:closed")')
     el-tabs(v-model='tabActive', type='border-card')
       // TAB - descr
       el-tab-pane(:label='$t("Description")', name='descr')
-        tab-descr(
-          :ratingId='ratingId',
-          :labels='labels',
-          :site='site',
-          :labelsIdsLimit='labelsIdsLimit',
-          :isModeEdit='isModeEdit'
-        )
+        tab-descr(:ratingId='ratingId', :labels='labels', :site='site', :isModeEdit='isModeEdit')
       // TAB - screenshot
       el-tab-pane(:label='$t("Screenshot")', name='screenshot', v-if='isModeEdit')
         tab-screenshot(:site='site')
@@ -73,11 +67,6 @@ export default defineComponent({
     site: {
       type: Object,
       default: () => {},
-    },
-
-    // Labels max count
-    labelsIdsLimit: {
-      type: Number,
     },
 
     // Only from add new sites

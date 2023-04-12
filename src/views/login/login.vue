@@ -65,7 +65,7 @@ export default defineComponent({
           password: this.password,
         });
 
-        window.location.href = this.$user.pageDefault;
+        window.location.href = this.$config['pages-specific'].default;
       } catch (errors: any) {
         let isValidationError = this.$utils.setErrors(this.errors, errors.errors);
         if (!isValidationError) {

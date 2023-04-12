@@ -19,7 +19,7 @@ include /src/mixins.pug
   +e.row-about
     el-link.text-uppercase(type='primary') {{ curItem.host }}
     el-button(type='primary', icon='el-icon-refresh', size='small', @click='getSitesSreens()') {{ $t('Update list') }}
-  app-img-cropper(:img='curItem.img', @update:img-data='setImgDataResult($event)')
+  app-img-cropper(:img='curItem.screenshotImg', @update:img-data='setImgDataResult($event)')
 </template>
 
 <script lang="ts">
@@ -29,7 +29,7 @@ import { SiteLogoScreenshotParamsType, SiteType, SiteScreenshotType } from '@/ty
 
 type LogoDataForCreateType = {
   siteScreenshotId: SiteScreenshotType['siteScreenshotId'];
-  img: SiteScreenshotType['screenshotImg'];
+  screenshotImg: SiteScreenshotType['screenshotImg'];
   color: SiteType['color'];
   params: SiteLogoScreenshotParamsType['logoScreenshotParams'];
   isSend: boolean;
@@ -41,7 +41,7 @@ function SiteLogoScreenshotParamsDefault(): LogoDataForCreateType {
     siteScreenshotId: 0,
     isSend: false,
     color: '',
-    img: '',
+    screenshotImg: '',
     params: {
       cutHeight: 0,
       cutWidth: 0,
@@ -101,8 +101,7 @@ export default defineComponent({
 
       try {
         let sreens = await this.$api['sites'].getSitesSreens({ ratingId: this.ratingId });
-        this.sreens = sreens.map((el: any) => {
-          el.img = el.screenshotImg;
+        this.sreens = sreens.map((el: LogoDataForCreateType) => {
           Object.assign(SiteLogoScreenshotParamsDefault(), el); // add default props
           return el;
         });
@@ -157,11 +156,16 @@ export default defineComponent({
         default:
           this.curIndex = 0;
       }
+
       this.curItem = JSON.parse(JSON.stringify(this.sreens[this.curIndex]));
     },
 
     // Set logo params
-    setImgDataResult({ params, color, imgBase64 }: LogoDataForCreateType) {
+    setImgDataResult({
+      params,
+      color,
+      imgBase64,
+    }: Pick<LogoDataForCreateType, 'params' | 'color' | 'imgBase64'>) {
       if (imgBase64) {
         this.curItem.params = params;
         this.curItem.imgBase64 = imgBase64;

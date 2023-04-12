@@ -180,7 +180,7 @@ export default defineComponent({
       // Sections
       sections: [] as SectionType[],
       // Maximum number of partitions
-      sectionsIdsLimit: 2,
+      sectionsIdsLimit: this.$config['ratings'].sectionsLimitMax,
       // isLoading
       isLoading: false,
       // Messages
@@ -223,7 +223,7 @@ export default defineComponent({
       this.isLoading = true;
       try {
         this.rating = await this.$api['ratings'].getRating({ ratingId });
-        this.sectionsIds = Object.values(this.rating.sectionsIds) as number[];
+        this.sectionsIds = Object.values(this.rating.sectionsIds);
         this.ratingIsHiden = this.rating.isHiden;
         this.initialStateRating = JSON.stringify(this.rating);
       } catch (errors: any) {
@@ -242,7 +242,7 @@ export default defineComponent({
 
       try {
         let sectionsIds = this.sectionsIds.reduce((a, v) => ({ ...a, [v]: v }), {});
-        let { ratingId, name } = await this.$api['ratings'].createRating({
+        let { ratingId } = await this.$api['ratings'].createRating({
           ...this.rating,
           sectionsIds,
         });

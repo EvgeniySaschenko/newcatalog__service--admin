@@ -69,6 +69,8 @@ export default defineComponent({
       } as RatingItemType,
       // id labels - needed because the component works with an array, and an object is sent to the server (field "itemCurrent.labelsIds")
       labelsIds: [] as number[],
+      // Labels max count
+      labelsIdsLimit: this.$config['sites'].labelsLimitMax,
       // Loading data
       isLoading: false,
       // Error messages
@@ -90,11 +92,6 @@ export default defineComponent({
     site: {
       type: Object,
       default: () => {},
-    },
-
-    // Labels max count
-    labelsIdsLimit: {
-      type: Number,
     },
 
     // Element add or edit

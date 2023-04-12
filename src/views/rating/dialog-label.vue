@@ -16,7 +16,7 @@ el-dialog(:title='title', :model-value='true', @closed='$emit("dialog:closed")')
     el-form-item(:error='errors.color', :label='$t("Label color")')
       +e.colors
         +e.colors-item(
-          v-for='item in colorsDefault',
+          v-for='item in colorsListDefault',
           :style='{ backgroundColor: item, borderColor: label.color == item ? label.color : "#fff" }',
           :key='item',
           @click='setColor(item)'
@@ -49,7 +49,7 @@ export default defineComponent({
     // Label color
     color: {
       type: String,
-      default: '#7952b3',
+      default: '',
     },
     // Title dialog
     title: {
@@ -87,30 +87,12 @@ export default defineComponent({
         color: '',
       },
       // Default colors
-      colorsDefault: [
-        '#7952b3',
-        '#E94B3C',
-        '#409EFF',
-        '#67C23A',
-        '#E6A23C',
-        '#F56C6C',
-        '#909399',
-        '#e91e63',
-        '#9c27b0',
-        '#009688',
-        '#357a38',
-        '#4780ad',
-        '#4615b2',
-        '#00FF00',
-        '#000000',
-        '#ff9100',
-        '#003C7A',
-      ],
+      colorsListDefault: this.$config['labels'].colorsListDefault,
     };
   },
   created() {
     this.label.name = { ...(this.name as LangType) };
-    this.label.color = this.color;
+    this.label.color = this.color || this.$config['labels'].colorDefault;
   },
   methods: {
     // Set color
