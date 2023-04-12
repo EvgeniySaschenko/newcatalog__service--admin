@@ -2,8 +2,8 @@
 include /src/mixins.pug
 
 .wrapper(v-loading='isLoading')
-  app-header(v-if='isInitRedy')
-  router-view(v-if='isInitRedy || $user.isPageLogin')
+  app-header(v-if='isAppRedy')
+  router-view(v-if='isAppRedy || isPageLogin')
   footer.container
 </template>
 
@@ -22,31 +22,44 @@ export default defineComponent({
   },
   data() {
     return {
+      // Loading
       isLoading: false,
-      isInitRedy: false,
+      // Indicates that the application has received all the required data
+      isAppRedy: false,
+      // The time of the last action with the page, if the user has been inactive for a long time, he will be logged out
       lastActivityTime: Date.now(),
+      // Indicates that the user is logged in
+      isUserAuth: false,
     };
+  },
+
+  computed: {
+    isPageLogin() {
+      return (
+        this.$route.path == this.$config['pages-specific'].login ||
+        location.pathname == this.$config['pages-specific'].login
+      );
+    },
   },
 
   components: {
     AppHeader,
   },
 
-  async created() {
+  async mounted() {
     await this.init();
   },
 
   methods: {
     // Get sections
     async init() {
-      if (this.$user.isPageLogin) return;
       if (this.isLoading) return;
       this.isLoading = true;
 
       try {
         // This request is made to check if the user is logged in.
-        let isLogin: any = await this.refreshAuth();
-        if (!isLogin) return;
+        await this.refreshAuth();
+        if (!this.isUserAuth) return;
         await this.updateSessionExpiration();
         this.setUserActivityLastTime();
         let sections = await this.$api['sections'].getSections();
@@ -60,7 +73,7 @@ export default defineComponent({
 
         this.$setTranslations({ translations });
         this.setLangs(settings.settings);
-        this.isInitRedy = true;
+        this.isAppRedy = true;
       } catch (errors: any) {
         this.$utils.showMessageError({ message: errors.server, errors });
       } finally {
@@ -89,10 +102,14 @@ export default defineComponent({
     // Check session expiration
     async refreshAuth() {
       try {
-        return await this.$api['user'].refreshAuth();
+        await this.$api['user'].refreshAuth();
+        this.isUserAuth = true;
+        return;
       } catch (errors: any) {
+        if (errors.is_not_authorized) return;
         this.$utils.showMessageError({ message: errors.server, errors });
       }
+      this.isUserAuth = false;
     },
 
     // Log out
@@ -110,13 +127,13 @@ export default defineComponent({
 
     // Update session expiration
     async updateSessionExpiration() {
-      if (!this.$user.isPageLogin) {
-        let refreshTockenTime = this.$user.refreshTockenTime * 1000;
+      if (this.isUserAuth) {
+        let refreshTockenTime = this.$config['user'].refreshTockenTime * 1000;
 
         let idInterval = await setInterval(async () => {
           let userIdleTime = (Date.now() - this.lastActivityTime) / 1000;
 
-          if (userIdleTime > this.$user.userIdleTime * 1000) {
+          if (userIdleTime > this.$config['user'].idleTime * 1000) {
             await this.logOut();
             clearInterval(idInterval);
           } else {

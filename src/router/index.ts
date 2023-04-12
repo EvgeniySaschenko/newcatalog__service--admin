@@ -1,55 +1,94 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { PagesKeys } from '@/types';
+import { $t } from '@/plugins/translations';
+import { $config } from '@/plugins/config';
+import { $utils } from '@/plugins/utils';
 
 let routes = [
   {
-    path: '/ratings',
-    name: PagesKeys['Ratings list'],
+    path: $config['pages-specific'].default,
+    name: $t('Ratings list'),
     component: () => import('@/views/ratings/ratings.vue'),
   },
   {
     path: '/sections',
-    name: PagesKeys['Sections list'],
+    name: $t('Sections list'),
     component: () => import('@/views/sections/sections.vue'),
   },
   {
     path: '/ratings/create',
-    name: PagesKeys['Create a new rating'],
+    name: $t('Create a new rating'),
     component: () => import('@/views/rating/rating.vue'),
   },
   {
     path: '/ratings/:ratingId',
-    name: PagesKeys['Edit rating'],
+    name: $t('Edit rating'),
     component: () => import('@/views/rating/rating.vue'),
   },
   {
     path: '/cache',
-    name: PagesKeys['Cache control'],
+    name: $t('Cache control'),
     component: () => import('@/views/cache/cache.vue'),
   },
   {
     path: '/user',
-    name: PagesKeys['User profile'],
+    name: $t('User profile'),
     component: () => import('@/views/user/user.vue'),
   },
   {
     path: '/settings',
-    name: PagesKeys['App Settings'],
+    name: $t('App Settings'),
     component: () => import('@/views/settings/settings.vue'),
   },
   {
-    path: '/login',
-    name: PagesKeys['Login'],
+    path: $config['pages-specific'].login,
+    name: $t('Login'),
     component: () => import('@/views/login/login.vue'),
   },
   {
     path: '/',
-    name: PagesKeys['Home'],
+    name: $t('Home Page'),
     redirect: (to: any) => {
-      return { path: '/ratings' };
+      return { path: $config['pages-specific'].default };
     },
   },
 ];
+
+// Create routes map
+export let $routesMap = {} as Record<string, { path: string; name: string }>;
+
+for (let { path, name } of routes) {
+  $routesMap[name] = {
+    path,
+    name,
+  };
+}
+
+// Checking for duplicate names
+(function () {
+  let checkKeys = {} as Record<string, number>;
+  for (let { name } of routes) {
+    if (!checkKeys[name]) {
+      checkKeys[name] = 1;
+    } else {
+      let error = $t('Routes must not have the same name');
+      let message = `${error}: "${name}"`;
+      console.error(message);
+      $utils.showMessageError({ message });
+    }
+  }
+})();
+
+// Checking for compliance with the main menu
+(function () {
+  for (let name of $config['main-menu']) {
+    if (!$routesMap[name]) {
+      let error = $t('The router does not have a key that is used in the main menu');
+      let message = `${error}: "${name}"`;
+      console.error(message);
+      $utils.showMessageError({ message });
+    }
+  }
+})();
 
 let router = createRouter({
   history: createWebHistory(process.env.BASE_URL),

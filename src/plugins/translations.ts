@@ -1,44 +1,71 @@
 import { LangType, ServicesLangsType, ServicesLangsEnum } from '@/types';
 import cookies from 'vue-cookies';
+import { $config } from '@/plugins/config';
 
 /* 
   !!! The correct list of languages and the default language will be obtained from the server from the application settings !!!
 */
 
-// Lang default
-let langDefaultServices: Record<ServicesLangsType, keyof LangType> = {
-  admin: 'en',
-  site: 'en',
-};
-
-// Langs
-let langsServices: Record<ServicesLangsType, LangType> = {
-  admin: {
-    en: '',
-  },
-  site: {
-    en: '',
-  },
-};
-
-// Translations list
-type TranslationsListType = Record<keyof LangType, Record<string, string>>;
-
-let translationsList = {} as unknown as TranslationsListType;
-
 // JSON.parse(JSON.stringify( -- Because objects are copied by reference
 
-// Get langs
-export let $langs = (serviceName: ServicesLangsType): LangType => {
-  return JSON.parse(JSON.stringify(langsServices[serviceName]));
-};
+/*
+  Lang default  
+*/
 
-// Get lang default
+let langDefaultServices: Record<ServicesLangsType, keyof LangType> = JSON.parse(
+  JSON.stringify($config['translations'].langDefaultServices)
+);
+// Get
 export let $langDefault = (serviceName: ServicesLangsType): keyof LangType => {
   return JSON.parse(JSON.stringify(langDefaultServices[serviceName]));
 };
 
-// Set langs app
+// Set
+type $setLangDefault = {
+  langDefault: keyof LangType;
+  serviceName: ServicesLangsType;
+};
+
+let langDefaultCookieName = $config['translations'].langDefaultCookieName;
+let langDefaultCookieAge = $config['translations'].langDefaultCookieAge;
+
+export function $setLangDefault({ langDefault, serviceName }: $setLangDefault) {
+  // If admin, we try to set the language based on cookies
+  if (ServicesLangsEnum.admin === serviceName) {
+    let langCookie = (cookies as any).get(langDefaultCookieName);
+    let isExistInList = Object.keys($langs(ServicesLangsEnum.admin)).includes(langCookie);
+
+    if (!isExistInList) {
+      (cookies as any).remove(langDefaultCookieName);
+    } else {
+      langDefault = langCookie;
+    }
+  }
+
+  langDefaultServices[serviceName] = langDefault;
+}
+
+// Set cookie
+export function $setCokieLangDefault({ langDefault }: { langDefault: keyof LangType }) {
+  let isExistInList = Object.keys($langs(ServicesLangsEnum.admin)).includes(langDefault);
+  if (!isExistInList) return;
+  (cookies as any).set(langDefaultCookieName, langDefault, langDefaultCookieAge);
+}
+
+/*
+  Langs
+*/
+
+let langsServices: Record<ServicesLangsType, LangType> = JSON.parse(
+  JSON.stringify($config['translations'].langsServices)
+);
+
+// Get
+export let $langs = (serviceName: ServicesLangsType): LangType => {
+  return JSON.parse(JSON.stringify(langsServices[serviceName]));
+};
+
+// Set
 type $setLangsType = {
   langs: LangType;
   serviceName: ServicesLangsType;
@@ -48,36 +75,13 @@ export function $setLangs({ langs, serviceName }: $setLangsType) {
   langsServices[serviceName] = langs;
 }
 
-// Set lang default
-type $setLangDefault = {
-  langDefault: keyof LangType;
-  serviceName: ServicesLangsType;
-};
+/* 
+  Translations list
+*/
 
-export let cookieNameLangDefault = 'langDefault';
+type TranslationsListType = Record<keyof LangType, Record<string, string>>;
 
-export function $setLangDefault({ langDefault, serviceName }: $setLangDefault) {
-  // If admin, we try to set the language based on cookies
-  if (ServicesLangsEnum.admin === serviceName) {
-    let langCookie = (cookies as any).get(cookieNameLangDefault);
-    let isExistInList = Object.keys($langs(ServicesLangsEnum.admin)).includes(langCookie);
-
-    if (!isExistInList) {
-      (cookies as any).remove(cookieNameLangDefault);
-    } else {
-      langDefault = langCookie;
-    }
-  }
-
-  langDefaultServices[serviceName] = langDefault;
-}
-
-// Set cookie lang default (admin)
-export function $setCokieLangDefault({ langDefault }: { langDefault: keyof LangType }) {
-  let isExistInList = Object.keys($langs(ServicesLangsEnum.admin)).includes(langDefault);
-  if (!isExistInList) return;
-  (cookies as any).set(cookieNameLangDefault, langDefault, '365d');
-}
+let translationsList = {} as unknown as TranslationsListType;
 
 // Set translations
 export function $setTranslations({ translations }: { translations: any }) {

@@ -4,8 +4,8 @@ include /src/mixins.pug
   +e.row--top
     .container
       +e.col-1
-        +e.ROUTER-LINK.logo(to='/ratings')
-          +e.IMG.logo-img(src='@/assets/img/logo.png')
+        +e.ROUTER-LINK.logo(:to='logoUrl')
+          +e.IMG.logo-img(src='@/assets/images/logo.png')
       +e.col-2
         language-swich.u-m--5
         el-button.u-m--5(@click='provideLogOut()', type='danger') {{ $t('Exit') }}
@@ -26,6 +26,11 @@ export default defineComponent({
   components: {
     MenuMain,
     LanguageSwich,
+  },
+  data() {
+    return {
+      logoUrl: this.$config['pages-specific'].default,
+    };
   },
 });
 </script>

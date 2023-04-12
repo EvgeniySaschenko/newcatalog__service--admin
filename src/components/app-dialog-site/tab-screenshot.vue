@@ -70,7 +70,7 @@ export default defineComponent({
       // File of selected screenshot
       customScreenshotFile: null as File | null,
       // Mime types
-      screenshotMimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'application/json'],
+      screenshotMimeTypes: this.$config['images'].screenshotMimeTypes,
       // Loading data
       isLoading: false,
       isShowConfirmNewScreenshot: false,

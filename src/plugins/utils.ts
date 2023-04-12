@@ -1,5 +1,6 @@
 import { $t } from '@/plugins/translations';
 import { ElMessage, ElMessageBox } from 'element-plus';
+import { $config } from '@/plugins/config';
 
 // Tell TypeScript that this property is global i.e. available in components via "this"
 declare module '@vue/runtime-core' {
@@ -27,7 +28,7 @@ export let $utils = {
         break;
     }
 
-    return new Intl.DateTimeFormat('uk', options).format(new Date(date));
+    return new Intl.DateTimeFormat($config['date'].dateTimeFormat, options).format(new Date(date));
   },
   /*
     Show confirmation dialog
@@ -88,7 +89,11 @@ export let $utils = {
     isForce - If the value is true, add add an error message even if the rkey was not previously in the object
     Adds error messages to "targetObject" if fields are present in "targetObject" and "keysErrors"
   */
-  setErrors(targetObject: any, keysErrors: any, isForce = false) {
+  setErrors(
+    targetObject: Record<string, string>,
+    keysErrors: Record<string, string>,
+    isForce = false
+  ) {
     let isValidationError = false;
     for (let key in keysErrors) {
       if (key in targetObject || isForce) {
@@ -103,28 +108,12 @@ export let $utils = {
     keysErrors - Object containing the keys to be changed
     Clear error messages to "targetObject" if fields are present in "targetObject" and "keysErrors"
   */
-  clearErrors(targetObject: any, keysErrors: any) {
+  clearErrors(targetObject: Record<string, string>, keysErrors: Record<string, string>) {
     for (let key in keysErrors) {
       if (key in targetObject) {
         targetObject[key] = '';
       }
     }
-  },
-
-  /*
-    Convert object to string QueryParams
-  */
-  convertToQueryParams<T extends object>(obj: T): string {
-    let query: string[] = [];
-    let key: keyof T;
-
-    for (key in obj) {
-      let value = String(obj[key]).trim();
-      if (value !== '' && value !== 'undefined' && typeof key === 'string') {
-        query.push(`${key}=${value}`);
-      }
-    }
-    return query.join('&');
   },
 };
 

@@ -40,7 +40,6 @@ app-dialog-site(
   :labels='labels',
   :site='itemCurrent',
   :ratingId='ratingId',
-  :labelsIdsLimit='labelsIdsLimit',
   @rating-item:update='updateRatingItems($event)',
   @dialog:closed='toggleDialogRatingItem(false, {})'
 )
@@ -69,12 +68,8 @@ export default defineComponent({
       itemCurrent: {} as RatingItemType,
       // Rating items
       ratingItems: [] as RatingItemType[],
-      // Labels max quantity
-      labelsIdsLimit: 5,
       // Loading data
       isLoading: false,
-      // Errors messages
-      errors: {},
     };
   },
   props: {

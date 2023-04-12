@@ -81,7 +81,7 @@ export default defineComponent({
         formAdd: {
           name: '',
         },
-        formEdit: {} as any,
+        formEdit: {} as Record<string, string>,
       },
     };
   },

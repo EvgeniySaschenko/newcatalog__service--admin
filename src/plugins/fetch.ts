@@ -1,4 +1,5 @@
 import { $t } from '@/plugins/translations';
+import { $config } from '@/plugins/config';
 
 export interface FetchType {
   (url: string, params?: RequestInit): Promise<Response>;
@@ -35,11 +36,11 @@ export let $fetch: FetchType = async (url: string, params?: RequestInit): Promis
     // Data validation errors
     throw await response.json();
   } else if (response.status == 401) {
-    let urlLogin = '/login';
     // If the user is not logged in, redirect to the login page
-    if (window.location.pathname !== urlLogin) {
-      window.location.href = '/login';
+    if (window.location.pathname != $config['pages-specific'].login) {
+      window.location.href = $config['pages-specific'].login;
     }
+    throw { is_not_authorized: $t('User is not authorized') };
   } else if (response.status == 404) {
     throw { server: $t('URL not found on server') };
   } else if (response.status > 400) {

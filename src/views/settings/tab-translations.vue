@@ -84,7 +84,7 @@ export default defineComponent({
         maxRecordsPerPage: 0,
         pagesCount: 0,
       } as PaginationType,
-      errors: {},
+      errors: {} as Record<string, string>,
     };
   },
 
