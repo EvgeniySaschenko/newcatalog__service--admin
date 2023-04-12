@@ -1,5 +1,4 @@
 import { LangsListType } from './langs-list';
-import { $t } from '@/plugins/translations';
 
 export type ValueOfType<T> = T[keyof T];
 
@@ -115,7 +114,7 @@ export type RatingType = {
   isHiden: boolean;
   descr: LangType;
   name: LangType;
-  sectionsIds: object;
+  sectionsIds: Record<string, number>;
   typeDisplay: RatingDisplayTypeEnum;
   typeRating: RatingTypeTypeEnum;
   typeSort: RatingSortTypeEnum;
@@ -131,7 +130,7 @@ export type RatingItemType = {
   ratingItemId: number;
   siteScreenshotId: number;
   isHiden: boolean;
-  labelsIds: object;
+  labelsIds: Record<string, number>;
   name: LangType;
   siteId: number;
   priority: number;

@@ -61,7 +61,7 @@ export default defineComponent({
         siteId: 0,
         name: this.$langs('site'),
         url: '',
-        labelsIds: {},
+        labelsIds: {} as Record<string, number>,
         ratingId: 0,
         priority: 0,
         siteScreenshotId: 0,
@@ -133,7 +133,7 @@ export default defineComponent({
 
       this.isLoading = true;
       this.$utils.clearErrors(this.errors, this.errors);
-      let labelsIds = this.labelsIds.reduce((a, v) => ({ ...a, [v]: v }), {}) as LabelType[];
+      let labelsIds = this.labelsIds.reduce((a, v) => ({ ...a, [v]: v }), {});
 
       try {
         await this.$api['ratings-items'].createItem({
@@ -162,7 +162,7 @@ export default defineComponent({
       if (this.isLoading) return;
       this.isLoading = true;
       this.$utils.clearErrors(this.errors, this.errors);
-      let labelsIds = this.labelsIds.reduce((a, v) => ({ ...a, [v]: v }), {}) as LabelType[];
+      let labelsIds = this.labelsIds.reduce((a, v) => ({ ...a, [v]: v }), {});
 
       try {
         await this.$api['ratings-items'].editItem({
