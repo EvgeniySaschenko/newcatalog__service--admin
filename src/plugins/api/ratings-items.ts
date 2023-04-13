@@ -9,7 +9,7 @@ export default {
   }: {
     ratingId: RatingType['ratingId'];
     typeSort: RatingSortTypeEnum;
-  }) => {
+  }): Promise<RatingItemType[]> => {
     let result = await $fetch(`/api/ratings-items/rating/${ratingId}?typeSort=${typeSort}`, {
       method: 'GET',
     });
@@ -24,7 +24,10 @@ export default {
     priority,
     ratingId,
     url,
-  }: Pick<RatingItemType, 'isHiden' | 'labelsIds' | 'name' | 'priority' | 'ratingId' | 'url'>) => {
+  }: Pick<
+    RatingItemType,
+    'isHiden' | 'labelsIds' | 'name' | 'priority' | 'ratingId' | 'url'
+  >): Promise<Pick<RatingItemType, 'ratingItemId'>> => {
     let result = await $fetch(`/api/ratings-items`, {
       method: 'POST',
       body: JSON.stringify({
@@ -51,7 +54,7 @@ export default {
   }: Pick<
     RatingItemType,
     'ratingItemId' | 'isHiden' | 'labelsIds' | 'name' | 'priority' | 'ratingId' | 'url'
-  >) => {
+  >): Promise<true> => {
     let result = await $fetch(`/api/ratings-items/${ratingItemId}`, {
       method: 'PUT',
       body: JSON.stringify({
@@ -68,7 +71,7 @@ export default {
   },
 
   // Delete item for rating
-  deleteItem: async ({ ratingItemId }: Pick<RatingItemType, 'ratingItemId'>) => {
+  deleteItem: async ({ ratingItemId }: Pick<RatingItemType, 'ratingItemId'>): Promise<true> => {
     let result = await $fetch(`/api/ratings-items/${ratingItemId}`, {
       method: 'DELETE',
       body: JSON.stringify({

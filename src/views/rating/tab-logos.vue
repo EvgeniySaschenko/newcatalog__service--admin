@@ -32,16 +32,18 @@ type LogoDataForCreateType = {
   screenshotImg: SiteScreenshotType['screenshotImg'];
   color: SiteType['color'];
   params: SiteLogoScreenshotParamsType['logoScreenshotParams'];
+  host: string;
   isSend: boolean;
   imgBase64: string;
 };
 
-function SiteLogoScreenshotParamsDefault(): LogoDataForCreateType {
+function SiteLogoScreenshotParamsDefault() {
   return {
     siteScreenshotId: 0,
-    isSend: false,
     color: '',
     screenshotImg: '',
+    host: '',
+    isSend: false,
     params: {
       cutHeight: 0,
       cutWidth: 0,
@@ -101,9 +103,9 @@ export default defineComponent({
 
       try {
         let sreens = await this.$api['sites'].getSitesSreens({ ratingId: this.ratingId });
-        this.sreens = sreens.map((el: LogoDataForCreateType) => {
-          Object.assign(SiteLogoScreenshotParamsDefault(), el); // add default props
-          return el;
+        this.sreens = sreens.map((el) => {
+          // add default props
+          return Object.assign(SiteLogoScreenshotParamsDefault(), el);
         });
         this.setCurrentItem();
       } catch (errors: any) {

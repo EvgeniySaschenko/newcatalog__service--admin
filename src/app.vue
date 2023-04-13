@@ -12,7 +12,6 @@ import { defineComponent } from 'vue';
 import { SettingsType, ServicesLangsEnum } from '@/types';
 import AppHeader from '@/components/app-header/app-header.vue';
 import useSectionsStore from '@/store/sections';
-import useSettingsStore from '@/store/settings';
 
 export default defineComponent({
   provide() {
@@ -66,7 +65,6 @@ export default defineComponent({
         let settings = await this.$api['settings'].getSettings();
 
         useSectionsStore().setSections(sections);
-        useSettingsStore().setSettings(settings);
         let translations = await this.$api['translations'].getTranslationsForFunctionTranslate({
           serviceName: ServicesLangsEnum.admin,
         });

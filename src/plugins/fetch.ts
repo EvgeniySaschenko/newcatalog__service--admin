@@ -45,8 +45,8 @@ export let $fetch: FetchType = async (url: string, params?: RequestInit): Promis
     throw { server: $t('URL not found on server') };
   } else if (response.status > 400) {
     // Other server errors
-    console.error(response);
-    throw { server: $t('Server error') };
+    let message = (await response.json())?.server || $t('Server error');
+    throw { server: message };
   }
   return response;
 };

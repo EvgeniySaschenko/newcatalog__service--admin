@@ -1,4 +1,4 @@
-import { LangType, ServicesLangsType, ServicesLangsEnum } from '@/types';
+import { LangType, ServicesLangsType, ServicesLangsEnum, TranslationsMapType } from '@/types';
 import cookies from 'vue-cookies';
 import { $config } from '@/plugins/config';
 
@@ -76,16 +76,14 @@ export function $setLangs({ langs, serviceName }: $setLangsType) {
 }
 
 /* 
-  Translations list
+  Translations map
 */
 
-type TranslationsListType = Record<keyof LangType, Record<string, string>>;
-
-let translationsList = {} as unknown as TranslationsListType;
+let translationsMap = {} as unknown as TranslationsMapType;
 
 // Set translations
-export function $setTranslations({ translations }: { translations: any }) {
-  translationsList = translations;
+export function $setTranslations({ translations }: { translations: TranslationsMapType }) {
+  translationsMap = translations;
 }
 
 // Function translation
@@ -95,8 +93,8 @@ interface $tType {
 
 export let $t = (key: string): string => {
   let lang = langDefaultServices[ServicesLangsEnum.admin];
-  if (!translationsList[lang]) return key;
-  return translationsList[lang][key] || key;
+  if (!translationsMap[lang]) return key;
+  return translationsMap[lang][key] || key;
 };
 
 // Tell TypeScript that this property is global i.e. available in components via "this"

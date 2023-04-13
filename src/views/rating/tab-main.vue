@@ -113,7 +113,7 @@ import { defineComponent } from 'vue';
 import useStoreSections from '@/store/sections';
 import { $langs } from '@/plugins/translations';
 
-let ratingInit = (): Omit<RatingType, 'userId'> => {
+let ratingInit = (): RatingType => {
   return {
     ratingId: 0,
     // Selected sections
@@ -324,7 +324,7 @@ export default defineComponent({
         this.$utils.showMessageSuccess({
           message: this.$t('Rating removed'),
         });
-        this.$router.push({ path: `/ratings` });
+        this.$router.push({ path: this.$config['pages-specific'].ratings });
       } catch (errors: any) {
         this.$utils.showMessageError({ message: errors.server || errors.errors?.rating, errors });
       } finally {
@@ -351,10 +351,9 @@ export default defineComponent({
           this.$utils.showMessageSuccess({
             message: this.$t('Rating published'),
           });
-          return;
+        } else {
+          throw { server: this.$t('There were errors while creating the cache') };
         }
-
-        throw { server: this.$t('There were errors while creating the cache') };
       } catch (errors: any) {
         this.$utils.showMessageError({ message: errors.server, errors });
       } finally {

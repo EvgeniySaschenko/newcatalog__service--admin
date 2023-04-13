@@ -1,10 +1,9 @@
 import { $fetch } from './_core';
-import { RatingType } from '@/types';
+import { RatingType, RatingsListItemType } from '@/types';
 
 export default {
-  // Сейчас используется кука для userId - нужно исправить и на беке
   // Get the ratings of the user who created them
-  getRatings: async () => {
+  getRatings: async (): Promise<RatingsListItemType[]> => {
     let result = await $fetch(`/api/ratings`, {
       method: 'GET',
     });
@@ -12,7 +11,7 @@ export default {
   },
 
   // Get rating
-  getRating: async ({ ratingId }: Pick<RatingType, 'ratingId'>) => {
+  getRating: async ({ ratingId }: Pick<RatingType, 'ratingId'>): Promise<RatingType> => {
     let result = await $fetch(`/api/ratings/${ratingId}`, {
       method: 'GET',
     });
@@ -31,7 +30,7 @@ export default {
   }: Pick<
     RatingType,
     'name' | 'descr' | 'isHiden' | 'sectionsIds' | 'typeSort' | 'typeDisplay' | 'typeRating'
-  >) => {
+  >): Promise<Pick<RatingType, 'ratingId'>> => {
     let result = await $fetch(`/api/ratings`, {
       method: 'POST',
       body: JSON.stringify({
@@ -67,7 +66,7 @@ export default {
     | 'typeSort'
     | 'typeDisplay'
     | 'typeRating'
-  >) => {
+  >): Promise<true> => {
     let result = await $fetch(`/api/ratings/${ratingId}`, {
       method: 'PUT',
       body: JSON.stringify({
@@ -85,7 +84,7 @@ export default {
   },
 
   // Delete rating
-  deleteRating: async ({ ratingId }: Pick<RatingType, 'ratingId'>) => {
+  deleteRating: async ({ ratingId }: Pick<RatingType, 'ratingId'>): Promise<true> => {
     let result = await $fetch(`/api/ratings/${ratingId}`, {
       method: 'DELETE',
       body: JSON.stringify({ ratingId }),

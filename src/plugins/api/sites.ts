@@ -1,15 +1,16 @@
-import { $fetch, $utils } from './_core';
+import { $fetch } from './_core';
 import {
   RatingItemType,
   RatingType,
   SiteScreenshotType,
   SiteType,
   SiteLogoScreenshotParamsType,
+  SiteScreenshotErrorType,
 } from '@/types';
 
 export default {
   // Get one site
-  getSiteBySiteId: async ({ siteId }: Pick<SiteType, 'siteId'>) => {
+  getSiteBySiteId: async ({ siteId }: Pick<SiteType, 'siteId'>): Promise<SiteType> => {
     let result = await $fetch(`/api/sites/${siteId}`, {
       method: 'GET',
     });
@@ -17,7 +18,9 @@ export default {
   },
 
   // Get screenshots for sites no logo
-  getSitesSreens: async ({ ratingId }: Pick<RatingType, 'ratingId'>) => {
+  getSitesSreens: async ({
+    ratingId,
+  }: Pick<RatingType, 'ratingId'>): Promise<SiteScreenshotType[]> => {
     let result = await $fetch(`/api/sites/screenshots/${ratingId}`, {
       method: 'GET',
     });
@@ -25,7 +28,9 @@ export default {
   },
 
   // Get sites with screenshot error
-  getScrenshotsErrors: async ({ ratingId }: Pick<RatingType, 'ratingId'>) => {
+  getScrenshotsErrors: async ({
+    ratingId,
+  }: Pick<RatingType, 'ratingId'>): Promise<SiteScreenshotErrorType[]> => {
     let result = await $fetch(`/api/sites/screenshots-errors/${ratingId}`, {
       method: 'GET',
     });
@@ -33,7 +38,10 @@ export default {
   },
 
   // Create site screenshot
-  createSiteScreenshot: async ({ siteId, url }: Pick<RatingItemType, 'siteId' | 'url'>) => {
+  createSiteScreenshot: async ({
+    siteId,
+    url,
+  }: Pick<RatingItemType, 'siteId' | 'url'>): Promise<Pick<SiteType, 'siteScreenshotId'>> => {
     let result = await $fetch(`/api/sites/screenshot-create`, {
       method: 'POST',
       body: JSON.stringify({
@@ -48,7 +56,7 @@ export default {
   editSitesColor: async ({
     siteScreenshotId,
     color,
-  }: Pick<RatingItemType, 'siteScreenshotId' | 'color'>) => {
+  }: Pick<RatingItemType, 'siteScreenshotId' | 'color'>): Promise<true> => {
     let result = await $fetch(`/api/sites/color`, {
       method: 'PUT',
       body: JSON.stringify({
@@ -68,7 +76,7 @@ export default {
     siteScreenshotId: SiteScreenshotType['siteScreenshotId'];
     color: SiteType['color'];
     logoScreenshotParams: SiteLogoScreenshotParamsType['logoScreenshotParams'];
-  }) => {
+  }): Promise<true> => {
     let result = await $fetch(`/api/sites/logo-create`, {
       method: 'PUT',
       body: JSON.stringify({
@@ -82,7 +90,7 @@ export default {
   },
 
   // Recreate logo site
-  recreateSiteLogo: async ({ siteId }: Pick<RatingItemType, 'siteId'>) => {
+  recreateSiteLogo: async ({ siteId }: Pick<RatingItemType, 'siteId'>): Promise<true> => {
     let result = await $fetch(`/api/sites/logo-recreate`, {
       method: 'PUT',
       body: JSON.stringify({
@@ -93,7 +101,18 @@ export default {
   },
 
   // Check for a logo or screenshot for a host
-  checkImagesForSite: async ({ host }: { host: RatingItemType['domain'] }) => {
+  checkImagesForSite: async ({
+    host,
+  }: {
+    host: RatingItemType['domain'];
+  }): Promise<{
+    isNotExistImages?: true;
+    isScreenshotProcessCreate?: true;
+    siteId?: number;
+    logoImg?: string;
+    color?: string;
+    screenshotImg?: string;
+  }> => {
     let result = await $fetch(`/api/sites/images-site-check/${host}`, {
       method: 'GET',
     });
@@ -107,7 +126,7 @@ export default {
   }: {
     domainSiteId: SiteType['siteId'];
     subdomainSiteId: RatingItemType['siteId'];
-  }) => {
+  }): Promise<true> => {
     let result = await $fetch(`/api/sites/images-domain-to-subdomain`, {
       method: 'PUT',
       body: JSON.stringify({
@@ -125,7 +144,7 @@ export default {
   }: {
     siteId: RatingItemType['siteId'];
     screenshotFile: File;
-  }) => {
+  }): Promise<Pick<SiteType, 'siteScreenshotId'>> => {
     let data = new FormData();
     data.append('screenshotFile', screenshotFile);
     data.append('siteId', JSON.stringify(siteId));

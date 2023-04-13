@@ -7,7 +7,7 @@ export default {
     name,
     color,
     ratingId,
-  }: Pick<LabelType, 'name' | 'color' | 'ratingId'>) => {
+  }: Pick<LabelType, 'name' | 'color' | 'ratingId'>): Promise<Pick<LabelType, 'labelId'>> => {
     let result = await $fetch(`/api/labels`, {
       method: 'POST',
       body: JSON.stringify({ name, color, ratingId }),
@@ -21,7 +21,7 @@ export default {
     name,
     color,
     ratingId,
-  }: Pick<LabelType, 'labelId' | 'name' | 'color' | 'ratingId'>) => {
+  }: Pick<LabelType, 'labelId' | 'name' | 'color' | 'ratingId'>): Promise<true> => {
     let result = await $fetch(`/api/labels/${labelId}`, {
       method: 'PUT',
       body: JSON.stringify({ labelId, name, color, ratingId }),
@@ -30,7 +30,10 @@ export default {
   },
 
   // Delete label for rating
-  deleteLabel: async ({ labelId, ratingId }: Pick<LabelType, 'labelId' | 'ratingId'>) => {
+  deleteLabel: async ({
+    labelId,
+    ratingId,
+  }: Pick<LabelType, 'labelId' | 'ratingId'>): Promise<true> => {
     let result = await $fetch(`/api/labels/${labelId}`, {
       method: 'DELETE',
       body: JSON.stringify({ labelId, ratingId }),
@@ -39,7 +42,7 @@ export default {
   },
 
   // Get all labels for rating
-  getLabels: async ({ ratingId }: Pick<LabelType, 'ratingId'>) => {
+  getLabels: async ({ ratingId }: Pick<LabelType, 'ratingId'>): Promise<LabelType[]> => {
     let result = await $fetch(`/api/labels/rating/${ratingId}`, {
       method: 'GET',
     });

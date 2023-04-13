@@ -1,4 +1,4 @@
-import { $fetch, $utils } from './_core';
+import { $fetch } from './_core';
 
 type ParamsType = {
   email: string;
@@ -9,7 +9,7 @@ type ParamsType = {
 
 export default {
   // Login
-  login: async ({ email, password }: Pick<ParamsType, 'email' | 'password'>) => {
+  login: async ({ email, password }: Pick<ParamsType, 'email' | 'password'>): Promise<true> => {
     let response = await $fetch('/api/user/login', {
       method: 'PUT',
       body: JSON.stringify({ email, password }),
@@ -18,7 +18,7 @@ export default {
   },
 
   // Log out
-  logOut: async () => {
+  logOut: async (): Promise<true> => {
     let response = await $fetch('/api/user/log-out', {
       method: 'PUT',
     });
@@ -26,7 +26,7 @@ export default {
   },
 
   // Refresh auth
-  refreshAuth: async () => {
+  refreshAuth: async (): Promise<true> => {
     let response = await $fetch('/api/user/auth-refresh', {
       method: 'PUT',
     });
@@ -34,7 +34,7 @@ export default {
   },
 
   // Refresh password
-  editPassword: async ({ password }: Pick<ParamsType, 'password'>) => {
+  editPassword: async ({ password }: Pick<ParamsType, 'password'>): Promise<true> => {
     let response = await $fetch('/api/user/password', {
       method: 'PUT',
       body: JSON.stringify({ password }),
@@ -43,7 +43,7 @@ export default {
   },
 
   // Refresh email
-  editEmail: async ({ email }: Pick<ParamsType, 'email'>) => {
+  editEmail: async ({ email }: Pick<ParamsType, 'email'>): Promise<true> => {
     let response = await $fetch('/api/user/email', {
       method: 'PUT',
       body: JSON.stringify({ email }),

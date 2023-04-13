@@ -183,6 +183,11 @@ export default defineComponent({
           logoImg,
           screenshotImg,
           color,
+        } as {
+          siteId: number;
+          logoImg: string;
+          screenshotImg: string;
+          color: string;
         };
       } catch (errors: any) {
         this.$utils.showMessageError({ message: errors.server, errors });
@@ -195,7 +200,6 @@ export default defineComponent({
     async linkDomainImagesToSubdomain() {
       if (this.isLoading) return;
       this.isLoading = true;
-      console.log(this.site);
       try {
         let result = await this.$api['sites'].getSiteBySiteId({
           siteId: this.site.siteId,

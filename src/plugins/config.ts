@@ -15,6 +15,8 @@ export let $config = {
     default: '/ratings',
     // Login page
     login: '/login',
+    // Ratings page
+    ratings: '/ratings',
   },
 
   // user

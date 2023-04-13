@@ -1,5 +1,5 @@
 import { $fetch } from './_core';
-import { ServicesType, TranslationType, PaginationType } from '@/types';
+import { ServicesType, TranslationType, PaginationType, TranslationsMapType } from '@/types';
 
 export default {
   // Get part translations for service
@@ -9,7 +9,7 @@ export default {
   }: {
     serviceName: ServicesType;
     page: PaginationType['page'];
-  }) => {
+  }): Promise<{ items: TranslationType[] } & PaginationType> => {
     let result = await $fetch(
       `/api/translations/part-list/?page=${page}&serviceName=${serviceName}`,
       {
@@ -20,7 +20,11 @@ export default {
   },
 
   // Get translations for function translate
-  getTranslationsForFunctionTranslate: async ({ serviceName }: { serviceName: ServicesType }) => {
+  getTranslationsForFunctionTranslate: async ({
+    serviceName,
+  }: {
+    serviceName: ServicesType;
+  }): Promise<TranslationsMapType> => {
     let result = await $fetch(`/api/translations/function-translate/?serviceName=${serviceName}`, {
       method: 'GET',
     });
@@ -28,7 +32,7 @@ export default {
   },
 
   // Create translations for service
-  createTranslations: async ({ serviceName }: { serviceName: ServicesType }) => {
+  createTranslations: async ({ serviceName }: { serviceName: ServicesType }): Promise<true> => {
     let response = await $fetch(`/api/translations/create-for-service`, {
       method: 'POST',
       body: JSON.stringify({ serviceName }),
@@ -45,7 +49,7 @@ export default {
     translationId: TranslationType['translationId'];
     text: TranslationType['text'];
     serviceName: ServicesType;
-  }) => {
+  }): Promise<true> => {
     let response = await $fetch(`/api/translations/text/${translationId}`, {
       method: 'PUT',
       body: JSON.stringify({ translationId, text, serviceName }),
