@@ -2,7 +2,7 @@
 include /src/mixins.pug
 
 el-form
-  el-table(:data='screenshots', stripe, v-loading='isLoading', :scrollbar-always-on='true')
+  el-table(:data='screenshotsErrors', stripe, v-loading='isLoading', :scrollbar-always-on='true')
     el-table-column(label='siteScreenshotId')
       template(#default='scope') {{ scope.row.siteScreenshotId }}
     el-table-column(label='URL', :min-width='150')
@@ -17,6 +17,7 @@ el-form
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { SiteScreenshotErrorType } from '@/types';
 
 export default defineComponent({
   props: {
@@ -30,7 +31,7 @@ export default defineComponent({
   data() {
     return {
       isLoading: false,
-      screenshots: [],
+      screenshotsErrors: [] as SiteScreenshotErrorType[],
     };
   },
 
@@ -45,7 +46,7 @@ export default defineComponent({
       this.isLoading = true;
 
       try {
-        this.screenshots = await this.$api['sites'].getScrenshotsErrors({
+        this.screenshotsErrors = await this.$api['sites'].getScrenshotsErrors({
           ratingId: this.ratingId,
         });
       } catch (errors: any) {

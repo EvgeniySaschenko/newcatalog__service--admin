@@ -3,7 +3,7 @@ import { RatingType } from '@/types';
 
 export default {
   // Create cache rating
-  createCacheRating: async ({ ratingId }: Pick<RatingType, 'ratingId'>) => {
+  createCacheRating: async ({ ratingId }: Pick<RatingType, 'ratingId'>): Promise<true> => {
     let result = await $fetch(`/api/cache/rating/${ratingId}`, {
       method: 'POST',
       body: JSON.stringify({ ratingId }),
@@ -12,7 +12,7 @@ export default {
   },
 
   // Delete cache rating
-  deleteCacheRating: async ({ ratingId }: Pick<RatingType, 'ratingId'>) => {
+  deleteCacheRating: async ({ ratingId }: Pick<RatingType, 'ratingId'>): Promise<true> => {
     let result = await $fetch(`/api/cache/rating/${ratingId}`, {
       method: 'DELETE',
       body: JSON.stringify({ ratingId }),
@@ -21,7 +21,7 @@ export default {
   },
 
   // Create new cache from all
-  resetCacheAll: async () => {
+  resetCacheAll: async (): Promise<true> => {
     let result = await $fetch(`/api/cache/reset-all`, {
       method: 'POST',
     });
@@ -29,7 +29,7 @@ export default {
   },
 
   // Clear cache all
-  clearCacheAll: async () => {
+  clearCacheAll: async (): Promise<true> => {
     let result = await $fetch(`/api/cache/clear-all`, {
       method: 'DELETE',
     });
@@ -37,7 +37,7 @@ export default {
   },
 
   // Create cache sections
-  createCacheSections: async () => {
+  createCacheSections: async (): Promise<true> => {
     let result = await $fetch(`/api/cache/sections`, {
       method: 'POST',
     });
@@ -45,7 +45,7 @@ export default {
   },
 
   // Create cache translations and langs site
-  createCacheTranslationsAndLangsSite: async () => {
+  createCacheTranslationsAndLangsSite: async (): Promise<true> => {
     let result = await $fetch(`/api/cache/translations-and-langs-site`, {
       method: 'POST',
     });

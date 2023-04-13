@@ -11,7 +11,7 @@ export default {
   },
 
   // Create section
-  createSection: async ({ name }: Pick<SectionType, 'name'>) => {
+  createSection: async ({ name }: Pick<SectionType, 'name'>): Promise<SectionType['sectionId']> => {
     let result = await $fetch(`/api/sections`, {
       method: 'POST',
       body: JSON.stringify({ name }),
@@ -25,7 +25,7 @@ export default {
     isHiden,
     name,
     priority,
-  }: Pick<SectionType, 'sectionId' | 'isHiden' | 'name' | 'priority'>) => {
+  }: Pick<SectionType, 'sectionId' | 'isHiden' | 'name' | 'priority'>): Promise<true> => {
     let result = await $fetch(`/api/sections/${sectionId}`, {
       method: 'PUT',
       body: JSON.stringify({ sectionId, isHiden, name, priority }),
@@ -34,7 +34,7 @@ export default {
   },
 
   // Delete section
-  deleteSection: async ({ sectionId }: Pick<SectionType, 'sectionId'>) => {
+  deleteSection: async ({ sectionId }: Pick<SectionType, 'sectionId'>): Promise<true> => {
     let result = await $fetch(`/api/sections/${sectionId}`, {
       method: 'DELETE',
       body: JSON.stringify({ sectionId }),

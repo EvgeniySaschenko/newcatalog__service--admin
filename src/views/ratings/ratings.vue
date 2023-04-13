@@ -24,9 +24,7 @@ include /src/mixins.pug
 <script lang="ts">
 import { defineComponent } from 'vue';
 import useStoreSections from '@/store/sections';
-import { RatingType, SectionType } from '@/types';
-
-type RatingExtendType = RatingType & { sectionsNames: SectionType['name'][] };
+import { SectionType, RatingsListItemType } from '@/types';
 
 export default defineComponent({
   name: 'page-ratings',
@@ -37,7 +35,7 @@ export default defineComponent({
       // Path current page
       pathPage: window.location.pathname,
       // List ratings current user
-      ratings: [] as RatingExtendType[],
+      ratings: [] as RatingsListItemType[],
       // Sections map
       sectionsMap: {} as SectionType[],
     };

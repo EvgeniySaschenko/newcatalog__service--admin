@@ -1,9 +1,9 @@
 import { $fetch } from './_core';
-import { SettingsServicesType } from '@/types';
+import { SettingsServicesType, SettingsType, LangsIsoType } from '@/types';
 
 export default {
   // Get settings
-  getSettings: async () => {
+  getSettings: async (): Promise<{ settings: SettingsType; langsIso: LangsIsoType[] }> => {
     let result = await $fetch(`/api/settings`, {
       method: 'GET',
     });
@@ -15,7 +15,7 @@ export default {
     settingName,
     serviceName,
     settingValue,
-  }: SettingsServicesType[keyof SettingsServicesType]) => {
+  }: SettingsServicesType[keyof SettingsServicesType]): Promise<true> => {
     let response = await $fetch(`/api/settings/${settingName}`, {
       method: 'PUT',
       body: JSON.stringify({ settingName, serviceName, settingValue }),

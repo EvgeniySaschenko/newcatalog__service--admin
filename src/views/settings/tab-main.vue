@@ -123,7 +123,6 @@ el-form.form-login(label-position='top', v-loading='isLoading')
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import useSettingsStore from '@/store/settings';
 
 import {
   SettingsType,
@@ -179,20 +178,22 @@ export default defineComponent({
   },
 
   methods: {
-    init() {
-      let {
-        langsIso,
-        settings,
-      }: {
-        langsIso: LangsIsoType[];
-        settings: SettingsType;
-      } = JSON.parse(JSON.stringify(useSettingsStore().settings));
-
-      this.langsIso = langsIso;
-      this.langDefaultAdmin = settings['langDefault'].admin;
-      this.langsAdmin = settings['langs'].admin;
-      this.langDefaultSite = settings['langDefault'].site;
-      this.langsSite = settings['langs'].site;
+    // Init
+    async init() {
+      if (this.isLoading) return;
+      this.isLoading = true;
+      try {
+        let { langsIso, settings } = await this.$api['settings'].getSettings();
+        this.langsIso = langsIso;
+        this.langDefaultAdmin = settings['langDefault'].admin;
+        this.langsAdmin = settings['langs'].admin;
+        this.langDefaultSite = settings['langDefault'].site;
+        this.langsSite = settings['langs'].site;
+      } catch (errors: any) {
+        this.$utils.showMessageError({ message: errors.server, errors });
+      } finally {
+        this.isLoading = false;
+      }
     },
 
     // Edit lang default

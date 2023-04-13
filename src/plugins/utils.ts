@@ -86,7 +86,9 @@ export let $utils = {
   /* 
     targetObject - mutable object
     keysErrors - Object containing the keys to be changed
-    isForce - If the value is true, add add an error message even if the rkey was not previously in the object
+    isForce:
+      If the value is true, add add an error message even if the key was not previously in the object. 
+      Used for composite keys (`${section.sectionId}_name`)
     Adds error messages to "targetObject" if fields are present in "targetObject" and "keysErrors"
   */
   setErrors(
@@ -96,6 +98,10 @@ export let $utils = {
   ) {
     let isValidationError = false;
     for (let key in keysErrors) {
+      if (!keysErrors[key]) {
+        continue;
+      }
+
       if (key in targetObject || isForce) {
         isValidationError = true;
         targetObject[key] = keysErrors[key];

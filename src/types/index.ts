@@ -2,6 +2,24 @@ import { LangsListType } from './langs-list';
 
 export type ValueOfType<T> = T[keyof T];
 
+// Lang
+export type LangType = Partial<LangsListType>;
+
+// Langs iso
+export type LangsIsoType = {
+  code: keyof LangType;
+  name: string;
+};
+
+// Translation
+export type TranslationType = {
+  translationId: number;
+  text: LangType;
+  key: string;
+};
+
+export type TranslationsMapType = Record<keyof LangType, Record<string, string>>;
+
 // Services
 export enum ServicesEnum {
   api = 'api',
@@ -36,22 +54,6 @@ export type SettingsServicesType = {
     settingValue: SettingsType[Key][keyof typeof ServicesLangsEnum];
     serviceName: keyof SettingsType[Key];
   };
-};
-
-// Lang
-export type LangType = Partial<LangsListType>;
-
-// Langs iso
-export type LangsIsoType = {
-  code: string;
-  name: string;
-};
-
-// Translation
-export type TranslationType = {
-  translationId: number;
-  text: LangType;
-  key: string;
 };
 
 // Section
@@ -93,23 +95,28 @@ export type SiteLogoScreenshotParamsType = {
 // Site
 export type SiteType = {
   siteId: number;
+  siteLogoId: number;
   siteScreenshotId: number;
-  img: string;
   color: string;
-  host: string;
-  alexaRank: number;
-  dateDomainCreate: Date;
+  dateLogoCreate: Date;
 };
 
 // Site screenshot
 export type SiteScreenshotType = {
   siteScreenshotId: number;
   screenshotImg: string;
+  host: string;
+};
+
+// Site screenshot error
+export type SiteScreenshotErrorType = {
+  dateScreenshotError: Date;
+  siteScreenshotId: number;
+  url: string;
 };
 
 // Rating
 export type RatingType = {
-  userId: number;
   ratingId: number;
   isHiden: boolean;
   descr: LangType;
@@ -139,6 +146,17 @@ export type RatingItemType = {
   domain: string;
   color: string;
 };
+
+export type RatingsListItemType = Pick<
+  RatingType,
+  | 'descr'
+  | 'isHiden'
+  | 'name'
+  | 'ratingId'
+  | 'sectionsIds'
+  | 'dateCacheCreation'
+  | 'dateFirstPublication'
+>;
 
 // Label
 export type LabelType = {
