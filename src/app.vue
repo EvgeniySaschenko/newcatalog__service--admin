@@ -58,6 +58,11 @@ export default defineComponent({
       try {
         // This request is made to check if the user is logged in.
         await this.refreshAuth();
+        // If the user is authorized, he should not get to the login page
+        if (this.isUserAuth && this.isPageLogin) {
+          window.location.href = this.$config['pages-specific'].default;
+        }
+
         if (!this.isUserAuth) return;
         await this.updateSessionExpiration();
         this.setUserActivityLastTime();
@@ -100,7 +105,7 @@ export default defineComponent({
     // Check session expiration
     async refreshAuth() {
       try {
-        await this.$api['user'].refreshAuth();
+        await this.$api['users'].refreshAuth();
         this.isUserAuth = true;
         return;
       } catch (errors: any) {
@@ -115,7 +120,7 @@ export default defineComponent({
       if (this.isLoading) return;
       this.isLoading = true;
       try {
-        return await this.$api['user'].logOut();
+        return await this.$api['users'].logOut();
       } catch (errors: any) {
         this.$utils.showMessageError({ message: errors.server, errors });
       } finally {
@@ -127,10 +132,8 @@ export default defineComponent({
     async updateSessionExpiration() {
       if (this.isUserAuth) {
         let refreshTockenTime = this.$config['user'].refreshTockenTime * 1000;
-
         let idInterval = await setInterval(async () => {
-          let userIdleTime = (Date.now() - this.lastActivityTime) / 1000;
-
+          let userIdleTime = Date.now() - this.lastActivityTime;
           if (userIdleTime > this.$config['user'].idleTime * 1000) {
             await this.logOut();
             clearInterval(idInterval);
