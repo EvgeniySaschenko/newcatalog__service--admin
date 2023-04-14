@@ -1,4 +1,4 @@
-import user from './user';
+import users from './users';
 import sections from './sections';
 import ratings from './ratings';
 import labels from './labels';
@@ -9,7 +9,7 @@ import settings from './settings';
 import translations from './translations';
 
 export let $api = {
-  user,
+  users,
   sections,
   ratings,
   labels,

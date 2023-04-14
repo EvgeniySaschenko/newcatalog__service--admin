@@ -60,7 +60,7 @@ export default defineComponent({
       if (this.isLoading) return;
       this.isLoading = true;
       try {
-        await this.$api['user'].login({
+        await this.$api['users'].login({
           email: this.email,
           password: this.password,
         });
