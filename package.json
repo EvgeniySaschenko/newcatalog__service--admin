@@ -22,7 +22,8 @@
     "vue": "^3.2.13",
     "vue-cookies": "^1.8.3",
     "vue-cropper": "^1.0.5",
-    "vue-router": "^4.0.3"
+    "vue-router": "^4.0.3",
+    "vue3-lazyload": "^0.3.6"
   },
   "devDependencies": {
     "@types/jest": "^27.0.1",
