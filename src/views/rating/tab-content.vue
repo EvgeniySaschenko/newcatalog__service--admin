@@ -14,7 +14,10 @@ include /src/mixins.pug
     +e.item(v-for='item of ratingItems')
       +e.row-top
         +e.box-img(:style='{ backgroundColor: item.color }')
-          +e.IMG.img.sites-list__img(:src='item.logoImg', :alt='item.name[$langDefault("site")]')
+          +e.IMG.img.sites-list__img(
+            v-lazy='item.logoImg',
+            :alt='item.name[$langDefault("site")]'
+          )
         +e.name
           +e.name-text {{ item.name[$langDefault('site')] }}
         +e.A.link(:href='item.url', target='_blank') {{ item.hostname }}

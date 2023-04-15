@@ -9,7 +9,8 @@ import pluginApi from '@/plugins/api';
 import pluginUtils from '@/plugins/utils';
 import pluginElementPlus from '@/plugins/element-plus';
 import pluginTranslations from '@/plugins/translations';
-import pinia from '@/plugins/pinia';
+import pluginLazyLoad from '@/plugins/lazy-load';
+import pluginPinia from '@/plugins/pinia';
 import * as ElementPlusIconsVue from '@element-plus/icons-vue';
 
 let app = createApp(App);
@@ -20,7 +21,8 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 
 app
   .use(config)
-  .use(pinia)
+  .use(pluginPinia)
+  .use(pluginLazyLoad.VueLazyLoad, pluginLazyLoad.options)
   .use(pluginTranslations)
   .use(pluginApi)
   .use(pluginUtils)
