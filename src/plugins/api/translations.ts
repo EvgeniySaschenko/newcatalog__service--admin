@@ -10,12 +10,9 @@ export default {
     serviceName: ServicesType;
     page: PaginationType['page'];
   }): Promise<{ items: TranslationType[] } & PaginationType> => {
-    let result = await $fetch(
-      `/api/translations/part-list/?page=${page}&serviceName=${serviceName}`,
-      {
-        method: 'GET',
-      }
-    );
+    let result = await $fetch(`/api/translations/?page=${page}&serviceName=${serviceName}`, {
+      method: 'GET',
+    });
     return await result.json();
   },
 

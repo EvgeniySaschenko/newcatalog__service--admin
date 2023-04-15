@@ -1,10 +1,14 @@
 import { $fetch } from './_core';
-import { RatingType, RatingsListItemType } from '@/types';
+import { RatingType, RatingsListItemType, PaginationType } from '@/types';
 
 export default {
   // Get the ratings of the user who created them
-  getRatings: async (): Promise<RatingsListItemType[]> => {
-    let result = await $fetch(`/api/ratings`, {
+  getRatings: async ({
+    page,
+  }: {
+    page: PaginationType['page'];
+  }): Promise<{ items: RatingsListItemType[] } & PaginationType> => {
+    let result = await $fetch(`/api/ratings?page=${page}`, {
       method: 'GET',
     });
     return await result.json();

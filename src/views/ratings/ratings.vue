@@ -19,12 +19,23 @@ include /src/mixins.pug
       template(#default='scope')
         span(v-if='scope.row.dateCacheCreation') {{ $utils.date(scope.row.dateCacheCreation, 'datetime') }}
         el-tag(v-else, type='info', effect='dark') {{ $t('Not published') }}
+
+  .u-center
+    el-pagination(
+      v-if='pagination.pagesCount > 1',
+      :page-size='pagination.maxRecordsPerPage',
+      layout='prev, pager, next',
+      :total='pagination.itemsCount',
+      background,
+      @current-change='changePage($event)',
+      v-model:current-page='pagination.page'
+    )
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 import useStoreSections from '@/store/sections';
-import { SectionType, RatingsListItemType } from '@/types';
+import { SectionType, RatingsListItemType, PaginationType } from '@/types';
 
 export default defineComponent({
   name: 'page-ratings',
@@ -36,6 +47,13 @@ export default defineComponent({
       pathPage: window.location.pathname,
       // List ratings current user
       ratings: [] as RatingsListItemType[],
+      // Pagination
+      pagination: {
+        page: 1,
+        itemsCount: 0,
+        maxRecordsPerPage: 0,
+        pagesCount: 0,
+      } as PaginationType,
       // Sections map
       sectionsMap: {} as SectionType[],
     };
@@ -56,18 +74,39 @@ export default defineComponent({
       await this.getRatings();
     },
 
-    // Get all ratings User
+    // Get ratings
     async getRatings() {
       if (this.isLoading) return;
       this.isLoading = true;
 
       try {
-        this.ratings = await this.$api['ratings'].getRatings();
+        let { items, page, itemsCount, maxRecordsPerPage, pagesCount } = await this.$api[
+          'ratings'
+        ].getRatings({ page: this.pagination.page });
+
+        this.ratings = items;
+        this.pagination = {
+          page,
+          itemsCount,
+          maxRecordsPerPage,
+          pagesCount,
+        };
       } catch (errors: any) {
         this.$utils.showMessageError({ message: errors.server, errors });
       } finally {
         this.isLoading = false;
       }
+    },
+
+    // Get ratings for page
+    async changePage(page: number) {
+      this.pagination.page = page;
+      await this.getRatings();
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+      this.isLoading = false;
     },
   },
 });
