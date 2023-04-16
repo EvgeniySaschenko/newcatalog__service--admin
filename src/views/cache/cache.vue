@@ -47,6 +47,9 @@ export default defineComponent({
     // Delete cache all
     async clearCacheAll() {
       if (this.isLoading) return;
+      await this.$utils.showDialogConfirm({
+        title: this.$t('Delete all cache?'),
+      });
       this.isLoading = true;
 
       try {
@@ -70,6 +73,9 @@ export default defineComponent({
     // Reset cache
     async resetCacheAll() {
       if (this.isLoading) return;
+      await this.$utils.showDialogConfirm({
+        title: this.$t('Rebuild all cache?'),
+      });
       this.isLoading = true;
 
       try {
@@ -93,6 +99,9 @@ export default defineComponent({
     // Create cache sections
     async createCacheSections() {
       if (this.isLoading) return;
+      await this.$utils.showDialogConfirm({
+        title: this.$t('Create cache for sections?'),
+      });
       this.isLoading = true;
 
       try {
@@ -116,6 +125,9 @@ export default defineComponent({
     // Create cache translations and langs site
     async createCacheTranslationsAndLangsSite() {
       if (this.isLoading) return;
+      await this.$utils.showDialogConfirm({
+        title: this.$t('Create cache translations and langs site?'),
+      });
       this.isLoading = true;
 
       try {
