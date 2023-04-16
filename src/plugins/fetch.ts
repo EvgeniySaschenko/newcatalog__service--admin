@@ -32,22 +32,38 @@ export let $fetch: FetchType = async (url: string, params?: RequestInit): Promis
     console.error(error);
     throw { server: $t('Server error') };
   }
-  if (response.status == 400) {
-    // Data validation errors
-    throw await response.json();
-  } else if (response.status == 401) {
-    // If the user is not logged in, redirect to the login page
-    if (window.location.pathname != $config['pages-specific'].login) {
-      window.location.href = $config['pages-specific'].login;
+
+  switch (response.status) {
+    // The server is not ready to process requests
+    case 202: {
+      throw {
+        server: $t('The server is not ready to process requests, an update is in progress.'),
+      };
     }
-    throw { is_not_authorized: $t('User is not authorized') };
-  } else if (response.status == 404) {
-    throw { server: $t('URL not found on server') };
-  } else if (response.status > 400) {
-    // Other server errors
-    let message = (await response.json())?.server || $t('Server error');
-    throw { server: message };
+    // Data validation errors
+    case 400: {
+      throw await response.json();
+    }
+    // If the user is not logged in, redirect to the login page
+    case 401: {
+      if (window.location.pathname != $config['pages-specific'].login) {
+        window.location.href = $config['pages-specific'].login;
+      }
+      throw { is_not_authorized: $t('User is not authorized') };
+    }
+    // URL not found
+    case 404: {
+      throw { server: $t('URL not found on server') };
+    }
+    default: {
+      if (response.status > 400) {
+        // Other server errors
+        let message = (await response.json())?.server || $t('Server error');
+        throw { server: message };
+      }
+    }
   }
+
   return response;
 };
 

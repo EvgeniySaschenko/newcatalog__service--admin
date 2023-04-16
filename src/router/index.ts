@@ -51,6 +51,13 @@ let routes = [
       return { path: $config['pages-specific'].default };
     },
   },
+  {
+    path: '/:notFound(.*)',
+    name: $t('Not found'),
+    redirect: (to: any) => {
+      return { path: $config['pages-specific'].default };
+    },
+  },
 ];
 
 // Create routes map
