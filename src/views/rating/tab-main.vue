@@ -21,19 +21,19 @@ include /src/mixins.pug
         :value='item.sectionId'
       )
   // Rating type
-  el-form-item(:label='$t("Rating type")')
-    el-radio-group(v-model='rating.typeRating')
-      el-radio-button(v-for='item in typesRating', :label='item.type', size='small') {{ item.name }}
+  //- el-form-item(:label='$t("Rating type")')
+  //-   el-radio-group(v-model='rating.typeRating')
+  //-     el-radio-button(v-for='item in typesRating', :label='item.type', size='small') {{ item.name }}
 
   // Display
-  el-form-item(:label='$t("Display")')
-    el-radio-group(v-model='rating.typeDisplay')
-      el-radio-button(v-for='item in typesDisplay', :label='item.type', size='small') {{ item.name }}
+  //- el-form-item(:label='$t("Display")')
+  //-   el-radio-group(v-model='rating.typeDisplay')
+  //-     el-radio-button(v-for='item in typesDisplay', :label='item.type', size='small') {{ item.name }}
 
   // Sort content by
-  el-form-item(:label='$t("Sorting")')
-    el-radio-group(v-model='rating.typeSort')
-      el-radio-button(v-for='item in typesSort', :label='item.type', size='small') {{ item.name }}
+  //- el-form-item(:label='$t("Sorting")')
+  //-   el-radio-group(v-model='rating.typeSort')
+  //-     el-radio-button(v-for='item in typesSort', :label='item.type', size='small') {{ item.name }}
 
   // Name
   el-form-item(:error='errors.name', :label='$t("Name")', required)

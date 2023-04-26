@@ -68,7 +68,6 @@ export default defineComponent({
         this.setUserActivityLastTime();
         let sections = await this.$api['sections'].getSections();
         let settings = await this.$api['settings'].getSettings();
-
         useSectionsStore().setSections(sections);
         let translations = await this.$api['translations'].getTranslationsForFunctionTranslate({
           serviceName: ServicesLangsEnum.admin,
