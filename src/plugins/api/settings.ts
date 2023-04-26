@@ -13,12 +13,12 @@ export default {
   // Edit setting
   editSetting: async ({
     settingName,
-    serviceName,
+    servicesNames,
     settingValue,
   }: SettingsServicesType[keyof SettingsServicesType]): Promise<true> => {
     let response = await $fetch(`/api/settings/${settingName}`, {
       method: 'PUT',
-      body: JSON.stringify({ settingName, serviceName, settingValue }),
+      body: JSON.stringify({ settingName, servicesNames, settingValue }),
     });
     return await response.json();
   },

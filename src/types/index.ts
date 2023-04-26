@@ -33,6 +33,7 @@ export type ServicesType = keyof typeof ServicesEnum;
 export enum ServicesLangsEnum {
   admin = 'admin',
   site = 'site',
+  api = 'api',
 }
 
 export type ServicesLangsType = keyof typeof ServicesLangsEnum;
@@ -52,7 +53,7 @@ export type SettingsServicesType = {
   [Key in keyof SettingsType]: {
     settingName: Key;
     settingValue: SettingsType[Key][keyof typeof ServicesLangsEnum];
-    serviceName: keyof SettingsType[Key];
+    servicesNames: (keyof SettingsType[Key])[]; // This field contains an array of services to which this setting can be applied.
   };
 };
 
