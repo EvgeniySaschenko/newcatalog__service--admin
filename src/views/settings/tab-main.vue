@@ -33,7 +33,7 @@ el-form.form-login(label-position='top', v-loading='isLoading')
         :label='$t("List of languages of the admin panel and API server")',
         :error='errors[ErrorsKeys.langsAdmin]'
       )
-        el-select(v-model='langsAdmin', multiple, filterable)
+        el-select(v-model='langsAdmin', multiple, filterable, size='large')
           el-option(
             v-for='item in langsIso',
             :key='item.code',
@@ -58,7 +58,7 @@ el-form.form-login(label-position='top', v-loading='isLoading')
         :label='$t("Admin panel and API server, language by default")',
         :error='errors[ErrorsKeys.langDefaultAdmin]'
       )
-        el-select(v-model='langDefaultAdmin', filterable)
+        el-select(v-model='langDefaultAdmin', filterable, size='large')
           el-option(
             v-for='item in langsIso',
             :key='item.code',
@@ -80,7 +80,7 @@ el-form.form-login(label-position='top', v-loading='isLoading')
     // Site langs
     el-descriptions-item
       el-form-item(:label='$t("List of site languages")', :error='errors[ErrorsKeys.langsSite]')
-        el-select(v-model='langsSite', multiple, filterable)
+        el-select(v-model='langsSite', multiple, filterable, size='large')
           el-option(
             v-for='item in langsIso',
             :key='item.code',
@@ -103,7 +103,7 @@ el-form.form-login(label-position='top', v-loading='isLoading')
         :label='$t("Site default language")',
         :error='errors[ErrorsKeys.langDefaultSite]'
       )
-        el-select(v-model='langDefaultSite', filterable)
+        el-select(v-model='langDefaultSite', filterable, size='large')
           el-option(
             v-for='item in langsIso',
             :key='item.code',

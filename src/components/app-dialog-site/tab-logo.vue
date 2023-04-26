@@ -3,29 +3,29 @@ include /src/mixins.pug
 
 +b.tab-logo(v-loading='isLoading')
   // If not exist screenshot
-  el-alert.u-mb--5(
-    v-if='!site.siteScreenshotId',
-    :title='$t("You need to take a screenshot first")',
-    type='warning',
-    show-icon,
-    :closable='false'
-  )
+  .u-mb--5(v-if='!site.siteScreenshotId')
+    el-alert(
+      :title='$t("You need to take a screenshot first")',
+      type='warning',
+      show-icon,
+      :closable='false'
+    )
   // If there is no screenshot and the site is a subdomain
-  el-alert.u-mb--5(
-    v-if='!site.siteScreenshotId && site.isSubdomain',
-    :title='$t("For a subdomain, you can try to find the logo that is used for the domain")',
-    type='warning',
-    show-icon,
-    :closable='false'
-  )
+  .u-mb--5(v-if='!site.siteScreenshotId && site.isSubdomain')
+    el-alert(
+      :title='$t("For a subdomain, you can try to find the logo that is used for the domain")',
+      type='warning',
+      show-icon,
+      :closable='false'
+    )
   // If exist screenshot and not exist logo
-  el-alert.u-mb--5(
-    v-if='site.siteScreenshotId && !site.siteLogoId',
-    :title='$t(`To create a logo, go to the "Create Logo" tab`)',
-    type='warning',
-    show-icon,
-    :closable='false'
-  )
+  .u-mb--5(v-if='site.siteScreenshotId && !site.siteLogoId')
+    el-alert(
+      :title='$t(`To create a logo, go to the "Create Logo" tab`)',
+      type='warning',
+      show-icon,
+      :closable='false'
+    )
 
   // Logo
   +e.row(v-if='site.siteLogoId')
