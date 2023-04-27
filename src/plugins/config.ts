@@ -1,4 +1,4 @@
-import { LangType, ServicesLangsType } from '@/types';
+import { LangType, ServicesLangsEnum } from '@/types';
 
 export let $config = {
   // date
@@ -76,7 +76,7 @@ export let $config = {
     langDefaultServices: {
       admin: 'en',
       site: 'en',
-    } as Record<ServicesLangsType, keyof LangType>,
+    } as Record<keyof typeof ServicesLangsEnum, keyof LangType>,
 
     langsServices: {
       admin: {
@@ -85,7 +85,7 @@ export let $config = {
       site: {
         en: '',
       },
-    } as Record<ServicesLangsType, LangType>,
+    } as Record<keyof typeof ServicesLangsEnum, LangType>,
   },
 };
 

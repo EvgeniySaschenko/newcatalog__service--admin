@@ -1,4 +1,4 @@
-import { LangType, ServicesLangsType, ServicesLangsEnum, TranslationsMapType } from '@/types';
+import { LangType, ServicesLangsEnum, TranslationsMapType } from '@/types';
 import cookies from 'vue-cookies';
 import { $config } from '@/plugins/config';
 
@@ -12,18 +12,18 @@ import { $config } from '@/plugins/config';
   Lang default  
 */
 
-let langDefaultServices: Record<ServicesLangsType, keyof LangType> = JSON.parse(
+let langDefaultServices: Record<keyof typeof ServicesLangsEnum, keyof LangType> = JSON.parse(
   JSON.stringify($config['translations'].langDefaultServices)
 );
 // Get
-export let $langDefault = (serviceName: ServicesLangsType): keyof LangType => {
+export let $langDefault = (serviceName: keyof typeof ServicesLangsEnum): keyof LangType => {
   return JSON.parse(JSON.stringify(langDefaultServices[serviceName]));
 };
 
 // Set
 type $setLangDefault = {
   langDefault: keyof LangType;
-  serviceName: ServicesLangsType;
+  serviceName: keyof typeof ServicesLangsEnum;
 };
 
 let langDefaultCookieName = $config['translations'].langDefaultCookieName;
@@ -56,19 +56,19 @@ export function $setCokieLangDefault({ langDefault }: { langDefault: keyof LangT
   Langs
 */
 
-let langsServices: Record<ServicesLangsType, LangType> = JSON.parse(
+let langsServices: Record<keyof typeof ServicesLangsEnum, LangType> = JSON.parse(
   JSON.stringify($config['translations'].langsServices)
 );
 
 // Get
-export let $langs = (serviceName: ServicesLangsType): LangType => {
+export let $langs = (serviceName: keyof typeof ServicesLangsEnum): LangType => {
   return JSON.parse(JSON.stringify(langsServices[serviceName]));
 };
 
 // Set
 type $setLangsType = {
   langs: LangType;
-  serviceName: ServicesLangsType;
+  serviceName: keyof typeof ServicesLangsEnum;
 };
 
 export function $setLangs({ langs, serviceName }: $setLangsType) {
