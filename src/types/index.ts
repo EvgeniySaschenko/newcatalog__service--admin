@@ -36,8 +36,6 @@ export enum ServicesLangsEnum {
   api = 'api',
 }
 
-export type ServicesLangsType = keyof typeof ServicesLangsEnum;
-
 // Settings
 export enum SettingsEnum {
   langDefault = 'langDefault',
@@ -52,8 +50,8 @@ export type SettingsType = {
 export type SettingsServicesType = {
   [Key in keyof SettingsType]: {
     settingName: Key;
-    settingValue: SettingsType[Key][keyof typeof ServicesLangsEnum];
-    servicesNames: (keyof SettingsType[Key])[]; // This field contains an array of services to which this setting can be applied.
+    settingValue: SettingsType[Key][keyof SettingsType[Key]];
+    serviceName: keyof SettingsType[Key]; // This field contains an array of services to which this setting can be applied.
   };
 };
 
