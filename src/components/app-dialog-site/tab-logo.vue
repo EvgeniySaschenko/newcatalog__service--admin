@@ -6,7 +6,7 @@ include /src/mixins.pug
   .u-mb--5(v-if='!site.siteScreenshotId')
     el-alert(
       :title='$t("You need to take a screenshot first")',
-      type='warning',
+      type='info',
       show-icon,
       :closable='false'
     )
@@ -14,7 +14,7 @@ include /src/mixins.pug
   .u-mb--5(v-if='!site.siteScreenshotId && site.isSubdomain')
     el-alert(
       :title='$t("For a subdomain, you can try to find the logo that is used for the domain")',
-      type='warning',
+      type='info',
       show-icon,
       :closable='false'
     )
@@ -22,7 +22,7 @@ include /src/mixins.pug
   .u-mb--5(v-if='site.siteScreenshotId && !site.siteLogoId')
     el-alert(
       :title='$t(`To create a logo, go to the "Create Logo" tab`)',
-      type='warning',
+      type='info',
       show-icon,
       :closable='false'
     )

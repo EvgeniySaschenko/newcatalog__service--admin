@@ -44,9 +44,9 @@ export default {
     return await result.json();
   },
 
-  // Create cache translations and langs site
-  createCacheTranslationsAndLangsSite: async (): Promise<true> => {
-    let result = await $fetch(`/api/cache/translations-and-langs-site`, {
+  // Create cache settings
+  createCacheSettings: async (): Promise<true> => {
+    let result = await $fetch(`/api/cache/settings`, {
       method: 'POST',
     });
     return await result.json();

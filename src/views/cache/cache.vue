@@ -7,16 +7,16 @@ include /src/mixins.pug
   .u-mb--10
     el-alert(
       :title='$t("Creating / deleting a cache implies that these changes will be published on the main site")',
-      type='warning',
+      type='info',
       show-icon,
       :closable='false'
     )
 
   el-descriptions(direction='vertical', :column='2', border, v-loading='isLoading')
     //
-    el-descriptions-item {{ $t('Create cache translations and langs site') }}
+    el-descriptions-item {{ $t('Create cache settings') }}
     el-descriptions-item(align='center', width='180')
-      el-button(type='primary', @click='createCacheTranslationsAndLangsSite()') {{ $t('Create cache') }}
+      el-button(type='primary', @click='createCacheSettings()') {{ $t('Create cache') }}
     //
     el-descriptions-item {{ $t('Create cache for sections') }}
     el-descriptions-item(align='center', width='180')
@@ -122,16 +122,16 @@ export default defineComponent({
       }
     },
 
-    // Create cache translations and langs site
-    async createCacheTranslationsAndLangsSite() {
+    // Create cache settings
+    async createCacheSettings() {
       if (this.isLoading) return;
       await this.$utils.showDialogConfirm({
-        title: this.$t('Create cache translations and langs site?'),
+        title: this.$t('Create cache settings site?'),
       });
       this.isLoading = true;
 
       try {
-        let response = await this.$api['cache'].createCacheTranslationsAndLangsSite();
+        let response = await this.$api['cache'].createCacheSettings();
 
         if (response) {
           this.$utils.showMessageSuccess({

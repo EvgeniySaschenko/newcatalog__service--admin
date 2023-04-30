@@ -1,11 +1,19 @@
 <template lang="pug">
 include /src/mixins.pug
 
-el-form.form-login(label-position='top', v-loading='isLoading')
+el-form.form-login(label-position='top')
+  .u-mb--10
+    el-alert(
+      :title='$t(`To see the changes in the admin panel, you need to refresh the page`)',
+      type='info',
+      show-icon,
+      :closable='false'
+    )
+
   .u-mb--10
     el-alert(
       :title='$t(`For "admin" and "api" you need to set the same parameters.`)',
-      type='warning',
+      type='info',
       show-icon,
       :closable='false'
     )
@@ -34,7 +42,7 @@ el-form.form-login(label-position='top', v-loading='isLoading')
       :closable='false'
     )
 
-  .u-mb--10(v-for='(item, serviceName) in langsMap')
+  .u-mb--10(v-for='(item, serviceName) in langsMap', v-loading='isLoading')
     el-descriptions(direction='vertical', :column='3', border)
       // langs
       el-descriptions-item
@@ -84,7 +92,7 @@ el-form.form-login(label-position='top', v-loading='isLoading')
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import { SettingsType, LangsIsoType, SettingsEnum, ServicesLangsEnum } from '@/types';
+import { SettingsType, LangsIsoType, SettingsEnum, ServicesLangsType } from '@/types';
 
 export default defineComponent({
   data() {
@@ -100,8 +108,8 @@ export default defineComponent({
     };
   },
 
-  mounted() {
-    this.init();
+  async mounted() {
+    await this.init();
   },
 
   unmounted() {
@@ -135,7 +143,7 @@ export default defineComponent({
     },
 
     // Edit lang default
-    async editLangDefault(serviceName: keyof typeof ServicesLangsEnum) {
+    async editLangDefault(serviceName: ServicesLangsType) {
       if (this.isLoading) return;
       this.isLoading = true;
       this.$utils.clearErrors(this.errors, { [`${serviceName}--${SettingsEnum.langDefault}`]: '' });
@@ -163,7 +171,7 @@ export default defineComponent({
     },
 
     // Edit langs
-    async editLangs(serviceName: keyof typeof ServicesLangsEnum) {
+    async editLangs(serviceName: ServicesLangsType) {
       if (this.isLoading) return;
       this.isLoading = true;
       this.$utils.clearErrors(this.errors, { [`${serviceName}--${SettingsEnum.langs}`]: '' });

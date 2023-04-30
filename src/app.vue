@@ -2,14 +2,14 @@
 include /src/mixins.pug
 
 .wrapper(v-loading='isLoading')
-  app-header(v-if='isAppRedy')
+  app-header(v-if='isAppRedy', :logoImage='logoImage')
   router-view(v-if='isAppRedy || isPageLogin')
   footer.container
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { SettingsType, ServicesLangsEnum } from '@/types';
+import { SettingsType, SettingsEnum, ServicesEnum } from '@/types';
 import AppHeader from '@/components/app-header/app-header.vue';
 import useSectionsStore from '@/store/sections';
 
@@ -29,6 +29,8 @@ export default defineComponent({
       lastActivityTime: Date.now(),
       // Indicates that the user is logged in
       isUserAuth: false,
+      // Logo image
+      logoImage: '',
     };
   },
 
@@ -70,11 +72,14 @@ export default defineComponent({
         let settings = await this.$api['settings'].getSettings();
         useSectionsStore().setSections(sections);
         let translations = await this.$api['translations'].getTranslationsForFunctionTranslate({
-          serviceName: ServicesLangsEnum.admin,
+          serviceName: ServicesEnum.admin,
         });
 
         this.$setTranslations({ translations });
         this.setLangs(settings.settings);
+
+        this.logoImage = settings.settings[SettingsEnum.imageAppLogo][ServicesEnum.admin];
+        console.log(this.logoImage);
         this.isAppRedy = true;
       } catch (errors: any) {
         this.$utils.showMessageError({ message: errors.server, errors });
@@ -87,17 +92,17 @@ export default defineComponent({
     setLangs(settings: SettingsType) {
       // site
       let siteLangs = settings['langs'].site.reduce((a, v) => ({ ...a, [v]: '' }), {});
-      this.$setLangs({ langs: siteLangs, serviceName: ServicesLangsEnum.site });
+      this.$setLangs({ langs: siteLangs, serviceName: ServicesEnum.site });
       this.$setLangDefault({
         langDefault: settings['langDefault'].site,
-        serviceName: ServicesLangsEnum.site,
+        serviceName: ServicesEnum.site,
       });
       // admin
       let langsAdmin = settings['langs'].admin.reduce((a, v) => ({ ...a, [v]: '' }), {});
-      this.$setLangs({ langs: langsAdmin, serviceName: ServicesLangsEnum.admin });
+      this.$setLangs({ langs: langsAdmin, serviceName: ServicesEnum.admin });
       this.$setLangDefault({
         langDefault: settings['langDefault'].admin,
-        serviceName: ServicesLangsEnum.admin,
+        serviceName: ServicesEnum.admin,
       });
     },
 
