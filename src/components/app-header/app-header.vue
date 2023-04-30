@@ -5,7 +5,7 @@ include /src/mixins.pug
     .container
       +e.col-1
         +e.ROUTER-LINK.logo(:to='logoUrl')
-          +e.IMG.logo-img(src='/images/app/logo.png')
+          +e.IMG.logo-img(:src='logoImage')
       +e.col-2
         language-swich.u-m--5
         el-button.u-m--5(@click='provideLogOut()', type='danger') {{ $t('Exit') }}
@@ -31,6 +31,13 @@ export default defineComponent({
     return {
       logoUrl: this.$config['pages-specific'].default,
     };
+  },
+
+  props: {
+    logoImage: {
+      type: String,
+      required: true,
+    },
   },
 });
 </script>

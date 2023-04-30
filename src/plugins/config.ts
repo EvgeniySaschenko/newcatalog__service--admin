@@ -1,4 +1,4 @@
-import { LangType, ServicesLangsEnum } from '@/types';
+import { LangType, ServicesTranslationsType } from '@/types';
 
 export let $config = {
   // date
@@ -73,19 +73,19 @@ export let $config = {
     langDefaultCookieName: 'langDefault',
     langDefaultCookieAge: '365d',
 
-    langDefaultServices: {
+    langDefault: {
       admin: 'en',
       site: 'en',
-    } as Record<keyof typeof ServicesLangsEnum, keyof LangType>,
+    } as Record<ServicesTranslationsType, keyof LangType>,
 
-    langsServices: {
+    langs: {
       admin: {
         en: '',
       },
       site: {
         en: '',
       },
-    } as Record<keyof typeof ServicesLangsEnum, LangType>,
+    } as Record<ServicesTranslationsType, LangType>,
   },
 };
 

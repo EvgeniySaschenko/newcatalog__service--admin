@@ -55,6 +55,11 @@ export let $fetch: FetchType = async (url: string, params?: RequestInit): Promis
     case 404: {
       throw { server: $t('URL not found on server') };
     }
+    // Request Entity Too Large
+    case 413: {
+      throw { server: $t('Request Entity Too Large') };
+    }
+
     default: {
       if (response.status > 400) {
         // Other server errors

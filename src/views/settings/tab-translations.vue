@@ -5,7 +5,7 @@ el-form.form-login.u-mb--10(label-position='top', v-loading='isLoading')
   .u-mb--10
     el-alert(
       :title='$t(`To see the changes in the admin panel, you need to refresh the page`)',
-      type='warning',
+      type='info',
       show-icon,
       :closable='false'
     )

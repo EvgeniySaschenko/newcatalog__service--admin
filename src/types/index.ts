@@ -27,32 +27,79 @@ export enum ServicesEnum {
   site = 'site',
 }
 
+// The languages of these services are used in the admin interface
+export type ServicesTranslationsType = 'admin' | 'site';
+
+// All services
 export type ServicesType = keyof typeof ServicesEnum;
 
-// ServicesLangs - only for services whose languages are configured
-export enum ServicesLangsEnum {
-  admin = 'admin',
-  site = 'site',
-  api = 'api',
-}
+// Services that have languages (There may be other services)
+export type ServicesLangsType = keyof Pick<typeof ServicesEnum, 'site' | 'admin' | 'api'>;
+
+// Used as shorthand
+type ServiceSiteType = keyof Pick<typeof ServicesEnum, 'site'>;
+type ServiceAdminType = keyof Pick<typeof ServicesEnum, 'admin'>;
 
 // Settings
 export enum SettingsEnum {
+  // langs
   langDefault = 'langDefault',
   langs = 'langs',
+  // images
+  imageAppFavicon = 'imageAppFavicon',
+  imageAppPreloader = 'imageAppPreloader',
+  imageAppLogo = 'imageAppLogo',
+  // colors
+  colorPrimary = 'colorPrimary',
+  colorPrimaryInverted = 'colorPrimaryInverted',
+  colorTextRegular = 'colorTextRegular',
+  colorSelectionBackground = 'colorSelectionBackground',
+  colorSelectionText = 'colorSelectionText',
+  // Code / text
+  headScript = 'headScript',
+  headStyles = 'headStyles',
+  headerHtml = 'headerHtml',
+  contentTopHtml = 'contentTopHtml',
+  contentBottomHtml = 'contentBottomHtml',
+  footerHtml = 'footerHtml',
 }
 
 export type SettingsType = {
-  [SettingsEnum.langDefault]: Record<keyof typeof ServicesLangsEnum, keyof LangType>;
-  [SettingsEnum.langs]: Record<keyof typeof ServicesLangsEnum, (keyof LangType)[]>;
+  // langs
+  [SettingsEnum.langDefault]: Record<ServicesLangsType, keyof LangType>;
+  [SettingsEnum.langs]: Record<ServicesLangsType, (keyof LangType)[]>;
+  // images
+  [SettingsEnum.imageAppFavicon]: Record<ServiceAdminType | ServiceSiteType, string>;
+  [SettingsEnum.imageAppPreloader]: Record<ServiceAdminType | ServiceSiteType, string>;
+  [SettingsEnum.imageAppLogo]: Record<ServiceAdminType | ServiceSiteType, string>;
+  // colors
+  [SettingsEnum.colorPrimary]: Record<ServiceSiteType, string>;
+  [SettingsEnum.colorPrimaryInverted]: Record<ServiceSiteType, string>;
+  [SettingsEnum.colorTextRegular]: Record<ServiceSiteType, string>;
+  [SettingsEnum.colorSelectionBackground]: Record<ServiceSiteType, string>;
+  [SettingsEnum.colorSelectionText]: Record<ServiceSiteType, string>;
+  // Script / Styles
+  [SettingsEnum.headScript]: Record<ServiceSiteType, string>;
+  [SettingsEnum.headStyles]: Record<ServiceSiteType, string>;
+  // html
+  [SettingsEnum.headerHtml]: Record<ServiceSiteType, string>;
+  [SettingsEnum.contentBottomHtml]: Record<ServiceSiteType, string>;
+  [SettingsEnum.contentTopHtml]: Record<ServiceSiteType, string>;
+  [SettingsEnum.footerHtml]: Record<ServiceSiteType, string>;
 };
 
 export type SettingsServicesType = {
   [Key in keyof SettingsType]: {
     settingName: Key;
-    settingValue: SettingsType[Key][keyof SettingsType[Key]];
-    serviceName: keyof SettingsType[Key]; // This field contains an array of services to which this setting can be applied.
+    settingValue: (keyof LangType)[] | string; // (SettingsType[Key][keyof SettingsType[Key]] )
+    serviceName: keyof typeof ServicesEnum; // ( keyof SettingsType[Key] ) This field contains an array of services to which this setting can be applied.
   };
+};
+
+export type SettingsExtendsType = {
+  [SettingsEnum.imageAppFavicon]: Record<'mimeTypes', string>[];
+  [SettingsEnum.imageAppPreloader]: Record<'mimeTypes', string>[];
+  [SettingsEnum.imageAppLogo]: Record<'mimeTypes', string>[];
 };
 
 // Section

@@ -1,4 +1,4 @@
-import { LangType, ServicesLangsEnum, TranslationsMapType } from '@/types';
+import { LangType, ServicesTranslationsType, TranslationsMapType, ServicesEnum } from '@/types';
 import cookies from 'vue-cookies';
 import { $config } from '@/plugins/config';
 
@@ -11,19 +11,18 @@ import { $config } from '@/plugins/config';
 /*
   Lang default  
 */
+let langDefaultValues = JSON.parse(JSON.stringify($config['translations'].langDefault));
+let langDefaultServices: Record<ServicesTranslationsType, keyof LangType> = langDefaultValues;
 
-let langDefaultServices: Record<keyof typeof ServicesLangsEnum, keyof LangType> = JSON.parse(
-  JSON.stringify($config['translations'].langDefaultServices)
-);
 // Get
-export let $langDefault = (serviceName: keyof typeof ServicesLangsEnum): keyof LangType => {
+export let $langDefault = (serviceName: ServicesTranslationsType): keyof LangType => {
   return JSON.parse(JSON.stringify(langDefaultServices[serviceName]));
 };
 
 // Set
 type $setLangDefault = {
   langDefault: keyof LangType;
-  serviceName: keyof typeof ServicesLangsEnum;
+  serviceName: ServicesTranslationsType;
 };
 
 let langDefaultCookieName = $config['translations'].langDefaultCookieName;
@@ -31,9 +30,9 @@ let langDefaultCookieAge = $config['translations'].langDefaultCookieAge;
 
 export function $setLangDefault({ langDefault, serviceName }: $setLangDefault) {
   // If admin, we try to set the language based on cookies
-  if (ServicesLangsEnum.admin === serviceName) {
+  if (ServicesEnum.admin === serviceName) {
     let langCookie = (cookies as any).get(langDefaultCookieName);
-    let isExistInList = Object.keys($langs(ServicesLangsEnum.admin)).includes(langCookie);
+    let isExistInList = Object.keys($langs(ServicesEnum.admin)).includes(langCookie);
 
     if (!isExistInList) {
       (cookies as any).remove(langDefaultCookieName);
@@ -47,7 +46,7 @@ export function $setLangDefault({ langDefault, serviceName }: $setLangDefault) {
 
 // Set cookie
 export function $setCokieLangDefault({ langDefault }: { langDefault: keyof LangType }) {
-  let isExistInList = Object.keys($langs(ServicesLangsEnum.admin)).includes(langDefault);
+  let isExistInList = Object.keys($langs(ServicesEnum.admin)).includes(langDefault);
   if (!isExistInList) return;
   (cookies as any).set(langDefaultCookieName, langDefault, langDefaultCookieAge);
 }
@@ -55,20 +54,18 @@ export function $setCokieLangDefault({ langDefault }: { langDefault: keyof LangT
 /*
   Langs
 */
-
-let langsServices: Record<keyof typeof ServicesLangsEnum, LangType> = JSON.parse(
-  JSON.stringify($config['translations'].langsServices)
-);
+let langsValues = JSON.parse(JSON.stringify($config['translations'].langs));
+let langsServices: Record<ServicesTranslationsType, LangType> = langsValues;
 
 // Get
-export let $langs = (serviceName: keyof typeof ServicesLangsEnum): LangType => {
+export let $langs = (serviceName: ServicesTranslationsType): LangType => {
   return JSON.parse(JSON.stringify(langsServices[serviceName]));
 };
 
 // Set
 type $setLangsType = {
   langs: LangType;
-  serviceName: keyof typeof ServicesLangsEnum;
+  serviceName: ServicesTranslationsType;
 };
 
 export function $setLangs({ langs, serviceName }: $setLangsType) {
@@ -92,7 +89,7 @@ interface $tType {
 }
 
 export let $t = (key: string): string => {
-  let lang = langDefaultServices[ServicesLangsEnum.admin];
+  let lang = langDefaultServices[ServicesEnum.admin];
   if (!translationsMap[lang]) return key;
   return translationsMap[lang][key] || key;
 };
