@@ -2,14 +2,6 @@
 include /src/mixins.pug
 
 el-form.form-login.u-mb--10(label-position='top', v-loading='isLoading')
-  .u-mb--10
-    el-alert(
-      :title='$t(`To see the changes in the admin panel, you need to refresh the page`)',
-      type='info',
-      show-icon,
-      :closable='false'
-    )
-
   el-button.u-mb--5(type='primary', @click='createTranslations()') {{ $t('Update list of translations') }}
 
   el-table(:data='translations', stripe, :scrollbar-always-on='true')
