@@ -3,9 +3,24 @@ include /src/mixins.pug
 
 +b.page--settings.container
   +e.H1.title {{ $t($route.name) }}
+
+  .u-mb--10
+    el-alert(
+      :title='$t(`To see the changes in the "admin", you need to refresh the page`)',
+      type='warning',
+      show-icon,
+      :closable='false'
+    )
+  .u-mb--10
+    el-alert(
+      :title='$t(`Changes will be displayed on the "site" after the cache is published.`)',
+      type='warning',
+      show-icon,
+      :closable='false'
+    )
   el-tabs(v-model='tabActive', @tab-change='setTabUrlParam()', type='border-card')
-    el-tab-pane(:label='$t("View")', :name='TabsEnum.view')
-      tab-view(v-if='tabActive == TabsEnum.view')
+    el-tab-pane(:label='$t("Design / marketing")', :name='TabsEnum.designMarketing')
+      tab-view(v-if='tabActive == TabsEnum.designMarketing')
     el-tab-pane(:label='$t("Langs")', :name='TabsEnum.langs')
       tab-langs(v-if='tabActive == TabsEnum.langs')
     el-tab-pane(:label='$t("Translations (SITE)")', :name='TabsEnum.tSite')
@@ -36,13 +51,18 @@ import TabTranslations from './tab-translations.vue';
 import { ServicesEnum } from '@/types';
 
 enum TabsEnum {
-  view = 'view',
+  designMarketing = 'designMarketing',
   langs = 'langs',
   tSite = 'translations-site',
   tAdmin = 'translations-admin',
   tApi = 'translations-api',
 }
-type TabsType = TabsEnum.view | TabsEnum.langs | TabsEnum.tSite | TabsEnum.tAdmin | TabsEnum.tApi;
+type TabsType =
+  | TabsEnum.designMarketing
+  | TabsEnum.langs
+  | TabsEnum.tSite
+  | TabsEnum.tAdmin
+  | TabsEnum.tApi;
 
 export default defineComponent({
   name: 'page-settings',
@@ -69,7 +89,7 @@ export default defineComponent({
     // Makes tab active depending on query params url
     setActiveTab() {
       let { tab } = this.$route.query;
-      this.tabActive = (tab as TabsType) || TabsEnum.view;
+      this.tabActive = (tab as TabsType) || TabsEnum.designMarketing;
     },
 
     // Add query parameters to url when changing tabs

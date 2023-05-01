@@ -50,6 +50,7 @@ export enum SettingsEnum {
   imageAppPreloader = 'imageAppPreloader',
   imageAppLogo = 'imageAppLogo',
   // colors
+  colorBodyBackground = 'colorBodyBackground',
   colorPrimary = 'colorPrimary',
   colorPrimaryInverted = 'colorPrimaryInverted',
   colorTextRegular = 'colorTextRegular',
@@ -62,6 +63,10 @@ export enum SettingsEnum {
   contentTopHtml = 'contentTopHtml',
   contentBottomHtml = 'contentBottomHtml',
   footerHtml = 'footerHtml',
+  // Marketing
+  pageTitlePrefix = 'pageTitlePrefix',
+  pageTitleSufix = 'pageTitleSufix',
+  googleTagManagerId = 'googleTagManagerId',
 }
 
 export type SettingsType = {
@@ -73,19 +78,23 @@ export type SettingsType = {
   [SettingsEnum.imageAppPreloader]: Record<ServiceAdminType | ServiceSiteType, string>;
   [SettingsEnum.imageAppLogo]: Record<ServiceAdminType | ServiceSiteType, string>;
   // colors
+  [SettingsEnum.colorBodyBackground]: Record<ServiceSiteType, string>;
   [SettingsEnum.colorPrimary]: Record<ServiceSiteType, string>;
   [SettingsEnum.colorPrimaryInverted]: Record<ServiceSiteType, string>;
   [SettingsEnum.colorTextRegular]: Record<ServiceSiteType, string>;
   [SettingsEnum.colorSelectionBackground]: Record<ServiceSiteType, string>;
   [SettingsEnum.colorSelectionText]: Record<ServiceSiteType, string>;
-  // Script / Styles
+  // Code / text
   [SettingsEnum.headScript]: Record<ServiceSiteType, string>;
   [SettingsEnum.headStyles]: Record<ServiceSiteType, string>;
-  // html
   [SettingsEnum.headerHtml]: Record<ServiceSiteType, string>;
   [SettingsEnum.contentBottomHtml]: Record<ServiceSiteType, string>;
   [SettingsEnum.contentTopHtml]: Record<ServiceSiteType, string>;
   [SettingsEnum.footerHtml]: Record<ServiceSiteType, string>;
+  // Seo / Marketing
+  [SettingsEnum.pageTitlePrefix]: Record<ServiceSiteType, string>;
+  [SettingsEnum.pageTitleSufix]: Record<ServiceSiteType, string>;
+  [SettingsEnum.googleTagManagerId]: Record<ServiceSiteType, string>;
 };
 
 export type SettingsServicesType = {

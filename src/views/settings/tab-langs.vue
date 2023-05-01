@@ -4,23 +4,7 @@ include /src/mixins.pug
 el-form.form-login(label-position='top')
   .u-mb--10
     el-alert(
-      :title='$t(`To see the changes in the admin panel, you need to refresh the page`)',
-      type='info',
-      show-icon,
-      :closable='false'
-    )
-
-  .u-mb--10
-    el-alert(
       :title='$t(`For "admin" and "api" you need to set the same parameters.`)',
-      type='info',
-      show-icon,
-      :closable='false'
-    )
-
-  .u-mb--10
-    el-alert(
-      :title='$t("To see the changes in the admin panel, you need to refresh the page.")',
       type='info',
       show-icon,
       :closable='false'

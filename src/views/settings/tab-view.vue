@@ -2,20 +2,6 @@
 include /src/mixins.pug
 .u-mb--10
   el-alert(
-    :title='$t(`To see the changes in the admin panel, you need to refresh the page`)',
-    type='info',
-    show-icon,
-    :closable='false'
-  )
-.u-mb--10
-  el-alert(
-    :title='$t(`Changes will be displayed on the "site" after the cache is published.`)',
-    type='info',
-    show-icon,
-    :closable='false'
-  )
-.u-mb--10
-  el-alert(
     :title='$t(`The favicon on the "site" is displayed immediately after saving the changes.`)',
     type='info',
     show-icon,
@@ -96,7 +82,7 @@ el-form.form-login(label-position='top', v-loading='isLoading')
     // CodeOrText
     el-collapse-item(
       :title='$t("Code code HTML/CSS/JavaScript/Text")',
-      :name='CollapseEnum.CodeOrText'
+      :name='CollapseEnum.codeOrText'
     )
       .u-mb--10(v-for='(setting, settingName) in codeOrTextMap')
         el-descriptions(
@@ -108,6 +94,31 @@ el-form.form-login(label-position='top', v-loading='isLoading')
           el-descriptions-item
             el-form-item(
               :label='DescrCodeOrText[settingName]',
+              :error='errors[`${serviceName}--${settingName}`]'
+            )
+              el-input(v-model='setting[serviceName]', type='textarea')
+
+          el-descriptions-item(width='100', align='center')
+            el-tag.u-m--5(type='danger', size='small') {{ serviceName.toUpperCase() }}
+
+          el-descriptions-item(width='100', align='center')
+            el-button(
+              type='primary',
+              @click='editSetting({ settingName, serviceName, settingValue: setting[serviceName] })'
+            ) {{ $t('Save') }}
+
+    // Marketing
+    el-collapse-item(:title='$t("Marketing / SEO")', :name='CollapseEnum.marketing')
+      .u-mb--10(v-for='(setting, settingName) in marketingMap')
+        el-descriptions(
+          direction='vertical',
+          :column='3',
+          border,
+          v-for='(settingValue, serviceName) in marketingMap[settingName]'
+        )
+          el-descriptions-item
+            el-form-item(
+              :label='DescrMarketing[settingName]',
               :error='errors[`${serviceName}--${settingName}`]'
             )
               el-input(v-model='setting[serviceName]', type='textarea')
@@ -134,9 +145,10 @@ let DescrImages = {
 };
 
 let DescrColors = {
+  [SettingsEnum.colorBodyBackground]: $t('Background color - "body" tag'),
   [SettingsEnum.colorPrimary]: $t('Color primary'),
   [SettingsEnum.colorPrimaryInverted]: `${$t('Inverted primary color')} - 
-  ${$t('an example would be white letters on the main background.')}`,
+  ${$t('an example would be white letters on the primary background.')}`,
   [SettingsEnum.colorTextRegular]: $t('Color regular text - an example would be plain black text.'),
   [SettingsEnum.colorSelectionBackground]: $t('Selection color - background.'),
   [SettingsEnum.colorSelectionText]: $t('Selection color - text.'),
@@ -150,6 +162,12 @@ let DescrCodeOrText = {
   [SettingsEnum.contentBottomHtml]: $t('This HTML will be added before the "footer" tag'),
   [SettingsEnum.footerHtml]: $t('This HTML will be added after the "footer" tag'),
 };
+let pageTitlePrefix = $t('The phrase that will be added at the beginning of the "title" tag');
+let DescrMarketing = {
+  [SettingsEnum.pageTitlePrefix]: pageTitlePrefix,
+  [SettingsEnum.pageTitleSufix]: $t('Phrase that will be added at the end of the "title" tag'),
+  [SettingsEnum.googleTagManagerId]: $t('To activate Google Tag Manager, add your id'),
+};
 
 type ServicesImagesType = keyof SettingsType[keyof typeof DescrImages];
 
@@ -157,6 +175,7 @@ enum CollapseEnum {
   images = 'images',
   colors = 'colors',
   codeOrText = 'codeOrText',
+  marketing = 'marketing',
 }
 
 export default defineComponent({
@@ -170,6 +189,7 @@ export default defineComponent({
       >,
       colorsMap: {} as Pick<SettingsType, keyof typeof DescrColors>,
       codeOrTextMap: {} as Pick<SettingsType, keyof typeof DescrCodeOrText>,
+      marketingMap: {} as Pick<SettingsType, keyof typeof DescrMarketing>,
       // Indicates that there have been some changes in the settings
       isLoading: false,
       errors: {} as Record<string, string>,
@@ -177,6 +197,7 @@ export default defineComponent({
       DescrImages,
       DescrColors,
       DescrCodeOrText,
+      DescrMarketing,
       collapseActive: '' as CollapseEnum,
       CollapseEnum,
     };
@@ -230,10 +251,12 @@ export default defineComponent({
         setKeysState(DescrImages, this.imagesMap);
         setKeysState(DescrColors, this.colorsMap);
         setKeysState(DescrCodeOrText, this.codeOrTextMap);
+        setKeysState(DescrMarketing, this.marketingMap);
 
         setKeysErrors(DescrImages);
         setKeysErrors(DescrColors);
         setKeysErrors(DescrCodeOrText);
+        setKeysErrors(DescrMarketing);
 
         // files images
         (() => {
