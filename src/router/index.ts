@@ -25,9 +25,9 @@ let routes = [
     component: () => import('@/views/rating/rating.vue'),
   },
   {
-    path: '/cache',
-    name: $t('Cache control'),
-    component: () => import('@/views/cache/cache.vue'),
+    path: '/panel-control',
+    name: $t('Panel control'),
+    component: () => import('@/views/panel-control/panel-control.vue'),
   },
   {
     path: '/user',

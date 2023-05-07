@@ -1,41 +1,62 @@
 <template lang="pug">
 include /src/mixins.pug
-
-+b.page--cache.container
-  +e.H1.title {{ $t($route.name) }}
++b.tab-main
+  .u-mb--10
+    el-tag(type='danger') {{ $t('Blocks').toUpperCase() }}
+    span - {{ $t('During the execution of the operation, the API service will not process requests') }}
 
   .u-mb--10
     el-alert(
       :title='$t("Creating / deleting a cache implies that these changes will be published on the main site")',
-      type='info',
+      type='warning',
       show-icon,
       :closable='false'
     )
+  .u-mb--10
+    el-descriptions(direction='vertical', :column='3', border, v-loading='isLoading')
+      //
+      el-descriptions-item {{ $t('Create cache settings') }}
+      el-descriptions-item(align='center', width='100')
+      el-descriptions-item(align='center', width='180')
+        el-button(type='primary', @click='createCacheSettings()') {{ $t('Create cache') }}
+      //
+      el-descriptions-item {{ $t('Create cache for sections') }}
+      el-descriptions-item(align='center', width='100')
+      el-descriptions-item(align='center', width='180')
+        el-button(type='primary', @click='createCacheSections()') {{ $t('Create cache') }}
+      //
+      el-descriptions-item {{ $t('Rebuild all cache') }}
+      el-descriptions-item(align='center', width='100')
+        el-tag(type='danger') {{ $t('Blocks').toUpperCase() }}
+      el-descriptions-item(align='center')
+        el-button(type='primary', @click='resetCacheAll()') {{ $t('Create cache') }}
+      //
+      el-descriptions-item {{ $t('Delete all cache') }}
+      el-descriptions-item(align='center', width='100')
+        el-tag(type='danger') {{ $t('Blocks').toUpperCase() }}
+      el-descriptions-item(align='center')
+        el-button(type='danger', @click='clearCacheAll()') {{ $t('Delete cache') }}
 
-  el-descriptions(direction='vertical', :column='2', border, v-loading='isLoading')
-    //
-    el-descriptions-item {{ $t('Create cache settings') }}
-    el-descriptions-item(align='center', width='180')
-      el-button(type='primary', @click='createCacheSettings()') {{ $t('Create cache') }}
-    //
-    el-descriptions-item {{ $t('Create cache for sections') }}
-    el-descriptions-item(align='center', width='180')
-      el-button(type='primary', @click='createCacheSections()') {{ $t('Create cache') }}
-    //
-    el-descriptions-item {{ $t('Rebuild all cache') }}
-    el-descriptions-item(align='center')
-      el-button(type='primary', @click='resetCacheAll()') {{ $t('Create cache') }}
-    //
-    el-descriptions-item {{ $t('Delete all cache') }}
-    el-descriptions-item(align='center')
-      el-button(type='danger', @click='clearCacheAll()') {{ $t('Delete cache') }}
+  .u-mb--10
+    el-alert(
+      :title='$t("A backup will be created for: database, images and whois.")',
+      type='warning',
+      show-icon,
+      :closable='false'
+    )
+    el-descriptions(direction='vertical', :column='3', border, v-loading='isLoading')
+      el-descriptions-item {{ $t('Run backup') }}
+      el-descriptions-item(align='center', width='100')
+        el-tag(type='danger') {{ $t('Blocks').toUpperCase() }}
+      el-descriptions-item(align='center', width='180')
+        el-button(type='primary', @click='runBackup()') {{ $t('Run backup') }}
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 
 export default defineComponent({
-  name: 'page-cache',
+  name: 'tab-main',
   data() {
     return {
       // loading data
@@ -141,6 +162,33 @@ export default defineComponent({
         }
 
         throw { server: this.$t('There were errors while creating the cache') };
+      } catch (errors: any) {
+        this.$utils.showMessageError({ message: errors.server, errors });
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
+    // Run backup
+    async runBackup() {
+      if (this.isLoading) return;
+      await this.$utils.showDialogConfirm({
+        title: this.$t('Run backup?'),
+      });
+      this.isLoading = true;
+
+      try {
+        let response = await this.$api['backups'].runBackup();
+
+        if (response) {
+          this.$utils.showMessageSuccess({
+            duration: 0,
+            message: this.$t('Started sending files to a remote server'),
+          });
+          return;
+        }
+
+        throw { server: this.$t('Errors occurred while creating a backup') };
       } catch (errors: any) {
         this.$utils.showMessageError({ message: errors.server, errors });
       } finally {

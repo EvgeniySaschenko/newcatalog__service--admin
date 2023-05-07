@@ -7,6 +7,7 @@ import sites from './sites';
 import cache from './cache';
 import settings from './settings';
 import translations from './translations';
+import backups from './backups';
 
 export let $api = {
   users,
@@ -18,6 +19,7 @@ export let $api = {
   cache,
   settings,
   translations,
+  backups,
 };
 
 // Tell TypeScript that this property is global i.e. available in components via "this"

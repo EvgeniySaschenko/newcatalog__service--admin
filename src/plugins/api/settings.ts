@@ -19,7 +19,7 @@ export default {
     settingName,
     serviceName,
     settingValue,
-  }: SettingsServicesType[keyof SettingsServicesType]): Promise<true> => {
+  }: SettingsServicesType): Promise<true> => {
     let response = await $fetch(`/api/settings/${settingName}`, {
       method: 'PUT',
       body: JSON.stringify({ settingName, serviceName, settingValue }),
@@ -33,8 +33,8 @@ export default {
     serviceName,
     settingValue,
   }: {
-    settingName: SettingsServicesType[keyof SettingsServicesType]['settingName'];
-    serviceName: SettingsServicesType[keyof SettingsServicesType]['serviceName'];
+    settingName: SettingsServicesType['settingName'];
+    serviceName: SettingsServicesType['serviceName'];
     settingValue: File;
   }): Promise<true> => {
     let data = new FormData();

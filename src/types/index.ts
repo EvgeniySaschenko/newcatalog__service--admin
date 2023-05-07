@@ -39,6 +39,7 @@ export type ServicesLangsType = keyof Pick<typeof ServicesEnum, 'site' | 'admin'
 // Used as shorthand
 type ServiceSiteType = keyof Pick<typeof ServicesEnum, 'site'>;
 type ServiceAdminType = keyof Pick<typeof ServicesEnum, 'admin'>;
+type ServiceApiType = keyof Pick<typeof ServicesEnum, 'api'>;
 
 // Settings
 export enum SettingsEnum {
@@ -67,6 +68,18 @@ export enum SettingsEnum {
   pageTitlePrefix = 'pageTitlePrefix',
   pageTitleSufix = 'pageTitleSufix',
   googleTagManagerId = 'googleTagManagerId',
+  // Backup
+  backup = 'backup',
+}
+
+export enum SettingsBackupEnum {
+  host = 'host',
+  username = 'username',
+  publicKey = 'publicKey',
+  publicKeyComment = 'publicKeyComment',
+  port = 'port',
+  concurrency = 'concurrency',
+  remoteDir = 'remoteDir',
 }
 
 export type SettingsType = {
@@ -95,14 +108,25 @@ export type SettingsType = {
   [SettingsEnum.pageTitlePrefix]: Record<ServiceSiteType, string>;
   [SettingsEnum.pageTitleSufix]: Record<ServiceSiteType, string>;
   [SettingsEnum.googleTagManagerId]: Record<ServiceSiteType, string>;
+  // Backup
+  [SettingsEnum.backup]: Record<
+    ServiceApiType,
+    {
+      [SettingsBackupEnum.host]: string;
+      [SettingsBackupEnum.username]: string;
+      [SettingsBackupEnum.publicKey]: string;
+      [SettingsBackupEnum.publicKeyComment]: string;
+      [SettingsBackupEnum.port]: number;
+      [SettingsBackupEnum.concurrency]: number;
+      [SettingsBackupEnum.remoteDir]: '/';
+    }
+  >;
 };
 
 export type SettingsServicesType = {
-  [Key in keyof SettingsType]: {
-    settingName: Key;
-    settingValue: (keyof LangType)[] | string; // (SettingsType[Key][keyof SettingsType[Key]] )
-    serviceName: keyof typeof ServicesEnum; // ( keyof SettingsType[Key] ) This field contains an array of services to which this setting can be applied.
-  };
+  settingName: string;
+  settingValue: any;
+  serviceName: keyof typeof ServicesEnum;
 };
 
 export type SettingsExtendsType = {
@@ -227,4 +251,12 @@ export type PaginationType = {
   itemsCount: number;
   maxRecordsPerPage: number;
   pagesCount: number;
+};
+
+// Backup
+export type BackupType = {
+  backupId: number;
+  report: any;
+  dateCreate: Date;
+  isError: boolean;
 };

@@ -7,7 +7,7 @@ export let $config = {
   },
 
   // main-menu - Url will be taken from the router
-  'main-menu': ['Ratings list', 'Sections list', 'Cache control', 'User profile', 'App Settings'],
+  'main-menu': ['Ratings list', 'Sections list', 'Panel control', 'User profile', 'App Settings'],
 
   // pages-specific
   'pages-specific': {
