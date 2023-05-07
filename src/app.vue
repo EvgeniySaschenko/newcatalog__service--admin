@@ -79,7 +79,6 @@ export default defineComponent({
         this.setLangs(settings.settings);
 
         this.logoImage = settings.settings[SettingsEnum.imageAppLogo][ServicesEnum.admin];
-        console.log(this.logoImage);
         this.isAppRedy = true;
       } catch (errors: any) {
         this.$utils.showMessageError({ message: errors.server, errors });

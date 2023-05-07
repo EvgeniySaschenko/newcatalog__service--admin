@@ -31,6 +31,18 @@ export let $utils = {
     return new Intl.DateTimeFormat($config['date'].dateTimeFormat, options).format(new Date(date));
   },
   /*
+    Time formatting
+  */
+  time(date: Date | null) {
+    if (!date) return '-';
+
+    return new Intl.DateTimeFormat($config['date'].dateTimeFormat, {
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric',
+    }).format(new Date(date));
+  },
+  /*
     Show confirmation dialog
   */
   showDialogConfirm({
