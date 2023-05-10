@@ -60,6 +60,7 @@ export enum SettingsEnum {
   // Code / text
   headScript = 'headScript',
   headStyles = 'headStyles',
+  headerInfoHtml = 'headerInfoHtml',
   headerHtml = 'headerHtml',
   contentTopHtml = 'contentTopHtml',
   contentBottomHtml = 'contentBottomHtml',
@@ -107,6 +108,7 @@ export type SettingsType = {
   // Code / text
   [SettingsEnum.headScript]: Record<ServiceSiteType, string>;
   [SettingsEnum.headStyles]: Record<ServiceSiteType, string>;
+  [SettingsEnum.headerInfoHtml]: Record<ServiceAdminType | ServiceSiteType, string>;
   [SettingsEnum.headerHtml]: Record<ServiceSiteType, string>;
   [SettingsEnum.contentBottomHtml]: Record<ServiceSiteType, string>;
   [SettingsEnum.contentTopHtml]: Record<ServiceSiteType, string>;

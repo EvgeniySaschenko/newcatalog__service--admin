@@ -271,6 +271,7 @@ let DescrCodeOrText = {
   [SettingsEnum.headScript]: $t('This JavaScript will be added to the "head" tag'),
   [SettingsEnum.headStyles]: $t('This CSS will be added to the "head" tag'),
   [SettingsEnum.headerHtml]: $t('This HTML will be added to the "header" tag'),
+  [SettingsEnum.headerInfoHtml]: $t('Info bar above "header"'),
   [SettingsEnum.contentTopHtml]: $t('This HTML will be added after the "header" tag'),
   [SettingsEnum.contentBottomHtml]: $t('This HTML will be added before the "footer" tag'),
   [SettingsEnum.footerHtml]: $t('This HTML will be added after the "footer" tag'),
