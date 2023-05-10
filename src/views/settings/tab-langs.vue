@@ -5,7 +5,7 @@ el-form.form-login(label-position='top')
   .u-mb--10
     el-alert(
       :title='$t(`For "admin" and "api" you need to set the same parameters.`)',
-      type='info',
+      type='warning',
       show-icon,
       :closable='false'
     )
@@ -13,7 +13,7 @@ el-form.form-login(label-position='top')
   .u-mb--10
     el-alert(
       :title='$t("Sites will be displayed in the language you selected in the language switcher.")',
-      type='info',
+      type='warning',
       show-icon,
       :closable='false'
     )
@@ -21,7 +21,7 @@ el-form.form-login(label-position='top')
   .u-mb--10
     el-alert(
       :title='`${$t("Texts for the main site, in the admin panel will be displayed in the default language for the main site.")} ${$t("For example rating name or label text will be displayed in the main sat language.")}`',
-      type='info',
+      type='warning',
       show-icon,
       :closable='false'
     )
