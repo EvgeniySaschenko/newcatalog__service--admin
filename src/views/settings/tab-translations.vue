@@ -12,7 +12,7 @@ el-form.form-login.u-mb--10(label-position='top', v-loading='isLoading')
     el-table-column(:label='$t("Translations")')
       template(#default='scope')
         .u-mb--10
-          el-text(type='warning') {{ scope.row.key }}
+          el-text(type='primary') {{ scope.row.key }}
 
         el-form-item(:error='errors[`${scope.row.translationId}_text`]')
           template(v-for='(item, key) in langs')

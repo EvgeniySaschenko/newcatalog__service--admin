@@ -70,6 +70,8 @@ export enum SettingsEnum {
   googleTagManagerId = 'googleTagManagerId',
   // Backup
   backup = 'backup',
+  // Oher
+  protector = 'protector',
 }
 
 export enum SettingsBackupEnum {
@@ -80,6 +82,11 @@ export enum SettingsBackupEnum {
   port = 'port',
   concurrency = 'concurrency',
   remoteDir = 'remoteDir',
+}
+
+export enum SettingsProtectorEnum {
+  url = 'url',
+  textKey = 'textKey',
 }
 
 export type SettingsType = {
@@ -119,6 +126,14 @@ export type SettingsType = {
       [SettingsBackupEnum.port]: number;
       [SettingsBackupEnum.concurrency]: number;
       [SettingsBackupEnum.remoteDir]: '/';
+    }
+  >;
+  // Other
+  [SettingsEnum.protector]: Record<
+    ServiceApiType,
+    {
+      [SettingsProtectorEnum.url]: string;
+      [SettingsProtectorEnum.textKey]: string;
     }
   >;
 };
