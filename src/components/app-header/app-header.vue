@@ -1,6 +1,7 @@
 <template lang="pug">
 include /src/mixins.pug
 +b.HEADER.app-header
+  +e.row--info-band(v-if='headerInfoHtml') {{ headerInfoHtml }}
   +e.row--top
     .container
       +e.col-1
@@ -38,6 +39,10 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    headerInfoHtml: {
+      type: String,
+      default: '',
+    },
   },
 });
 </script>
@@ -52,6 +57,22 @@ export default defineComponent({
       margin-bottom: 10px
     &-img
       width: 100%
+  &__row--info-band
+    padding: 5px 10px
+    text-align: center
+    position: relative
+    font-size: 14px
+    color: #ffffff
+    &::after
+      content: ""
+      position: absolute
+      top: 0
+      left: 0
+      right: 0
+      bottom: 0
+      background-color: $app-primary-color
+      opacity: .7
+      z-index: -1
   &__row--top
     padding: 10px 0
     background-color: $app-primary-color

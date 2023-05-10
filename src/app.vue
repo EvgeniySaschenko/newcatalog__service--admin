@@ -2,7 +2,7 @@
 include /src/mixins.pug
 
 .wrapper(v-loading='isLoading')
-  app-header(v-if='isAppRedy', :logoImage='logoImage')
+  app-header(v-if='isAppRedy', :logoImage='logoImage', :headerInfoHtml='headerInfoHtml')
   router-view(v-if='isAppRedy || isPageLogin')
   footer.container
 </template>
@@ -31,6 +31,8 @@ export default defineComponent({
       isUserAuth: false,
       // Logo image
       logoImage: '',
+      // header info Html
+      headerInfoHtml: '',
     };
   },
 
@@ -79,6 +81,8 @@ export default defineComponent({
         this.setLangs(settings.settings);
 
         this.logoImage = settings.settings[SettingsEnum.imageAppLogo][ServicesEnum.admin];
+        this.headerInfoHtml = settings.settings[SettingsEnum.headerInfoHtml][ServicesEnum.admin];
+
         this.isAppRedy = true;
       } catch (errors: any) {
         this.$utils.showMessageError({ message: errors.server, errors });
