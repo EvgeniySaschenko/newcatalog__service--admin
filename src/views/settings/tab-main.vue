@@ -141,7 +141,7 @@ el-form.form-login(label-position='top', v-loading='isLoading')
             // host
             el-form-item(
               :label='$t("Host")',
-              :error='errors[`${serviceName}--${SettingsBackupEnum.host}`]'
+              :error='errors[`${serviceName}--${SettingsEnum.backup}-${SettingsBackupEnum.host}`]'
             )
               el-input(
                 v-model='settingValue[SettingsBackupEnum.host]',
@@ -150,19 +150,19 @@ el-form.form-login(label-position='top', v-loading='isLoading')
             // username
             el-form-item(
               :label='$t("Login")',
-              :error='errors[`${serviceName}--${SettingsBackupEnum.username}`]'
+              :error='errors[`${serviceName}--${SettingsEnum.backup}-${SettingsBackupEnum.username}`]'
             )
               el-input(v-model='settingValue[SettingsBackupEnum.username]')
             // port
             el-form-item(
               :label='$t("Port")',
-              :error='errors[`${serviceName}--${SettingsBackupEnum.port}`]'
+              :error='errors[`${serviceName}--${SettingsEnum.backup}-${SettingsBackupEnum.port}`]'
             )
               el-input-number(:min='0', v-model='settingValue[SettingsBackupEnum.port]')
             // remoteDir
             el-form-item(
               :label='$t("Directory")',
-              :error='errors[`${serviceName}--${SettingsBackupEnum.remoteDir}`]'
+              :error='errors[`${serviceName}--${SettingsEnum.backup}-${SettingsBackupEnum.remoteDir}`]'
             )
               el-input(
                 v-model='settingValue[SettingsBackupEnum.remoteDir]',
@@ -171,19 +171,19 @@ el-form.form-login(label-position='top', v-loading='isLoading')
             // concurrency
             el-form-item(
               :label='$t("Concurrency")',
-              :error='errors[`${serviceName}--${SettingsBackupEnum.concurrency}`]'
+              :error='errors[`${serviceName}--${SettingsEnum.backup}-${SettingsBackupEnum.concurrency}`]'
             )
               el-input-number(:min='1', v-model='settingValue[SettingsBackupEnum.concurrency]')
             // publicKey
             el-form-item(
               :label='`${$t("SSH public key.")} ${$t("Clearing this field will generate a new key.")}`',
-              :error='errors[`${serviceName}--${SettingsBackupEnum.publicKey}`]'
+              :error='errors[`${serviceName}--${SettingsEnum.backup}-${SettingsBackupEnum.publicKey}`]'
             )
               el-input(v-model='settingValue[SettingsBackupEnum.publicKey]', type='textarea')
             // publicKeyComment
             el-form-item(
               :label='$t("Public key comment")',
-              :error='errors[`${serviceName}--${SettingsBackupEnum.publicKeyComment}`]'
+              :error='errors[`${serviceName}--${SettingsEnum.backup}-${SettingsBackupEnum.publicKeyComment}`]'
             )
               el-input(v-model='settingValue[SettingsBackupEnum.publicKeyComment]')
 
@@ -193,11 +193,18 @@ el-form.form-login(label-position='top', v-loading='isLoading')
           el-descriptions-item(width='100', align='center')
             el-button(
               type='primary',
-              @click='editSetting({ settingName: SettingsEnum.backup, serviceName, settingValue: backupMap[serviceName], isRunInit: true })'
+              @click='editSetting({ settingName: SettingsEnum.backup, serviceName, settingValue: backupMap[serviceName], isRunInit: true, isClearAllErrors: true })'
             ) {{ $t('Save') }}
 
     // Protector
     el-collapse-item(:title='$t("Server protector")', :name='CollapseEnum.protector')
+      .u-mb--10
+        el-alert(
+          :title='$t(`This setting can completely block access to the admin panel`)',
+          type='error',
+          show-icon,
+          :closable='false'
+        )
       .u-mb--10
         el-alert(
           :title='$t(`If the protector server becomes unavailable, the check will be disabled`)',
@@ -212,7 +219,7 @@ el-form.form-login(label-position='top', v-loading='isLoading')
             // Url
             el-form-item(
               :label='$t("Server url that allows / forbids sending requests to the API server")',
-              :error='errors[`${serviceName}--${SettingsProtectorEnum.url}`]'
+              :error='errors[`${serviceName}--${SettingsEnum.protector}-${SettingsProtectorEnum.url}`]'
             )
               el-input(
                 v-model='settingValue[SettingsProtectorEnum.url]',
@@ -222,7 +229,7 @@ el-form.form-login(label-position='top', v-loading='isLoading')
             // Text key
             el-form-item(
               :label='$t("The key (string) that the server should return in the response if requests to the API server are allowed")',
-              :error='errors[`${serviceName}--${SettingsProtectorEnum.textKey}`]'
+              :error='errors[`${serviceName}--${SettingsEnum.protector}-${SettingsProtectorEnum.textKey}`]'
             )
               el-input(
                 v-model='settingValue[SettingsProtectorEnum.textKey]',
@@ -235,7 +242,7 @@ el-form.form-login(label-position='top', v-loading='isLoading')
           el-descriptions-item(width='100', align='center')
             el-button(
               type='primary',
-              @click='editSetting({ settingName: SettingsEnum.protector, serviceName, settingValue: protectorMap[serviceName], isRunInit: true })'
+              @click='editSetting({ settingName: SettingsEnum.protector, serviceName, settingValue: protectorMap[serviceName], isClearAllErrors: true })'
             ) {{ $t('Save') }}
 </template>
 
@@ -382,14 +389,14 @@ export default defineComponent({
         // backup
         for (let serviceName in this.backupMap) {
           for (let settingName in (this.backupMap as any)[serviceName]) {
-            this.errors[`${serviceName}--${settingName}`] = '';
+            this.errors[`${serviceName}--${SettingsEnum.backup}-${settingName}`] = '';
           }
         }
 
         // protector
         for (let serviceName in this.protectorMap) {
           for (let settingName in (this.protectorMap as any)[serviceName]) {
-            this.errors[`${serviceName}--${settingName}`] = '';
+            this.errors[`${serviceName}--${SettingsEnum.protector}-${settingName}`] = '';
           }
         }
 
@@ -418,10 +425,18 @@ export default defineComponent({
       settingName,
       serviceName,
       settingValue,
-      isRunInit = false,
-    }: SettingsServicesType & { isRunInit: boolean }) {
+      isRunInit = false, // Currently used to see SSH public key
+      isClearAllErrors = false, // For settings consisting of different properties
+    }: SettingsServicesType & { isRunInit?: boolean; isClearAllErrors?: boolean }) {
       if (this.isLoading) return;
       this.isLoading = true;
+
+      if (isClearAllErrors) {
+        this.$utils.clearErrors(this.errors, this.errors);
+      } else {
+        this.$utils.clearErrors(this.errors, { [`${serviceName}--${settingName}`]: '' });
+      }
+
       this.$utils.clearErrors(this.errors, { [`${serviceName}--${settingName}`]: '' });
       try {
         let response = await this.$api['settings'].editSetting({
