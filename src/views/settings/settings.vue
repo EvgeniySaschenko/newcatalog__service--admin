@@ -21,8 +21,13 @@ include /src/mixins.pug
   el-tabs(v-model='tabActive', @tab-change='setTabUrlParam()', type='border-card')
     el-tab-pane(:label='$t("Main")', :name='TabsEnum.main')
       tab-main(v-if='tabActive == TabsEnum.main')
+
+    el-tab-pane(:label='$t("Ssl certificates")', :name='TabsEnum.ssl')
+      tab-ssl(v-if='tabActive == TabsEnum.ssl')
+
     el-tab-pane(:label='$t("Langs")', :name='TabsEnum.langs')
       tab-langs(v-if='tabActive == TabsEnum.langs')
+
     el-tab-pane(:label='$t("Translations (SITE)")', :name='TabsEnum.tSite')
       tab-translations(
         v-if='tabActive == TabsEnum.tSite',
@@ -47,17 +52,25 @@ include /src/mixins.pug
 import { defineComponent } from 'vue';
 import TabMain from './tab-main.vue';
 import TabLangs from './tab-langs.vue';
+import TabSsl from './tab-ssl.vue';
 import TabTranslations from './tab-translations.vue';
 import { ServicesEnum } from '@/types';
 
 enum TabsEnum {
   main = 'main',
+  ssl = 'ssl',
   langs = 'langs',
   tSite = 'translations-site',
   tAdmin = 'translations-admin',
   tApi = 'translations-api',
 }
-type TabsType = TabsEnum.main | TabsEnum.langs | TabsEnum.tSite | TabsEnum.tAdmin | TabsEnum.tApi;
+type TabsType =
+  | TabsEnum.main
+  | TabsEnum.langs
+  | TabsEnum.ssl
+  | TabsEnum.tSite
+  | TabsEnum.tAdmin
+  | TabsEnum.tApi;
 
 export default defineComponent({
   name: 'page-settings',
@@ -65,6 +78,7 @@ export default defineComponent({
   components: {
     TabMain,
     TabLangs,
+    TabSsl,
     TabTranslations,
   },
   data() {
