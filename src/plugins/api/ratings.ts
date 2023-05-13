@@ -26,6 +26,7 @@ export default {
   createRating: async ({
     name,
     descr,
+    linksToSources,
     isHiden,
     sectionsIds,
     typeSort,
@@ -33,13 +34,21 @@ export default {
     typeRating,
   }: Pick<
     RatingType,
-    'name' | 'descr' | 'isHiden' | 'sectionsIds' | 'typeSort' | 'typeDisplay' | 'typeRating'
+    | 'name'
+    | 'descr'
+    | 'linksToSources'
+    | 'isHiden'
+    | 'sectionsIds'
+    | 'typeSort'
+    | 'typeDisplay'
+    | 'typeRating'
   >): Promise<Pick<RatingType, 'ratingId'>> => {
     let result = await $fetch(`/api/ratings`, {
       method: 'POST',
       body: JSON.stringify({
         name,
         descr,
+        linksToSources,
         isHiden,
         sectionsIds,
         typeSort,
@@ -55,6 +64,7 @@ export default {
     ratingId,
     name,
     descr,
+    linksToSources,
     isHiden,
     sectionsIds,
     typeSort,
@@ -65,6 +75,7 @@ export default {
     | 'ratingId'
     | 'name'
     | 'descr'
+    | 'linksToSources'
     | 'isHiden'
     | 'sectionsIds'
     | 'typeSort'
@@ -77,6 +88,7 @@ export default {
         ratingId,
         name,
         descr,
+        linksToSources,
         isHiden,
         sectionsIds,
         typeSort,

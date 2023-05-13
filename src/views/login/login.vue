@@ -20,7 +20,9 @@ include /src/mixins.pug
         :placeholder='$t("Password")',
         v-model='password',
         style='width: 100%',
-        type='password'
+        type='password',
+        name='password',
+        autocomplete='current-password'
       )
 
     el-form-item

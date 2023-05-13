@@ -226,6 +226,7 @@ export type RatingType = {
   dateFirstPublication: Date | null;
   countRatingItemsTotal: number;
   countRatingItemsHidden: number;
+  linksToSources: string[];
 };
 
 // Rating item

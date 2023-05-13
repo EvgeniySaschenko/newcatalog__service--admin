@@ -207,8 +207,8 @@ el-form.form-login(label-position='top', v-loading='isLoading')
         )
       .u-mb--10
         el-alert(
-          :title='$t(`If the protector server becomes unavailable, the check will be disabled`)',
-          type='warning',
+          :title='$t(`If the server protector is unavailable, you will not be able to access the admin panel`)',
+          type='error',
           show-icon,
           :closable='false'
         )
