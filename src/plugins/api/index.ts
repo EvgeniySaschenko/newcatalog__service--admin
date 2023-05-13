@@ -8,6 +8,7 @@ import cache from './cache';
 import settings from './settings';
 import translations from './translations';
 import backups from './backups';
+import sslCertificates from './ssl-certificates';
 
 export let $api = {
   users,
@@ -20,6 +21,7 @@ export let $api = {
   settings,
   translations,
   backups,
+  'ssl-certificates': sslCertificates,
 };
 
 // Tell TypeScript that this property is global i.e. available in components via "this"
