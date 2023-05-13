@@ -51,11 +51,26 @@ include /src/mixins.pug
     v-for='(value, key) in $langs("site")'
   )
     el-input(
+      :rows='3',
       show-word-limit,
       v-model='rating.descr[key]',
       :placeholder='$t("Description")',
       type='textarea'
     )
+
+  // Source links
+  el-form-item(:error='errors.linksToSources', :label='$t("Source links")')
+    el-select(
+      v-model='rating.linksToSources',
+      multiple,
+      filterable,
+      allow-create,
+      default-first-option,
+      :reserve-keyword='false',
+      :placeholder='$t("Source links")',
+      style='width: 100%'
+    )
+      el-option(v-for='item in rating.linksToSources', :label='item', :value='item')
 
   // Hide
   el-form-item(:label='$t("Hide")')
@@ -122,6 +137,8 @@ let ratingInit = (): RatingType => {
     name: $langs('site'),
     // Descriptin rating
     descr: $langs('site'),
+    // source links
+    linksToSources: [],
     // Hidden rating
     isHiden: false,
     // Rating type
@@ -188,6 +205,7 @@ export default defineComponent({
         name: '',
         descr: '',
         sectionsIds: '',
+        linksToSources: '',
       },
     };
   },
