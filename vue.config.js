@@ -21,4 +21,15 @@ module.exports = {
       ],
     },
   },
+
+  pwa: {
+    iconPaths: {
+      favicon32: './favicon.ico',
+      favicon16: './favicon.ico',
+      favicon96: './favicon.ico',
+      appleTouchIcon: './favicon.ico',
+      msTitleImage: './favicon.ico',
+      faviconSVG: './favicon.ico',
+    },
+  },
 };
