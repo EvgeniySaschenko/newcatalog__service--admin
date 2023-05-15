@@ -262,6 +262,7 @@ let DescrImages = {
   [SettingsEnum.imageAppLogo]: $t('Image logo'),
   [SettingsEnum.imageAppFavicon]: $t('Image favicon'),
   [SettingsEnum.imageAppPreloader]: $t('Image preloader'),
+  [SettingsEnum.imageAppDefault]: $t('Image default (If the image does not exist)'),
 };
 
 let DescrColors = {
