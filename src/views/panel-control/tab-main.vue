@@ -7,7 +7,7 @@ include /src/mixins.pug
 
   .u-mb--10
     el-alert(
-      :title='$t("Creating / deleting a cache implies that these changes will be published on the main site")',
+      :title='$t("Creating / deleting a cache implies that these changes will be published on the main website")',
       type='warning',
       show-icon,
       :closable='false'
@@ -147,7 +147,7 @@ export default defineComponent({
     async createCacheSettings() {
       if (this.isLoading) return;
       await this.$utils.showDialogConfirm({
-        title: this.$t('Create cache settings site?'),
+        title: this.$t(`Create cache "settings" for website?`),
       });
       this.isLoading = true;
 
