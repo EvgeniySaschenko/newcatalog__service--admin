@@ -197,7 +197,7 @@ el-form.form-login(label-position='top', v-loading='isLoading')
             ) {{ $t('Save') }}
 
     // Protector
-    el-collapse-item(:title='$t(`Server "protector"`)', :name='CollapseEnum.protector')
+    el-collapse-item(:title='$t(`Server protection`)', :name='CollapseEnum.protector')
       .u-mb--10
         el-alert(
           :title='$t(`This setting can completely block access to the admin panel`)',
