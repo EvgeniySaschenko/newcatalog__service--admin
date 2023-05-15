@@ -13,34 +13,34 @@ include /src/mixins.pug
     )
   .u-mb--10
     el-alert(
-      :title='$t(`Changes will be displayed on the "site" after the cache is published.`)',
+      :title='$t(`Changes will be displayed on the "site" after the cache is published`)',
       type='warning',
       show-icon,
       :closable='false'
     )
   el-tabs(v-model='tabActive', @tab-change='setTabUrlParam()', type='border-card')
-    el-tab-pane(:label='$t("Main")', :name='TabsEnum.main')
+    el-tab-pane(:label='$t("Main Settings")', :name='TabsEnum.main')
       tab-main(v-if='tabActive == TabsEnum.main')
 
-    el-tab-pane(:label='$t("Ssl certificates")', :name='TabsEnum.ssl')
+    el-tab-pane(:label='$t("SSL certificates")', :name='TabsEnum.ssl')
       tab-ssl(v-if='tabActive == TabsEnum.ssl')
 
-    el-tab-pane(:label='$t("Langs")', :name='TabsEnum.langs')
+    el-tab-pane(:label='$t("Languages")', :name='TabsEnum.langs')
       tab-langs(v-if='tabActive == TabsEnum.langs')
 
-    el-tab-pane(:label='$t("Translations (SITE)")', :name='TabsEnum.tSite')
+    el-tab-pane(:label='`${$t("Translations")} (${ServicesEnum.site.toUpperCase()})`', :name='TabsEnum.tSite')
       tab-translations(
         v-if='tabActive == TabsEnum.tSite',
         :serviceName='ServicesEnum.site',
         :langs='$langs("site")'
       )
-    el-tab-pane(:label='$t("Translations (ADMIN)")', :name='TabsEnum.tAdmin')
+    el-tab-pane(:label='`${$t("Translations")} (${ServicesEnum.admin.toUpperCase()})`', :name='TabsEnum.tAdmin')
       tab-translations(
         v-if='tabActive == TabsEnum.tAdmin',
         :serviceName='ServicesEnum.admin',
         :langs='$langs("admin")'
       )
-    el-tab-pane(:label='$t("Translations (API)")', :name='TabsEnum.tApi')
+    el-tab-pane(:label='`${$t("Translations")} (${ServicesEnum.api.toUpperCase()})`', :name='TabsEnum.tApi')
       tab-translations(
         v-if='tabActive == TabsEnum.tApi',
         :serviceName='ServicesEnum.api',

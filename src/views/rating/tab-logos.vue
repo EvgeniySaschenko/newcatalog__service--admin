@@ -133,7 +133,7 @@ export default defineComponent({
         this.sreens[this.curIndex] = this.curItem;
 
         this.$utils.showMessageSuccess({
-          message: this.$t('Logo added'),
+          message: this.$t('Added'),
         });
       } catch (errors: any) {
         this.$utils.showMessageError({ message: errors.server, errors });

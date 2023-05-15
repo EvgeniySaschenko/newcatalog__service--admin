@@ -15,7 +15,7 @@ include /src/mixins.pug
           el-tag.u-m--5(type='warning', effect='plain', v-for='sectionId in scope.row.sectionsIds') {{ sectionsMap[sectionId].name[$langDefault('site')] }}
     el-table-column(:label='$t("Date of first publication")', width='150')
       template(#default='scope') {{ $utils.date(scope.row.dateFirstPublication) }}
-    el-table-column(:label='$t("Publication date (cached)")', width='150')
+    el-table-column(:label='$t("Cache creation date")', width='150')
       template(#default='scope')
         span(v-if='scope.row.dateCacheCreation') {{ $utils.date(scope.row.dateCacheCreation, 'datetime') }}
         el-tag(v-else, type='info', effect='dark') {{ $t('Not published') }}

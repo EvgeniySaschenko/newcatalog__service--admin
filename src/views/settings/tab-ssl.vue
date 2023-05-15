@@ -21,10 +21,10 @@ el-form.form-login(label-position='top')
     el-descriptions(direction='vertical', :column='2', border)
       el-descriptions-item
         // сertificate
-        el-form-item(:label='$t("Ssl сertificate")', :error='errors.cert')
+        el-form-item(:label='$t("SSL сertificate")', :error='errors.cert')
           el-input(v-model='cert', type='textarea')
         // privateKey
-        el-form-item(:label='$t("Ssl private key")', :error='errors.privateKey')
+        el-form-item(:label='$t("SSL private key")', :error='errors.privateKey')
           el-input(v-model='privateKey', type='textarea')
         // serviceName
         el-form-item(:label='$t("For domain")', :error='errors.serviceName')

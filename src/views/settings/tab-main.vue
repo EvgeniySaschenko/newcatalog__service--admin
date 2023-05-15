@@ -6,7 +6,7 @@ el-form.form-login(label-position='top', v-loading='isLoading')
     // images
     el-collapse-item(:title='$t("Images")', :name='CollapseEnum.images')
       el-alert(
-        :title='$t(`The favicon on the "site" is displayed immediately after saving the changes.`)',
+        :title='$t(`Favicon will change immediately after saving the settings`)',
         type='warning',
         show-icon,
         :closable='false'
@@ -51,7 +51,7 @@ el-form.form-login(label-position='top', v-loading='isLoading')
     el-collapse-item(:title='$t("Colors")', :name='CollapseEnum.colors')
       .u-mb--10
         el-alert(
-          :title='$t(`For the "error page" of the "site" the local colors will be used.`)',
+          :title='$t(`For the "error page" of the site the local colors will be used`)',
           type='warning',
           show-icon,
           :closable='false'
@@ -82,7 +82,7 @@ el-form.form-login(label-position='top', v-loading='isLoading')
 
     // CodeOrText
     el-collapse-item(
-      :title='$t("Code code HTML/CSS/JavaScript/Text")',
+      :title='$t("Code: HTML/CSS/JavaScript/Text")',
       :name='CollapseEnum.codeOrText'
     )
       .u-mb--10(v-for='(setting, settingName) in codeOrTextMap')
@@ -145,7 +145,7 @@ el-form.form-login(label-position='top', v-loading='isLoading')
             )
               el-input(
                 v-model='settingValue[SettingsBackupEnum.host]',
-                :placeholder='$t("examplehost.com")'
+                placeholder='examplehost.com'
               )
             // username
             el-form-item(
@@ -161,7 +161,7 @@ el-form.form-login(label-position='top', v-loading='isLoading')
               el-input-number(:min='0', v-model='settingValue[SettingsBackupEnum.port]')
             // remoteDir
             el-form-item(
-              :label='$t("Directory")',
+              :label='$t("Directory path")',
               :error='errors[`${serviceName}--${SettingsEnum.backup}-${SettingsBackupEnum.remoteDir}`]'
             )
               el-input(
@@ -176,7 +176,7 @@ el-form.form-login(label-position='top', v-loading='isLoading')
               el-input-number(:min='1', v-model='settingValue[SettingsBackupEnum.concurrency]')
             // publicKey
             el-form-item(
-              :label='`${$t("SSH public key.")} ${$t("Clearing this field will generate a new key.")}`',
+              :label='`${$t("SSH public key")}. ${$t("Clearing this field will generate a new key")}`',
               :error='errors[`${serviceName}--${SettingsEnum.backup}-${SettingsBackupEnum.publicKey}`]'
             )
               el-input(v-model='settingValue[SettingsBackupEnum.publicKey]', type='textarea')
@@ -197,7 +197,7 @@ el-form.form-login(label-position='top', v-loading='isLoading')
             ) {{ $t('Save') }}
 
     // Protector
-    el-collapse-item(:title='$t("Server protector")', :name='CollapseEnum.protector')
+    el-collapse-item(:title='$t(`Server "protector"`)', :name='CollapseEnum.protector')
       .u-mb--10
         el-alert(
           :title='$t(`This setting can completely block access to the admin panel`)',
@@ -207,7 +207,7 @@ el-form.form-login(label-position='top', v-loading='isLoading')
         )
       .u-mb--10
         el-alert(
-          :title='$t(`If the server protector is unavailable, you will not be able to access the admin panel`)',
+          :title='$t(`If the server "protector" is unavailable, you will not be able to access the admin panel`)',
           type='error',
           show-icon,
           :closable='false'
@@ -223,7 +223,7 @@ el-form.form-login(label-position='top', v-loading='isLoading')
             )
               el-input(
                 v-model='settingValue[SettingsProtectorEnum.url]',
-                :placeholder='$t("https://url")'
+                placeholder='https://url'
               )
 
             // Text key
@@ -261,17 +261,17 @@ import { $t } from '@/plugins/translations';
 let DescrImages = {
   [SettingsEnum.imageAppLogo]: $t('Image logo'),
   [SettingsEnum.imageAppFavicon]: $t('Image favicon'),
-  [SettingsEnum.imageAppPreloader]: $t('Image preloder'),
+  [SettingsEnum.imageAppPreloader]: $t('Image preloader'),
 };
 
 let DescrColors = {
   [SettingsEnum.colorBodyBackground]: $t('Background color - "body" tag'),
   [SettingsEnum.colorPrimary]: $t('Color primary'),
   [SettingsEnum.colorPrimaryInverted]: `${$t('Inverted primary color')} - 
-  ${$t('an example would be white letters on the primary background.')}`,
-  [SettingsEnum.colorTextRegular]: $t('Color regular text - an example would be plain black text.'),
-  [SettingsEnum.colorSelectionBackground]: $t('Selection color - background.'),
-  [SettingsEnum.colorSelectionText]: $t('Selection color - text.'),
+  ${$t('an example would be white letters on the primary background')}`,
+  [SettingsEnum.colorTextRegular]: $t('Color regular text - an example would be plain black text'),
+  [SettingsEnum.colorSelectionBackground]: $t('Selection color - background'),
+  [SettingsEnum.colorSelectionText]: $t('Selection color - text'),
 };
 
 let DescrCodeOrText = {
@@ -281,7 +281,7 @@ let DescrCodeOrText = {
   [SettingsEnum.headerInfoHtml]: $t('Info bar above "header"'),
   [SettingsEnum.contentTopHtml]: $t('This HTML will be added after the "header" tag'),
   [SettingsEnum.contentBottomHtml]: $t('This HTML will be added before the "footer" tag'),
-  [SettingsEnum.footerHtml]: $t('This HTML will be added after the "footer" tag'),
+  [SettingsEnum.footerHtml]: $t('This HTML will be added in the "footer" tag'),
 };
 let pageTitlePrefix = $t('The phrase that will be added at the beginning of the "title" tag');
 
@@ -447,7 +447,7 @@ export default defineComponent({
 
         if (response) {
           this.$utils.showMessageSuccess({
-            message: this.$t('Setting edited'),
+            message: this.$t('Changed'),
           });
 
           if (isRunInit) {
@@ -493,7 +493,7 @@ export default defineComponent({
 
         if (response) {
           this.$utils.showMessageSuccess({
-            message: this.$t('Setting edited'),
+            message: this.$t('Changed'),
           });
           this.clearFileImage({ settingName, serviceName });
 

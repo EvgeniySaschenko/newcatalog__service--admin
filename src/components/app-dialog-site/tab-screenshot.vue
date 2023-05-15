@@ -6,7 +6,7 @@ include /src/mixins.pug
   // if
   template(v-if='site.isScreenshotProcessCreate')
     el-alert.u-mb--5(
-      :title='$t("The site has been queued for taking a screenshot")',
+      :title='$t("The site is in queue for taking a screenshot")',
       type='warning',
       show-icon,
       :closable='false'
@@ -25,7 +25,7 @@ include /src/mixins.pug
         +e.col--action
           el-tooltip(
             v-if='!site.screenshotImg && site.isSubdomain',
-            :content='$t("Screenshots are not generated automatically for subdomains")',
+            :content='$t("Screenshots are not created automatically for subdomains")',
             placement='top'
           )
             el-icon.u-m--10

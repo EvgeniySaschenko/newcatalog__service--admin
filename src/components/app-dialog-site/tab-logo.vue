@@ -21,7 +21,7 @@ include /src/mixins.pug
   // If exist screenshot and not exist logo
   .u-mb--5(v-if='site.siteScreenshotId && !site.siteLogoId')
     el-alert(
-      :title='$t(`To create a logo, go to the "Create Logo" tab`)',
+      :title='$t("To create a logo, go to the logo creation tab")',
       type='info',
       show-icon,
       :closable='false'
@@ -66,9 +66,9 @@ include /src/mixins.pug
           +e.subdomain-title {{ $t('Logo') }}
           +e.subdomain-box-logo(:style='{ backgroundColor: domain.color }')
             img(:src='domain.logoImg')
-        // If exist screeshot
+        // If exist Screenshot
         +e.subdomain--screenshot(v-if='domain.screenshotImg')
-          +e.subdomain-title {{ $t('Screeshot') }}
+          +e.subdomain-title {{ $t('Screenshot') }}
           img(:src='domain.screenshotImg')
 
       +e.col--action
@@ -81,7 +81,7 @@ include /src/mixins.pug
             el-icon.u-m--10
               el-icon-question-filled
           el-button(type='primary', @click='checkImagesForSite()', size='small') {{ $t('Check for availability') }}
-        // If exist screeshot or logo
+        // If exist Screenshot or logo
         template(v-else)
           el-tooltip(
             :content='`${$t("The domain images will be linked to the subdomain")}. ${$t("This means that when you edit the logo/color, the changes will show up wherever this screenshot is used")}`',
