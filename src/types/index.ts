@@ -50,6 +50,7 @@ export enum SettingsEnum {
   imageAppFavicon = 'imageAppFavicon',
   imageAppPreloader = 'imageAppPreloader',
   imageAppLogo = 'imageAppLogo',
+  imageAppDefault = 'imageAppDefault',
   // colors
   colorBodyBackground = 'colorBodyBackground',
   colorPrimary = 'colorPrimary',
@@ -98,6 +99,7 @@ export type SettingsType = {
   [SettingsEnum.imageAppFavicon]: Record<ServiceAdminType | ServiceSiteType, string>;
   [SettingsEnum.imageAppPreloader]: Record<ServiceAdminType | ServiceSiteType, string>;
   [SettingsEnum.imageAppLogo]: Record<ServiceAdminType | ServiceSiteType, string>;
+  [SettingsEnum.imageAppDefault]: Record<ServiceAdminType | ServiceSiteType, string>;
   // colors
   [SettingsEnum.colorBodyBackground]: Record<ServiceSiteType, string>;
   [SettingsEnum.colorPrimary]: Record<ServiceSiteType, string>;

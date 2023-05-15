@@ -12,7 +12,8 @@ import { defineComponent } from 'vue';
 import { SettingsType, SettingsEnum, ServicesEnum } from '@/types';
 import AppHeader from '@/components/app-header/app-header.vue';
 import useSectionsStore from '@/store/sections';
-
+import { $setLazyLoadOptions } from '@/plugins/lazy-load';
+import { inject } from 'vue';
 export default defineComponent({
   provide() {
     return {
@@ -79,6 +80,11 @@ export default defineComponent({
 
         this.$setTranslations({ translations });
         this.setLangs(settings.settings);
+
+        $setLazyLoadOptions(
+          { error: settings.settings[SettingsEnum.imageAppDefault][ServicesEnum.admin] },
+          this
+        );
 
         this.logoImage = settings.settings[SettingsEnum.imageAppLogo][ServicesEnum.admin];
         this.headerInfoHtml = settings.settings[SettingsEnum.headerInfoHtml][ServicesEnum.admin];
