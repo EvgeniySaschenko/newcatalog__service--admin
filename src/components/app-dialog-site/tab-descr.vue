@@ -172,7 +172,7 @@ export default defineComponent({
         });
 
         this.$utils.showMessageSuccess({
-          message: this.$t('Modified'),
+          message: this.$t('Changed'),
         });
 
         (this.provideEmitUpdateRatingItem as any)();

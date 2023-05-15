@@ -76,7 +76,7 @@ include /src/mixins.pug
   el-form-item(:label='$t("Hide")')
     el-checkbox.u-m--10(v-model='rating.isHiden')
     el-tooltip(
-      :content='$t("When you save the section will be removed from the cache. Also when recreating all caches will not be published")',
+      :content='$t("When you save the section will be removed from the cache")',
       placement='top'
     )
       el-icon.u-m--10
@@ -110,7 +110,7 @@ include /src/mixins.pug
 
   +e.bottom
     el-button(v-if='!rating.ratingId', type='primary', @click='createRating()') {{ $t('Create rating') }}
-    el-button(v-if='rating.ratingId', type='primary', @click='editRating()') {{ $t('Save your changes') }}
+    el-button(v-if='rating.ratingId', type='primary', @click='editRating()') {{ $t('Save') }}
     el-button(v-if='rating.ratingId', type='danger', @click='deleteRating()') {{ $t('Delete') }}
 </template>
 
@@ -266,7 +266,7 @@ export default defineComponent({
         });
 
         this.$utils.showMessageSuccess({
-          message: this.$t('Rating created'),
+          message: this.$t('Created'),
         });
 
         ratingIdNew = ratingId;
@@ -302,7 +302,7 @@ export default defineComponent({
         await this.$api['ratings'].editRating(this.preparingRatingDataForSavingEdit());
 
         this.$utils.showMessageSuccess({
-          message: this.$t('Rating changed'),
+          message: this.$t('Changed'),
         });
 
         isSuccess = true;
@@ -340,7 +340,7 @@ export default defineComponent({
         await this.$api['ratings'].deleteRating({ ratingId: this.ratingId });
 
         this.$utils.showMessageSuccess({
-          message: this.$t('Rating removed'),
+          message: this.$t('Removed'),
         });
         this.$router.push({ path: this.$config['pages-specific'].ratings });
       } catch (errors: any) {

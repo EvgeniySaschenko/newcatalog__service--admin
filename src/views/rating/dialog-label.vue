@@ -114,7 +114,7 @@ export default defineComponent({
         });
 
         this.$utils.showMessageSuccess({
-          message: this.$t('Label created'),
+          message: this.$t('Created'),
         });
 
         this.$emit('label:update', { event: 'create' });
@@ -143,7 +143,7 @@ export default defineComponent({
         });
 
         this.$utils.showMessageSuccess({
-          message: this.$t('Label changed'),
+          message: this.$t('Changed'),
         });
 
         this.$emit('label:update', { event: 'edit' });
@@ -172,7 +172,7 @@ export default defineComponent({
         });
 
         this.$utils.showMessageSuccess({
-          message: this.$t('Label removed'),
+          message: this.$t('Removed'),
         });
 
         this.$emit('label:update', { event: 'delete' });

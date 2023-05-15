@@ -37,7 +37,7 @@ export let $fetch: FetchType = async (url: string, params?: RequestInit): Promis
     // The server is not ready to process requests
     case 202: {
       throw {
-        server: $t('The server is not ready to process requests, an update is in progress.'),
+        server: $t('The server is not ready to process requests, an update is in progress'),
       };
     }
     // Data validation errors

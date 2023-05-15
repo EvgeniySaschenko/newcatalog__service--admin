@@ -36,7 +36,7 @@ let routes = [
   },
   {
     path: '/settings',
-    name: $t('App Settings'),
+    name: $t('Settings'),
     component: () => import('@/views/settings/settings.vue'),
   },
   {
@@ -46,7 +46,7 @@ let routes = [
   },
   {
     path: '/',
-    name: $t('Home Page'),
+    name: $t('Main Page'),
     redirect: (to: any) => {
       return { path: $config['pages-specific'].default };
     },

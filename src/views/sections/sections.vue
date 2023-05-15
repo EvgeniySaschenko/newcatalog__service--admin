@@ -18,7 +18,7 @@ include /src/mixins.pug
       el-table-column(width='200')
         template(#default='scope')
           el-form-item
-            el-button(type='primary', @click='createSection()') {{ $t('Add Section') }}
+            el-button(type='primary', @click='createSection()') {{ $t('Add a Section') }}
 
   // Edit
   el-form
@@ -129,7 +129,7 @@ export default defineComponent({
         await this.getSections();
         this.nameNewSection = this.$langs('site');
         this.$utils.showMessageSuccess({
-          message: this.$t('Section added'),
+          message: this.$t('Added'),
         });
       } catch (errors: any) {
         let isValidationError = this.$utils.setErrors(this.errors.formAdd, errors.errors);
@@ -153,7 +153,7 @@ export default defineComponent({
         await this.$api['sections'].deleteSection({ sectionId: +sectionId });
         await this.getSections();
         this.$utils.showMessageSuccess({
-          message: this.$t('Section deleted'),
+          message: this.$t('Removed'),
         });
       } catch (errors: any) {
         this.$utils.showMessageError({ message: errors.server || errors.errors?.section, errors });
@@ -173,7 +173,7 @@ export default defineComponent({
         await this.$api['sections'].editSection(section);
         await this.getSections();
         this.$utils.showMessageSuccess({
-          message: this.$t('Section edited'),
+          message: this.$t('Changed'),
         });
       } catch (errors: any) {
         let errorsMsgs = {

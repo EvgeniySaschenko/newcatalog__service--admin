@@ -2,7 +2,7 @@
 include /src/mixins.pug
 +b.tab-main
   .u-mb--10
-    el-tag(type='danger') {{ $t('Blocks').toUpperCase() }}
+    el-tag(type='danger') {{ $t('Blocked').toUpperCase() }}
     span - {{ $t('During the execution of the operation, the API service will not process requests') }}
 
   .u-mb--10
@@ -20,26 +20,26 @@ include /src/mixins.pug
       el-descriptions-item(align='center', width='180')
         el-button(type='primary', @click='createCacheSettings()') {{ $t('Create cache') }}
       //
-      el-descriptions-item {{ $t('Create cache for sections') }}
+      el-descriptions-item {{ $t('Create cache sections') }}
       el-descriptions-item(align='center', width='100')
       el-descriptions-item(align='center', width='180')
         el-button(type='primary', @click='createCacheSections()') {{ $t('Create cache') }}
       //
       el-descriptions-item {{ $t('Rebuild all cache') }}
       el-descriptions-item(align='center', width='100')
-        el-tag(type='danger') {{ $t('Blocks').toUpperCase() }}
+        el-tag(type='danger') {{ $t('Blocked').toUpperCase() }}
       el-descriptions-item(align='center')
         el-button(type='primary', @click='resetCacheAll()') {{ $t('Create cache') }}
       //
       el-descriptions-item {{ $t('Delete all cache') }}
       el-descriptions-item(align='center', width='100')
-        el-tag(type='danger') {{ $t('Blocks').toUpperCase() }}
+        el-tag(type='danger') {{ $t('Blocked').toUpperCase() }}
       el-descriptions-item(align='center')
         el-button(type='danger', @click='clearCacheAll()') {{ $t('Delete cache') }}
 
   .u-mb--10
     el-alert(
-      :title='$t("A backup will be created for: database, images and whois.")',
+      :title='$t("A backup will be created for: database, images and whois")',
       type='warning',
       show-icon,
       :closable='false'
@@ -47,9 +47,9 @@ include /src/mixins.pug
     el-descriptions(direction='vertical', :column='3', border, v-loading='isLoading')
       el-descriptions-item {{ $t('Run backup') }}
       el-descriptions-item(align='center', width='100')
-        el-tag(type='danger') {{ $t('Blocks').toUpperCase() }}
+        el-tag(type='danger') {{ $t('Blocked').toUpperCase() }}
       el-descriptions-item(align='center', width='180')
-        el-button(type='primary', @click='runBackup()') {{ $t('Run backup') }}
+        el-button(type='primary', @click='runBackup()') {{ $t('Create backup') }}
 </template>
 
 <script lang="ts">

@@ -26,7 +26,7 @@ el-form.form-login.u-mb--10(label-position='top', v-loading='isLoading')
               template(#prepend) {{ key }}
 
     // save
-    el-table-column(:label='$t("Save your changes")', width='200', align='center')
+    el-table-column(:label='$t("Save")', width='200', align='center')
       template(#default='scope')
         el-button(
           type='primary',
@@ -141,7 +141,7 @@ export default defineComponent({
         });
 
         this.$utils.showMessageSuccess({
-          message: this.$t('Translation edited'),
+          message: this.$t('Changed'),
         });
 
         this.isChanges = true;
@@ -170,7 +170,7 @@ export default defineComponent({
         await this.changePage(1);
 
         this.$utils.showMessageSuccess({
-          message: this.$t('Translations updated'),
+          message: this.$t('Changed'),
         });
 
         this.isChanges = true;
