@@ -82,8 +82,8 @@ include /src/mixins.pug
       el-icon.u-m--10
         el-icon-question-filled
 
-  // Remove from site
-  el-form-item(:label='$t("Remove from site")')
+  // Remove from website
+  el-form-item(:label='$t("Remove from website")')
     el-button(
       type='danger',
       @click='deleteCacheRating(rating.ratingId)',
@@ -219,7 +219,7 @@ export default defineComponent({
         { type: RatingDisplayTypeEnum.tile, name: this.$t('Tile') },
         { type: RatingDisplayTypeEnum.inline, name: this.$t('Line') },
       ];
-      this.typesRating = [{ type: RatingTypeTypeEnum.site, name: this.$t('Sites') }];
+      this.typesRating = [{ type: RatingTypeTypeEnum.site, name: this.$t('Websites') }];
       this.typesSort = [
         { type: RatingSortTypeEnum.alexa, name: this.$t('Alexa Rank') },
         { type: RatingSortTypeEnum.click, name: this.$t('Clicks') },

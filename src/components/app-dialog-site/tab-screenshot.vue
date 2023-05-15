@@ -6,7 +6,7 @@ include /src/mixins.pug
   // if
   template(v-if='site.isScreenshotProcessCreate')
     el-alert.u-mb--5(
-      :title='$t("The site is in queue for taking a screenshot")',
+      :title='$t("The website is in queue for taking a screenshot")',
       type='warning',
       show-icon,
       :closable='false'
@@ -21,7 +21,7 @@ include /src/mixins.pug
           div(v-else)
             el-icon.u-m--10(size='40')
               el-icon-picture
-            div {{ $t('There are no screenshots for this site') }}
+            div {{ $t('There are no screenshots for this website') }}
         +e.col--action
           el-tooltip(
             v-if='!site.screenshotImg && site.isSubdomain',
@@ -111,7 +111,7 @@ export default defineComponent({
       if (this.isLoading) return;
       if (this.site.siteScreenshotId) {
         await this.$utils.showDialogConfirm({
-          message: this.$t('There is already a screenshot for this site. Create new?'),
+          message: this.$t('There is already a screenshot for this website. Create new?'),
         });
       }
 
@@ -122,7 +122,7 @@ export default defineComponent({
         await this.$api['sites'].createSiteScreenshot({ siteId, url });
 
         this.$utils.showMessageSuccess({
-          message: `${this.$t('The site has been added to the queue for taking a screenshot')}`,
+          message: `${this.$t('The website has been added to the queue for taking a screenshot')}`,
         });
         (this.provideEmitUpdateRatingItem as any)();
       } catch (errors: any) {

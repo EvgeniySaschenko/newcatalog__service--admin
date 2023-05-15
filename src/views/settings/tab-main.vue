@@ -51,7 +51,7 @@ el-form.form-login(label-position='top', v-loading='isLoading')
     el-collapse-item(:title='$t("Colors")', :name='CollapseEnum.colors')
       .u-mb--10
         el-alert(
-          :title='$t(`For the "error page" of the site the local colors will be used`)',
+          :title='$t(`For the "error page" of the website the local colors will be used`)',
           type='warning',
           show-icon,
           :closable='false'

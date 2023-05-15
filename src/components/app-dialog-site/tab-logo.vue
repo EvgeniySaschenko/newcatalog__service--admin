@@ -42,7 +42,7 @@ include /src/mixins.pug
 
   // Color
   +e.row(v-if='site.siteLogoId')
-    +e.title {{ $t('Site color') }}
+    +e.title {{ $t('Website color') }}
     +e.content
       +e.col--value
         app-img-color(
@@ -246,7 +246,7 @@ export default defineComponent({
         });
 
         this.$utils.showMessageSuccess({
-          message: this.$t('Site color updated'),
+          message: this.$t('Website color updated'),
         });
 
         (this.provideEmitUpdateRatingItem as any)();

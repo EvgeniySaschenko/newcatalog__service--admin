@@ -4,7 +4,7 @@ include /src/mixins.pug
 // Dialog box for editing / creating a rating element
 el-dialog(fullscreen, :model-value='true', @closed='$emit("dialog:closed")')
   +b.app-dialog-site.container
-    +e.H2.title {{ isModeEdit ? `${$t('Edit site')}: ${site.hostname}` : $t('Add site') }}
+    +e.H2.title {{ isModeEdit ? `${$t('Edit website')}: ${site.hostname}` : $t('Add website') }}
     +e.row-top(v-if='isModeEdit')
       el-button(
         type='primary',
