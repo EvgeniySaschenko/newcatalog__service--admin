@@ -168,12 +168,6 @@ el-form.form-login(label-position='top', v-loading='isLoading')
                 v-model='settingValue[SettingsBackupEnum.remoteDir]',
                 placeholder='/home/dir123'
               )
-            // concurrency
-            el-form-item(
-              :label='$t("Concurrency")',
-              :error='errors[`${serviceName}--${SettingsEnum.backup}-${SettingsBackupEnum.concurrency}`]'
-            )
-              el-input-number(:min='1', v-model='settingValue[SettingsBackupEnum.concurrency]')
             // publicKey
             el-form-item(
               :label='`${$t("SSH public key")}. ${$t("Clearing this field will generate a new key")}`',

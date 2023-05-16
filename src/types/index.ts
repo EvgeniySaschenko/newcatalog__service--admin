@@ -82,7 +82,6 @@ export enum SettingsBackupEnum {
   publicKey = 'publicKey',
   publicKeyComment = 'publicKeyComment',
   port = 'port',
-  concurrency = 'concurrency',
   remoteDir = 'remoteDir',
 }
 
@@ -128,8 +127,7 @@ export type SettingsType = {
       [SettingsBackupEnum.publicKey]: string;
       [SettingsBackupEnum.publicKeyComment]: string;
       [SettingsBackupEnum.port]: number;
-      [SettingsBackupEnum.concurrency]: number;
-      [SettingsBackupEnum.remoteDir]: '/';
+      [SettingsBackupEnum.remoteDir]: string;
     }
   >;
   // Other
