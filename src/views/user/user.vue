@@ -21,14 +21,27 @@ include /src/mixins.pug
 
       // Password
       el-descriptions-item
-        el-form-item(:error='errors.password')
-          el-input(
-            :placeholder='$t("Password")',
-            v-model='password',
-            style='width: 100%',
-            type='password',
-            name='password'
-          )
+        el-form
+          el-form-item(:error='errors.password', required)
+            el-input(
+              :placeholder='$t("Password")',
+              v-model='password',
+              style='width: 100%',
+              type='password',
+              name='password',
+              autocomplete='new-password'
+            )
+          // password2
+          el-form-item(:error='errors.password', required)
+            el-input(
+              :placeholder='$t("Repeat password")',
+              v-model='password2',
+              style='width: 100%',
+              type='password',
+              name='password',
+              autocomplete='new-password'
+            )
+
       el-descriptions-item(align='center')
         el-button(type='primary', @click='editPassword()') {{ $t('Change password') }}
 </template>
@@ -46,6 +59,7 @@ export default defineComponent({
       email: '',
       // Password
       password: '',
+      password2: '',
       // Errors
       errors: {
         email: '',
@@ -85,7 +99,10 @@ export default defineComponent({
       this.isLoading = true;
       this.$utils.clearErrors(this.errors, this.errors);
       try {
-        let response = await this.$api['users'].editPassword({ password: this.password });
+        let response = await this.$api['users'].editPassword({
+          password: this.password,
+          password2: this.password2,
+        });
 
         if (response) {
           this.$utils.showMessageSuccess({

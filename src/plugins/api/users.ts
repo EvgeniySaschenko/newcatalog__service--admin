@@ -4,6 +4,7 @@ type ParamsType = {
   email: string;
   name: string;
   password: string;
+  password2: string;
   code: string;
 };
 
@@ -34,10 +35,13 @@ export default {
   },
 
   // Refresh password
-  editPassword: async ({ password }: Pick<ParamsType, 'password'>): Promise<true> => {
+  editPassword: async ({
+    password,
+    password2,
+  }: Pick<ParamsType, 'password' | 'password2'>): Promise<true> => {
     let response = await $fetch('/api/users/password', {
       method: 'PUT',
-      body: JSON.stringify({ password }),
+      body: JSON.stringify({ password, password2 }),
     });
     return await response.json();
   },
