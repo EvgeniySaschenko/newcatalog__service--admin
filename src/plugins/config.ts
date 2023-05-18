@@ -24,7 +24,7 @@ export let $config = {
     // Time after which it is necessary to refresh the token (sec)
     refreshTockenTime: 300,
     // If the user has been idle this time, you must log out (sec)
-    idleTime: 1200,
+    idleTime: 600,
   },
 
   // images
@@ -40,9 +40,9 @@ export let $config = {
 
   // labels
   labels: {
-    colorDefault: '#7952b3',
+    colorDefault: '#5a448d',
     colorsListDefault: [
-      '#7952b3',
+      '#5a448d',
       '#E94B3C',
       '#409EFF',
       '#67C23A',
@@ -59,6 +59,11 @@ export let $config = {
       '#000000',
       '#ff9100',
       '#003C7A',
+      '#800000',
+      '#A52A2A',
+      '#FFA07A',
+      '#1E90FF',
+      '#DA70D6',
     ],
   },
 

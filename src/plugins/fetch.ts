@@ -34,12 +34,6 @@ export let $fetch: FetchType = async (url: string, params?: RequestInit): Promis
   }
 
   switch (response.status) {
-    // The server is not ready to process requests
-    case 202: {
-      throw {
-        server: $t('The server is not ready to process requests, an update is in progress'),
-      };
-    }
     // Data validation errors
     case 400: {
       throw await response.json();
@@ -58,6 +52,12 @@ export let $fetch: FetchType = async (url: string, params?: RequestInit): Promis
     // Request Entity Too Large
     case 413: {
       throw { server: $t('Request Entity Too Large') };
+    }
+    // The server is not ready to process requests
+    case 503: {
+      throw {
+        server: $t('The server is not ready to process requests, an update is in progress'),
+      };
     }
 
     default: {
