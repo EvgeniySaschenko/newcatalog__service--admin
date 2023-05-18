@@ -38,12 +38,12 @@ include /src/mixins.pug
               v-model='password2',
               style='width: 100%',
               type='password',
-              name='password',
+              name='password2',
               autocomplete='new-password'
             )
 
       el-descriptions-item(align='center')
-        el-button(type='primary', @click='editPassword()') {{ $t('Change password') }}
+        el-button(native-type='submit', type='primary', @click.prevent='editPassword()') {{ $t('Change password') }}
 </template>
 
 <script lang="ts">

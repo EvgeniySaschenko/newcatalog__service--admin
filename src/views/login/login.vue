@@ -6,7 +6,7 @@ include /src/mixins.pug
     +e.H1.title {{ $t('Login') }}
     // E-mail
     el-form-item(label='E-mail', required, :error='errors.email')
-      el-input(
+      el-input#email(
         placeholder='E-mail',
         v-model='email',
         style='width: 100%',
@@ -16,17 +16,17 @@ include /src/mixins.pug
       )
     // password
     el-form-item(:label='$t("Password")', required, :error='errors.password')
-      el-input(
+      el-input#password(
         :placeholder='$t("Password")',
         v-model='password',
         style='width: 100%',
         type='password',
         name='password',
-        autocomplete='current-password'
+        autocomplete='on'
       )
 
     el-form-item
-      el-button(type='primary', @click='send()', style='width: 100%') {{ $t('Send') }}
+      el-button(native-type='submit', type='primary', @click.prevent='send()', style='width: 100%') {{ $t('Send') }}
 
     el-alert(:title='errors.auth', type='error', center, v-if='errors.auth') 
     el-alert(

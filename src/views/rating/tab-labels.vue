@@ -10,7 +10,7 @@ dialog-label(
   @dialog:closed='toggleDialogLabelAdd(false)',
   @label:update='getLabels(ratingId)'
 )
-el-button(type='primary')(@click='toggleDialogLabelAdd(true)') {{ $t('Add Label') }}
+el-button(type='primary', @click='toggleDialogLabelAdd(true)') {{ $t('Add Label') }}
 
 // Edit Label
 dialog-label(
