@@ -22,9 +22,9 @@ export let $config = {
   // user
   user: {
     // Time after which it is necessary to refresh the token (sec)
-    refreshTockenTime: 300,
+    refreshTockenTime: 180,
     // If the user has been idle this time, you must log out (sec)
-    idleTime: 600,
+    idleTime: 900,
   },
 
   // images
@@ -62,7 +62,7 @@ export let $config = {
       '#800000',
       '#A52A2A',
       '#FFA07A',
-      '#1E90FF',
+      '#0000CD',
       '#DA70D6',
     ],
   },

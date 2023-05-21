@@ -24,7 +24,7 @@ export let $utils = {
 
     switch (format) {
       case 'datetime':
-        Object.assign(options, { hour: 'numeric', minute: 'numeric' });
+        Object.assign(options, { hour: 'numeric', minute: 'numeric', second: 'numeric' });
         break;
     }
 
@@ -34,7 +34,7 @@ export let $utils = {
     Time formatting
   */
   time(date: Date | null) {
-    if (!date) return '-';
+    if (!date) return '';
 
     return new Intl.DateTimeFormat($config['date'].dateTimeFormat, {
       hour: 'numeric',

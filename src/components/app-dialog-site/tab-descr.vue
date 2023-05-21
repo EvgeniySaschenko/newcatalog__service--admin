@@ -2,7 +2,7 @@
 include /src/mixins.pug
 +b.tab-descr(label-position='top', v-loading='isLoading')
   +e.box-img(:style='{ backgroundColor: state.color }', v-if='isModeEdit')
-    +e.IMG.img(:src='state.logoImg', :alt='state.name[$langDefault("site")]')
+    +e.IMG.img(v-lazy='site.logoImg', :alt='state.name[$langDefault("site")]')
   // Link
   el-form-item(:error='errors.url', :label='$t("Link")', required)
     el-input(:placeholder='$t("Link")', size='small', v-model='state.url', :disabled='isModeEdit')

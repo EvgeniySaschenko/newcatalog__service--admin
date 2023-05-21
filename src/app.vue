@@ -3,17 +3,19 @@ include /src/mixins.pug
 
 .wrapper(v-loading='isLoading')
   app-header(v-if='isAppRedy', :logoImage='logoImage', :headerInfoHtml='headerInfoHtml')
-  router-view(v-if='isAppRedy || isPageLogin')
-  footer.container
+  .app-main
+    router-view(v-if='isAppRedy || isPageLogin')
+  app-footer(v-if='isAppRedy')
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { SettingsType, SettingsEnum, ServicesEnum } from '@/types';
 import AppHeader from '@/components/app-header/app-header.vue';
+import AppFooter from '@/components/app-footer/app-footer.vue';
 import useSectionsStore from '@/store/sections';
 import { $setLazyLoadOptions } from '@/plugins/lazy-load';
-import { inject } from 'vue';
+
 export default defineComponent({
   provide() {
     return {
@@ -48,13 +50,29 @@ export default defineComponent({
 
   components: {
     AppHeader,
+    AppFooter,
   },
 
   async mounted() {
     await this.init();
   },
 
+  watch: {
+    $route(to, from) {
+      this.closeElMessages();
+    },
+  },
+
   methods: {
+    // Close error messages when changing route
+    closeElMessages() {
+      let elements = document.querySelectorAll('.el-message .el-message__closeBtn');
+      for (let element of elements) {
+        let event = new Event('click');
+        element.dispatchEvent(event);
+      }
+    },
+
     // Get sections
     async init() {
       if (this.isLoading) return;
@@ -173,4 +191,12 @@ export default defineComponent({
 
 <style lang="sass">
 @import "@/assets/style/_style.sass"
+.wrapper
+  margin: 0 auto
+  position: relative
+  min-height: 100vh
+  display: flex
+  flex-direction: column
+  .app-main
+    min-height: 100vh
 </style>

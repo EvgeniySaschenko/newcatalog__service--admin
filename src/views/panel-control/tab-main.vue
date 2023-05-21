@@ -2,7 +2,7 @@
 include /src/mixins.pug
 +b.tab-main
   .u-mb--10
-    el-tag(type='danger') {{ $t('Blocked').toUpperCase() }}
+    el-tag.u-mr--10(type='danger') {{ $t('Blocked').toUpperCase() }}
     span - {{ $t('During the execution of the operation, the API service will not process requests') }}
 
   .u-mb--10
@@ -36,6 +36,16 @@ include /src/mixins.pug
         el-tag(type='danger') {{ $t('Blocked').toUpperCase() }}
       el-descriptions-item(align='center')
         el-button(type='danger', @click='clearCacheAll()') {{ $t('Delete cache') }}
+      //
+      el-descriptions-item {{ $t('Restart screenshots process create') }}
+      el-descriptions-item(align='center', width='100')
+      el-descriptions-item(align='center')
+        el-button(type='warning', @click='restartScreenshotsProcess()') {{ $t('Restart') }}
+      //
+      el-descriptions-item {{ $t('Restart the process of getting site information') }}
+      el-descriptions-item(align='center', width='100')
+      el-descriptions-item(align='center')
+        el-button(type='warning', @click='restartSitesProcess()') {{ $t('Restart') }}
 
   .u-mb--10
     el-alert(
@@ -182,13 +192,60 @@ export default defineComponent({
 
         if (response) {
           this.$utils.showMessageSuccess({
-            duration: 0,
             message: this.$t('Started sending files to a remote server'),
           });
           return;
         }
 
         throw { server: this.$t('Errors occurred while creating a backup') };
+      } catch (errors: any) {
+        this.$utils.showMessageError({ message: errors.server, errors });
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
+    // Restart screenshots process
+    async restartScreenshotsProcess() {
+      if (this.isLoading) return;
+      await this.$utils.showDialogConfirm({
+        title: this.$t('Restart screenshots process create?'),
+      });
+      this.isLoading = true;
+
+      try {
+        let response = await this.$api['sites'].restartScreenshotsProcess();
+
+        if (response) {
+          this.$utils.showMessageSuccess({
+            message: this.$t('Restarted'),
+          });
+          return;
+        }
+      } catch (errors: any) {
+        this.$utils.showMessageError({ message: errors.server, errors });
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
+    // Restart sites process
+    async restartSitesProcess() {
+      if (this.isLoading) return;
+      await this.$utils.showDialogConfirm({
+        title: this.$t('Restart the process of getting site information?'),
+      });
+      this.isLoading = true;
+
+      try {
+        let response = await this.$api['sites'].restartSitesProcess();
+
+        if (response) {
+          this.$utils.showMessageSuccess({
+            message: this.$t('Restarted'),
+          });
+          return;
+        }
       } catch (errors: any) {
         this.$utils.showMessageError({ message: errors.server, errors });
       } finally {

@@ -157,4 +157,20 @@ export default {
 
     return await result.json();
   },
+
+  // Restart screenshots process
+  restartScreenshotsProcess: async (): Promise<true> => {
+    let result = await $fetch(`/api/sites/screenshots-process-restart`, {
+      method: 'PUT',
+    });
+    return await result.json();
+  },
+
+  // Restart sites process
+  restartSitesProcess: async (): Promise<true> => {
+    let result = await $fetch(`/api/sites/sites-process-restart`, {
+      method: 'PUT',
+    });
+    return await result.json();
+  },
 };
