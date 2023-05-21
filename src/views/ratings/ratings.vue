@@ -1,7 +1,7 @@
 <template lang="pug">
 include /src/mixins.pug
 +b.page--ratings.container
-  +e.H1.title {{ $t($route.name) }}
+  +e.H1.title {{ $t($route.name) }} - {{ $t('Page') }} {{ pagination.page }}
 
   // Button create new rating
   router-link.inline-block(:to='`${pathPage}/create`')
@@ -13,14 +13,26 @@ include /src/mixins.pug
         router-link.u-m--5(:to='`${pathPage}/${scope.row.ratingId}`') {{ scope.row.name[$langDefault('site')] || `#${scope.row.ratingId} - ${$langDefault('site')}` }}
         div
           el-tag.u-m--5(type='warning', effect='plain', v-for='sectionId in scope.row.sectionsIds') {{ sectionsMap[sectionId].name[$langDefault('site')] }}
+
+    el-table-column(:label='$t("Hidden")', width='150')
+      template(#default='scope')
+        el-tag(v-if='scope.row.isHiden', type='info', effect='dark') {{ $t('Hidden') }}
+
     el-table-column(:label='$t("Date of first publication")', width='150')
-      template(#default='scope') {{ $utils.date(scope.row.dateFirstPublication) }}
+      template(#default='scope')
+        .u-text-center
+          div {{ $utils.date(scope.row.dateFirstPublication) }}
+          el-text(type='info') {{ $utils.time(scope.row.dateFirstPublication) }}
+
     el-table-column(:label='$t("Cache creation date")', width='150')
       template(#default='scope')
-        span(v-if='scope.row.dateCacheCreation') {{ $utils.date(scope.row.dateCacheCreation, 'datetime') }}
-        el-tag(v-else, type='info', effect='dark') {{ $t('Not published') }}
+        .u-text-center
+          div(v-if='scope.row.dateCacheCreation')
+            div {{ $utils.date(scope.row.dateCacheCreation) }}
+            el-text(type='info') {{ $utils.time(scope.row.dateCacheCreation) }}
+          el-tag.u-mb--5(v-else, type='warning', effect='dark') {{ $t('Not published') }}
 
-  .u-center
+  .u-center.u-mt--10
     el-pagination(
       v-if='pagination.pagesCount > 1',
       :page-size='pagination.maxRecordsPerPage',
@@ -71,6 +83,8 @@ export default defineComponent({
   methods: {
     // Init
     async init() {
+      let { page } = this.$route.query;
+      this.pagination.page = Number(page) || 1;
       await this.getRatings();
     },
 
@@ -101,6 +115,7 @@ export default defineComponent({
     // Get ratings for page
     async changePage(page: number) {
       this.pagination.page = page;
+      this.$router.push({ query: { page } });
       await this.getRatings();
       window.scrollTo({
         top: 0,

@@ -306,6 +306,8 @@ export default defineComponent({
         });
 
         isSuccess = true;
+
+        this.$emit('update:rating');
       } catch (errors: any) {
         let isValidationError = this.$utils.setErrors(this.errors, errors.errors);
         if (!isValidationError) {
