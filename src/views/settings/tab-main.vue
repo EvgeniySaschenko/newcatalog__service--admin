@@ -279,11 +279,14 @@ let DescrCodeOrText = {
   [SettingsEnum.footerHtml]: $t('This HTML will be added in the "footer" tag'),
 };
 let pageTitlePrefix = $t('The phrase that will be added at the beginning of the "title" tag');
-
+let gtmCode = `
+  ${$t('To activate Google Tag Manager, add the code without the "script" tag')}.
+  ${$t('See the example in the documentation')}
+`;
 let DescrMarketing = {
   [SettingsEnum.pageTitlePrefix]: pageTitlePrefix,
   [SettingsEnum.pageTitleSufix]: $t('Phrase that will be added at the end of the "title" tag'),
-  [SettingsEnum.googleTagManagerId]: $t('To activate Google Tag Manager, add your id'),
+  [SettingsEnum.googleTagManagerCode]: gtmCode,
 };
 type ServicesImagesType = keyof SettingsType[keyof typeof DescrImages];
 
