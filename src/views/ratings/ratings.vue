@@ -8,6 +8,9 @@ include /src/mixins.pug
     el-button(type='primary', icon='el-icon-plus') {{ $t('Create a new rating') }}
   // List ratings
   el-table(:data='ratings', stripe, :scrollbar-always-on='true')
+    // #
+    el-table-column(label='#', type='index', :index='calcNumberRecord')
+
     el-table-column(:label='$t("Name")')
       template(#default='scope')
         router-link.u-m--5(:to='`${pathPage}/${scope.row.ratingId}`') {{ scope.row.name[$langDefault('site')] || `#${scope.row.ratingId} - ${$langDefault('site')}` }}
@@ -122,6 +125,12 @@ export default defineComponent({
         behavior: 'smooth',
       });
       this.isLoading = false;
+    },
+
+    // Reciord number relative all list
+    calcNumberRecord(index: number) {
+      let { maxRecordsPerPage, page } = this.pagination;
+      return (page - 1) * maxRecordsPerPage + (index + 1);
     },
   },
 });
