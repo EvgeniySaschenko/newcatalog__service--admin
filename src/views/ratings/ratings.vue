@@ -75,26 +75,31 @@ export default defineComponent({
   },
 
   mounted() {
-    this.init();
     // Sections
     let store = useStoreSections();
     for (let item of store.$state.items) {
       this.sectionsMap[item.sectionId] = item;
     }
+    this.getRatings();
+  },
+
+  watch: {
+    // Added "watch" for "$route" because clicking on the logo does not load a new list
+    $route: {
+      async handler(current, prev) {
+        if (current.path === prev.path) {
+          await this.getRatings();
+        }
+      },
+    },
   },
 
   methods: {
-    // Init
-    async init() {
-      let { page } = this.$route.query;
-      this.pagination.page = Number(page) || 1;
-      await this.getRatings();
-    },
-
     // Get ratings
     async getRatings() {
-      if (this.isLoading) return;
       this.isLoading = true;
+      let { page } = this.$route.query;
+      this.pagination.page = Number(page) || 1;
 
       try {
         let { items, page, itemsCount, maxRecordsPerPage, pagesCount } = await this.$api[
@@ -119,7 +124,6 @@ export default defineComponent({
     async changePage(page: number) {
       this.pagination.page = page;
       this.$router.push({ query: { page } });
-      await this.getRatings();
       window.scrollTo({
         top: 0,
         behavior: 'smooth',
