@@ -270,8 +270,10 @@ let DescrColors = {
 };
 
 let DescrCodeOrText = {
-  [SettingsEnum.headScript]: $t('This JavaScript will be added to the "head" tag'),
-  [SettingsEnum.headStyles]: $t('This CSS will be added to the "head" tag'),
+  [SettingsEnum.headScript]: `${$t('This JavaScript will be added to the "head" tag')}.
+  ${$t('Add without "script" tag')}`,
+  [SettingsEnum.headStyles]: `${$t('This CSS will be added to the "head" tag')}.
+  ${$t('Add without "style" tag')}`,
   [SettingsEnum.headerHtml]: $t('This HTML will be added to the "header" tag'),
   [SettingsEnum.headerInfoHtml]: $t('Info bar above "header"'),
   [SettingsEnum.contentTopHtml]: $t('This HTML will be added after the "header" tag'),
