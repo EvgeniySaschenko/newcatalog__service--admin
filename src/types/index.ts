@@ -69,7 +69,6 @@ export enum SettingsEnum {
   // Marketing
   pageTitlePrefix = 'pageTitlePrefix',
   pageTitleSufix = 'pageTitleSufix',
-  googleTagManagerCode = 'googleTagManagerCode',
   // Backup
   backup = 'backup',
   // Oher
@@ -117,7 +116,6 @@ export type SettingsType = {
   // Seo / Marketing
   [SettingsEnum.pageTitlePrefix]: Record<ServiceSiteType, string>;
   [SettingsEnum.pageTitleSufix]: Record<ServiceSiteType, string>;
-  [SettingsEnum.googleTagManagerCode]: Record<ServiceSiteType, string>;
   // Backup
   [SettingsEnum.backup]: Record<
     ServiceApiType,
