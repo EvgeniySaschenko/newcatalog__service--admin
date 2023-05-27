@@ -20,10 +20,10 @@ include /src/mixins.pug
       el-descriptions-item(align='center', width='180')
         el-button(type='primary', @click='createCacheSettings()') {{ $t('Create cache') }}
       //
-      el-descriptions-item {{ $t('Create cache sections') }}
-      el-descriptions-item(align='center', width='100')
-      el-descriptions-item(align='center', width='180')
-        el-button(type='primary', @click='createCacheSections()') {{ $t('Create cache') }}
+      //- el-descriptions-item {{ $t('Create cache sections') }}
+      //- el-descriptions-item(align='center', width='100')
+      //- el-descriptions-item(align='center', width='180')
+      //-   el-button(type='primary', @click='createCacheSections()') {{ $t('Create cache') }}
       //
       el-descriptions-item {{ $t('Rebuild all cache') }}
       el-descriptions-item(align='center', width='100')

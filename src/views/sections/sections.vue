@@ -1,191 +1,93 @@
 <template lang="pug">
 include /src/mixins.pug
-+b.page--sections.container
++b.page--sections.container(v-loading='isLoading')
   +e.H1.title {{ $t($route.name) }}
   // Add
-  el-form(v-loading='isSendingFormAdd')
-    el-table(:data='[1]')
-      el-table-column
-        template(#default='scope')
-          el-form-item(:error='errors.formAdd.name', required)
-            el-input.u-mb--5(
-              v-model='nameNewSection[key]',
-              :placeholder='$t("Name")',
-              v-for='(item, key) in $langs("site")'
-            )
-              template(#prepend) {{ key }}
+  el-button(type='primary', @click='toggleDialogSection(true, {})') {{ $t('Add a Section') }}
 
-      el-table-column(width='200')
-        template(#default='scope')
-          el-form-item
-            el-button(type='primary', @click='createSection()') {{ $t('Add a Section') }}
+  // Sections list
+  el-table(:data='sections', stripe, :scrollbar-always-on='true')
+    // id
+    el-table-column(label='#', type='index')
 
-  // Edit
-  el-form
-    el-table(:data='items', stripe, v-loading='isSendingFormEdit', :scrollbar-always-on='true')
-      el-table-column(:label='$t("Name")', :min-width='200')
-        template(#default='scope')
-          el-form-item(:error='errors.formEdit[`${scope.row.sectionId}_name`]', required)
-            el-input.u-mb--5(
-              v-model='scope.row.name[key]',
-              size='small',
-              :placeholder='$t("Name")',
-              v-for='(item, key) in $langs("site")'
-            )
-              template(#prepend) {{ key }}
+    el-table-column(:label='$t("Name")')
+      template(#default='scope')
+        div {{ scope.row.name[$langDefault('site')] }}
 
-      el-table-column(:label='$t("Priority")', width='150')
-        template(#default='scope')
-          el-form-item
-            el-input-number(
-              v-model='scope.row.priority',
-              size='small',
-              :placeholder='$t("Priority")'
-            ) 
+    el-table-column(:label='$t("Priority")', width='130')
+      template(#default='scope')
+        .u-text-center {{ scope.row.priority }}
 
-      el-table-column(:label='$t("Hide")', width='90')
-        template(#default='scope')
-          el-form-item
-            el-checkbox(v-model='scope.row.isHiden')
+    el-table-column(:label='$t("Hidden")', width='130')
+      template(#default='scope')
+        .u-text-center
+          el-tag(v-if='scope.row.isHiden', type='info', effect='dark') {{ $t('Hidden') }}
 
-      el-table-column(:label='$t("Edit")', width='150')
-        template(#default='scope')
-          el-form-item
-            el-button(type='primary', @click='editSection(scope.row)') {{ $t('Edit') }}
+    el-table-column(:label='$t("Date create")', width='150')
+      template(#default='scope')
+        .u-text-center {{ $utils.date(scope.row.dateCreate) }}
 
-      el-table-column(:label='$t("Delete")', width='150')
-        template(#default='scope')
-          el-form-item
-            el-button(type='danger', @click='deleteSection({ sectionId: scope.row.sectionId })') {{ $t('Delete') }}
+    el-table-column(:label='$t("Edit")', width='150')
+      template(#default='scope')
+        el-button(type='primary', @click='toggleDialogSection(true, scope.row)') {{ $t('Edit') }}
+
+dialog-section(
+  :sectionCurrent='sectionCurrent',
+  v-if='isDialogSection',
+  @section:update='getSections($event)',
+  @dialog:closed='toggleDialogSection(false, {})'
+)
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import useStoreSections from '@/store/sections';
 import { SectionType } from '@/types';
+import useStoreSections from '@/store/sections';
+import DialogSection from './dialog-section.vue';
 
 export default defineComponent({
   name: 'page-sections',
   data() {
     return {
-      // Sending form add
-      isSendingFormAdd: false,
-      // Sending form Edit
-      isSendingFormEdit: false,
+      // Loading data
+      isLoading: false,
       // List sections
-      items: [] as SectionType[],
-      // Name new section
-      nameNewSection: this.$langs('site'),
-      // Errors messages
-      errors: {
-        formAdd: {
-          name: '',
-        },
-        formEdit: {} as Record<string, string>,
-      },
+      sections: [] as SectionType[],
+      // Section current
+      sectionCurrent: {},
+      // Is sohow dialog
+      isDialogSection: false,
     };
   },
-  watch: {
-    sections: {
-      deep: true,
-      immediate: true,
-      handler() {
-        this.setState();
-      },
-    },
-  },
-  computed: {
-    sections() {
-      let store = useStoreSections();
-      return store.$state.items;
-    },
-  },
-  methods: {
-    // Set state sections
-    setState() {
-      this.items = this.sections.map((el: SectionType) => {
-        return { ...el };
-      });
-    },
 
+  created() {
+    this.getSections();
+  },
+
+  components: {
+    DialogSection,
+  },
+
+  methods: {
     // Get sections
     async getSections() {
-      let store = useStoreSections();
-      let sections = await this.$api['sections'].getSections();
-      store.setSections(sections);
-      this.$utils.clearErrors(this.errors.formEdit, this.errors.formEdit);
-    },
-
-    // Create section
-    async createSection() {
-      if (this.isSendingFormAdd) return;
-      this.isSendingFormAdd = true;
-      this.$utils.clearErrors(this.errors.formAdd, this.errors.formAdd);
-
+      this.isLoading = true;
       try {
-        await this.$api['sections'].createSection({
-          name: this.nameNewSection,
-        });
-        await this.getSections();
-        this.nameNewSection = this.$langs('site');
-        this.$utils.showMessageSuccess({
-          message: this.$t('Added'),
-        });
+        let sections = await this.$api['sections'].getSections();
+        let store = useStoreSections();
+        store.setSections(sections);
+        this.sections = sections;
       } catch (errors: any) {
-        let isValidationError = this.$utils.setErrors(this.errors.formAdd, errors.errors);
-        if (!isValidationError) {
-          this.$utils.showMessageError({ message: errors.server, errors });
-        }
+        this.$utils.showMessageError({ message: errors.server, errors });
       } finally {
-        this.isSendingFormAdd = false;
+        this.isLoading = false;
       }
     },
 
-    // Delete section
-    async deleteSection({ sectionId }: Pick<SectionType, 'sectionId'>) {
-      await this.$utils.showDialogConfirm({
-        title: this.$t('Are you sure you want to delete?'),
-      });
-      if (this.isSendingFormEdit) return;
-      this.isSendingFormEdit = true;
-
-      try {
-        await this.$api['sections'].deleteSection({ sectionId: +sectionId });
-        await this.getSections();
-        this.$utils.showMessageSuccess({
-          message: this.$t('Removed'),
-        });
-      } catch (errors: any) {
-        this.$utils.showMessageError({ message: errors.server || errors.errors?.section, errors });
-      } finally {
-        this.isSendingFormEdit = false;
-      }
-    },
-
-    // Edit section
-    async editSection(section: SectionType) {
-      if (this.isSendingFormEdit) return;
-      this.isSendingFormEdit = true;
-      let errorKey = `${section.sectionId}_name`;
-      this.$utils.clearErrors(this.errors.formEdit, { [errorKey]: '' });
-
-      try {
-        await this.$api['sections'].editSection(section);
-        await this.getSections();
-        this.$utils.showMessageSuccess({
-          message: this.$t('Changed'),
-        });
-      } catch (errors: any) {
-        let errorsMsgs = {
-          [errorKey]: errors.errors?.name,
-        };
-        let isValidationError = this.$utils.setErrors(this.errors.formEdit, errorsMsgs, true);
-        if (!isValidationError) {
-          this.$utils.showMessageError({ message: errors.server, errors });
-        }
-      } finally {
-        this.isSendingFormEdit = false;
-      }
+    // Show / hidden dialog section
+    toggleDialogSection(isDialogSection: boolean, section: SectionType) {
+      this.sectionCurrent = section;
+      this.isDialogSection = isDialogSection;
     },
   },
 });

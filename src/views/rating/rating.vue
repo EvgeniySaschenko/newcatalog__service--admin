@@ -124,6 +124,7 @@ export default defineComponent({
 
       try {
         let { pagesCount } = await this.$api['ratings'].getRatings({ page: 1 });
+        this.pagesRatinsList = [];
         for (let i = 0; i < pagesCount; i++) {
           this.pagesRatinsList.push(i + 1);
         }
