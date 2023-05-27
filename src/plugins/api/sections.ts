@@ -11,10 +11,17 @@ export default {
   },
 
   // Create section
-  createSection: async ({ name }: Pick<SectionType, 'name'>): Promise<SectionType['sectionId']> => {
+  createSection: async ({
+    isHiden,
+    name,
+    descr,
+    priority,
+  }: Pick<SectionType, 'isHiden' | 'name' | 'descr' | 'priority'>): Promise<
+    SectionType['sectionId']
+  > => {
     let result = await $fetch(`/api/sections`, {
       method: 'POST',
-      body: JSON.stringify({ name }),
+      body: JSON.stringify({ isHiden, name, descr, priority }),
     });
     return await result.json();
   },
@@ -24,11 +31,12 @@ export default {
     sectionId,
     isHiden,
     name,
+    descr,
     priority,
-  }: Pick<SectionType, 'sectionId' | 'isHiden' | 'name' | 'priority'>): Promise<true> => {
+  }: Pick<SectionType, 'sectionId' | 'isHiden' | 'name' | 'descr' | 'priority'>): Promise<true> => {
     let result = await $fetch(`/api/sections/${sectionId}`, {
       method: 'PUT',
-      body: JSON.stringify({ sectionId, isHiden, name, priority }),
+      body: JSON.stringify({ sectionId, isHiden, name, descr, priority }),
     });
     return await result.json();
   },

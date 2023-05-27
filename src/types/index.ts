@@ -156,6 +156,8 @@ export type SectionType = {
   isHiden: boolean;
   name: LangType;
   priority: number;
+  descr: LangType;
+  dateCreate: Date;
 };
 
 // Rating
