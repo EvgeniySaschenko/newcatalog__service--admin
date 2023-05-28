@@ -21,7 +21,7 @@ el-form.form-login(label-position='top', v-loading='isLoading')
         )
           el-descriptions-item
             el-form-item(
-              :label='DescrImages[settingName]',
+              :label='$t(DescrImages[settingName])',
               :error='errors[`${serviceName}--${settingName}`]'
             )
               div
@@ -66,7 +66,7 @@ el-form.form-login(label-position='top', v-loading='isLoading')
         )
           el-descriptions-item
             el-form-item(
-              :label='DescrColors[settingName]',
+              :label='$t(DescrColors[settingName])',
               :error='errors[`${serviceName}--${settingName}`]'
             )
               el-color-picker(v-model='setting[serviceName]', size='large')
@@ -94,7 +94,7 @@ el-form.form-login(label-position='top', v-loading='isLoading')
         )
           el-descriptions-item
             el-form-item(
-              :label='DescrCodeOrText[settingName]',
+              :label='$t(DescrCodeOrText[settingName])',
               :error='errors[`${serviceName}--${settingName}`]'
             )
               el-input(v-model='setting[serviceName]', type='textarea')
@@ -119,7 +119,7 @@ el-form.form-login(label-position='top', v-loading='isLoading')
         )
           el-descriptions-item
             el-form-item(
-              :label='DescrMarketing[settingName]',
+              :label='$t(DescrMarketing[settingName])',
               :error='errors[`${serviceName}--${settingName}`]'
             )
               el-input(v-model='setting[serviceName]', type='textarea')
@@ -262,18 +262,27 @@ let DescrImages = {
 let DescrColors = {
   [SettingsEnum.colorBodyBackground]: $t('Background color - "body" tag'),
   [SettingsEnum.colorPrimary]: $t('Color primary'),
-  [SettingsEnum.colorPrimaryInverted]: `${$t('Inverted primary color')} - 
-  ${$t('an example would be white letters on the primary background')}`,
+  [SettingsEnum.colorPrimaryInverted]: [
+    $t('Inverted primary color'),
+    ' - ',
+    $t('an example would be white letters on the primary background'),
+  ],
   [SettingsEnum.colorTextRegular]: $t('Color regular text - an example would be plain black text'),
   [SettingsEnum.colorSelectionBackground]: $t('Selection color - background'),
   [SettingsEnum.colorSelectionText]: $t('Selection color - text'),
 };
 
 let DescrCodeOrText = {
-  [SettingsEnum.headScript]: `${$t('This JavaScript will be added to the "head" tag')}.
-  ${$t('Add without "script" tag')}`,
-  [SettingsEnum.headStyles]: `${$t('This CSS will be added to the "head" tag')}.
-  ${$t('Add without "style" tag')}`,
+  [SettingsEnum.headScript]: [
+    $t('This JavaScript will be added to the "head" tag'),
+    '. ',
+    $t('Add without "script" tag'),
+  ],
+  [SettingsEnum.headStyles]: [
+    $t('This CSS will be added to the "head" tag'),
+    '. ',
+    $t('Add without "style" tag'),
+  ],
   [SettingsEnum.headerHtml]: $t('This HTML will be added to the "header" tag'),
   [SettingsEnum.headerInfoHtml]: $t('Info bar above "header"'),
   [SettingsEnum.contentTopHtml]: $t('This HTML will be added after the "header" tag'),
@@ -341,7 +350,7 @@ export default defineComponent({
         this.settingsExtends = settingsExtends;
 
         // errors
-        let setKeysErrors = (keysSettings: Partial<Record<string, string>>) => {
+        let setKeysErrors = (keysSettings: Partial<Record<string, any>>) => {
           let settingName: any;
           for (settingName in keysSettings) {
             for (let serviceName in (settings as any)[settingName]) {
@@ -352,7 +361,7 @@ export default defineComponent({
 
         // state
         let setKeysState = (
-          keysSettings: Partial<Record<keyof SettingsType, string>>,
+          keysSettings: Partial<Record<keyof SettingsType, any>>,
           objTarget: Partial<SettingsType>
         ) => {
           type SettingNameType = keyof SettingsType;
