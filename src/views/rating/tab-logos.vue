@@ -17,7 +17,7 @@ include /src/mixins.pug
     +e.EL-ICON-ARROW-LEFT.arrow--prev(@click='setCurrentItem("prev")')
     +e.EL-ICON-ARROW-RIGHT.arrow--next(@click='setCurrentItem("next")')
   +e.row-about
-    el-link.text-uppercase(type='primary') {{ curItem.host }}
+    el-text(type='warning') {{ curItem.host }}
     el-button(type='primary', icon='el-icon-refresh', size='small', @click='getSitesSreens()') {{ $t('Update list') }}
   app-img-cropper(:img='curItem.screenshotImg', @update:img-data='setImgDataResult($event)')
 </template>

@@ -85,13 +85,23 @@ export function $setTranslations({ translations }: { translations: TranslationsM
 
 // Function translation
 interface $tType {
-  (key: string): string;
+  (keys: string | string[]): string;
 }
 
-export let $t = (key: string): string => {
+export let $t = (keys: string | string[]): string => {
   let lang = langDefaultServices[ServicesEnum.admin];
-  if (!translationsMap[lang]) return key;
-  return translationsMap[lang][key] || key;
+  let getTranslate = (key: string) => {
+    if (!translationsMap[lang]) return key;
+    return translationsMap[lang][key] || key;
+  };
+  if (Array.isArray(keys)) {
+    let result = '';
+    for (let key of keys) {
+      result += getTranslate(key);
+    }
+    return result;
+  }
+  return getTranslate(keys);
 };
 
 // Tell TypeScript that this property is global i.e. available in components via "this"
