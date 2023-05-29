@@ -1,7 +1,8 @@
 <template lang="pug">
 include /src/mixins.pug
 +b.HEADER.app-header
-  +e.row--info-band(v-if='headerInfoHtml') {{ headerInfoHtml }}
+  +e.row--info-band(v-if='headerInfoHtml')
+    .container(v-html="headerInfoHtml")
   +e.row--top
     .container
       +e.col-1
