@@ -338,7 +338,6 @@ export default defineComponent({
       this.isLoading = true;
 
       try {
-        await this.$api['cache'].deleteCacheRating({ ratingId: this.ratingId });
         await this.$api['ratings'].deleteRating({ ratingId: this.ratingId });
 
         this.$utils.showMessageSuccess({
