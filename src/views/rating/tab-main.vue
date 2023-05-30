@@ -256,7 +256,7 @@ export default defineComponent({
       if (this.isLoading) return;
       this.isLoading = true;
       this.$utils.clearErrors(this.errors, this.errors);
-      let ratingIdNew = null;
+      let ratingIdNew: null | number = null;
 
       try {
         let sectionsIds = this.sectionsIds.reduce((a, v) => ({ ...a, [v]: v }), {});
@@ -284,10 +284,15 @@ export default defineComponent({
         try {
           await this.getRating(ratingIdNew);
           // Go to the rating created page
-          this.$router.push({ path: `/ratings/${ratingIdNew}` });
+          setTimeout(() => {
+            // setTimeout is needed so that the user sees the message before changing the page
+            this.$router.push({ path: `/ratings/${ratingIdNew}` });
+          }, 2000);
         } catch (error) {
           // Go to the list ratings created page
-          this.$router.push({ path: `/ratings` });
+          setTimeout(() => {
+            this.$router.push({ path: `/ratings` });
+          }, 2000);
         }
       }
     },
