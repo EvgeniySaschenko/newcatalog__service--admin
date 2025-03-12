@@ -5,6 +5,11 @@ let path = require('path');
 module.exports = {
   devServer: {
     port: ADMIN__PORT,
+    client: {
+      webSocketURL: {
+        protocol: 'wss',
+      },
+    },
   },
 
   configureWebpack: {
