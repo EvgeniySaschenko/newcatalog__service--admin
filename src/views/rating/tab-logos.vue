@@ -19,9 +19,9 @@ include /src/mixins.pug
   +e.row-about
     el-text(type='primary') {{ curItem.host }}
     el-button(type='primary', icon='el-icon-refresh', size='small', @click='getSitesSreens()') {{ $t('Update list') }}
-  .u-mb--10
+  +e.row-alert
     el-alert(
-      :title='$t(`To "save" you need to select a color from the palette, or by clicking on the preview.`)',
+      :title='$t(`To save you need to select a color from the palette, or by clicking on the preview image`)',
       type='warning',
       show-icon,
       :closable='false'
@@ -193,6 +193,7 @@ export default defineComponent({
     display: flex
     justify-content: space-between
     padding: 10px
+  &__row-alert,
   &__row-about,
   &__row-arrow
     display: flex
