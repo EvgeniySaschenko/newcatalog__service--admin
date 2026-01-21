@@ -17,8 +17,15 @@ include /src/mixins.pug
     +e.EL-ICON-ARROW-LEFT.arrow--prev(@click='setCurrentItem("prev")')
     +e.EL-ICON-ARROW-RIGHT.arrow--next(@click='setCurrentItem("next")')
   +e.row-about
-    el-text(type='warning') {{ curItem.host }}
+    el-text(type='primary') {{ curItem.host }}
     el-button(type='primary', icon='el-icon-refresh', size='small', @click='getSitesSreens()') {{ $t('Update list') }}
+  .u-mb--10
+    el-alert(
+      :title='$t(`To "save" you need to select a color from the palette, or by clicking on the preview.`)',
+      type='warning',
+      show-icon,
+      :closable='false'
+    )
   app-img-cropper(:img='curItem.screenshotImg', @update:img-data='setImgDataResult($event)')
 </template>
 

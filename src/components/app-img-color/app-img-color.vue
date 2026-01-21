@@ -4,11 +4,13 @@ include /src/mixins.pug
   +e.col
     +e.title {{ $t('Color') }}
     +e.value
-      el-color-picker(v-model='color', size='large', @change='setColor()')
+      el-color-picker(v-model='color', size='large', @change='emitImgData()')
   +e.col
     +e.title {{ $t('Preview') }}
     +e.value
-      +e.preview-box-canvas(:style='{ backgroundColor: color }')
+      +e.preview-box-canvas(
+        :style='{ backgroundColor: color, display: imgData.img ? "block" : "none" }'
+      )
         +e.CANVAS.canvas(
           ref='canvas',
           @click='getCanvasColor($event)',
@@ -108,14 +110,13 @@ export default defineComponent({
       let ctx = canvas.getContext('2d');
       let [red, green, blue] = (ctx as CanvasRenderingContext2D).getImageData(x, y, 1, 1).data;
       this.color = rgb2hex(`rgb(${red},${green},${blue})`).hex;
-      this.$emit('update:img-data', {
-        color: this.color,
-        img: this.imgData.img,
-      });
+
+      this.emitImgData();
     },
 
-    // Set color
-    setColor() {
+    // emit ImgData
+    emitImgData() {
+      if (!this.imgData.img || !this.color) return;
       this.$emit('update:img-data', {
         color: this.color,
         img: this.imgData.img,
@@ -139,5 +140,5 @@ export default defineComponent({
   &__preview-box-canvas
     display: flex
     padding: 10px
-    border: 1px solid var(--app-border-color)
+    border: 1px solid #ccc
 </style>
