@@ -9,6 +9,6 @@ COPY package.json package-lock.json ./
 
 RUN npm install
 
-RUN npm install --global http-server
+RUN npm install --global sirv-cli
 
 COPY . .
