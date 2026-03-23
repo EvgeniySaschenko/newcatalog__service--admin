@@ -79,7 +79,8 @@ export enum SettingsBackupEnum {
   host = 'host',
   username = 'username',
   publicKey = 'publicKey',
-  publicKeyComment = 'publicKeyComment',
+  keyAlgorithm = 'keyAlgorithm',
+  keyAlgorithmList = 'keyAlgorithmList',
   port = 'port',
   remoteDir = 'remoteDir',
 }
@@ -123,7 +124,8 @@ export type SettingsType = {
       [SettingsBackupEnum.host]: string;
       [SettingsBackupEnum.username]: string;
       [SettingsBackupEnum.publicKey]: string;
-      [SettingsBackupEnum.publicKeyComment]: string;
+      [SettingsBackupEnum.keyAlgorithm]: string;
+      [SettingsBackupEnum.keyAlgorithmList]: string[];
       [SettingsBackupEnum.port]: number;
       [SettingsBackupEnum.remoteDir]: string;
     }

@@ -2,9 +2,9 @@ import { $fetch } from './_core';
 import { BackupType, PaginationType } from '@/types';
 
 export default {
-  // Run backup
-  runBackup: async (): Promise<true> => {
-    let result = await $fetch(`/api/backups/run`, {
+  // Create backup
+  createBackup: async (): Promise<true> => {
+    let result = await $fetch(`/api/backups/create`, {
       method: 'POST',
     });
     return await result.json();
