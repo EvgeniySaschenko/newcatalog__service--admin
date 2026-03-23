@@ -170,16 +170,26 @@ el-form.form-login(label-position='top', v-loading='isLoading')
               )
             // publicKey
             el-form-item(
-              :label='`${$t("SSH public key")}. ${$t("Clearing this field will generate a new key")}`',
+              :label='`${$t("Public SSH key for the remote server")}. ${$t("Clearing this field will generate a new key")}`',
               :error='errors[`${serviceName}--${SettingsEnum.backup}-${SettingsBackupEnum.publicKey}`]'
             )
               el-input(v-model='settingValue[SettingsBackupEnum.publicKey]', type='textarea')
-            // publicKeyComment
+            // keyAlgorithm
             el-form-item(
-              :label='$t("Public key comment")',
-              :error='errors[`${serviceName}--${SettingsEnum.backup}-${SettingsBackupEnum.publicKeyComment}`]'
+              :label='$t("Algorithm for creating an SSH key (www.openssh.org)")',
+              :error='errors[`${serviceName}--${SettingsEnum.backup}-${SettingsBackupEnum.keyAlgorithm}`]'
             )
-              el-input(v-model='settingValue[SettingsBackupEnum.publicKeyComment]')
+            el-select(
+              v-model='settingValue[SettingsBackupEnum.keyAlgorithm]',
+              filterable,
+              size='large'
+            )
+              el-option(
+                v-for='item in settingValue[SettingsBackupEnum.keyAlgorithmList]',
+                :key='item',
+                :label='item',
+                :value='item'
+              )
 
           el-descriptions-item(width='100', align='center')
             el-tag.u-m--5(type='danger', size='small') {{ serviceName.toUpperCase() }}

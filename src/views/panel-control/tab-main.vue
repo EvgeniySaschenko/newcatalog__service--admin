@@ -20,11 +20,6 @@ include /src/mixins.pug
       el-descriptions-item(align='center', width='180')
         el-button(type='primary', @click='createCacheSettings()') {{ $t('Create cache') }}
       //
-      //- el-descriptions-item {{ $t('Create cache sections') }}
-      //- el-descriptions-item(align='center', width='100')
-      //- el-descriptions-item(align='center', width='180')
-      //-   el-button(type='primary', @click='createCacheSections()') {{ $t('Create cache') }}
-      //
       el-descriptions-item {{ $t('Rebuild all cache') }}
       el-descriptions-item(align='center', width='100')
         el-tag(type='danger') {{ $t('Blocked').toUpperCase() }}
@@ -49,17 +44,17 @@ include /src/mixins.pug
 
   .u-mb--10
     el-alert(
-      :title='$t("A backup will be created for: database, images and whois")',
+      :title='$t("A backup copy of the database and file storage will be created")',
       type='warning',
       show-icon,
       :closable='false'
     )
     el-descriptions(direction='vertical', :column='3', border, v-loading='isLoading')
-      el-descriptions-item {{ $t('Run backup') }}
+      el-descriptions-item {{ $t('Create backup') }}
       el-descriptions-item(align='center', width='100')
         el-tag(type='danger') {{ $t('Blocked').toUpperCase() }}
       el-descriptions-item(align='center', width='180')
-        el-button(type='primary', @click='runBackup()') {{ $t('Create backup') }}
+        el-button(type='primary', @click='createBackup()') {{ $t('Create backup') }}
 </template>
 
 <script lang="ts">
@@ -180,7 +175,7 @@ export default defineComponent({
     },
 
     // Run backup
-    async runBackup() {
+    async createBackup() {
       if (this.isLoading) return;
       await this.$utils.showDialogConfirm({
         title: this.$t('Run backup?'),
@@ -188,7 +183,7 @@ export default defineComponent({
       this.isLoading = true;
 
       try {
-        let response = await this.$api['backups'].runBackup();
+        let response = await this.$api['backups'].createBackup();
 
         if (response) {
           this.$utils.showMessageSuccess({
