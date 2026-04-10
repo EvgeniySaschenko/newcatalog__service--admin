@@ -199,55 +199,6 @@ el-form.form-login(label-position='top', v-loading='isLoading')
               type='primary',
               @click='editSetting({ settingName: SettingsEnum.backup, serviceName, settingValue: backupMap[serviceName], isRunInit: true, isClearAllErrors: true })'
             ) {{ $t('Save') }}
-
-    // Protector
-    el-collapse-item(:title='$t(`Server protection`)', :name='CollapseEnum.protector')
-      .u-mb--10
-        el-alert(
-          :title='$t(`This setting can completely block access to the admin panel`)',
-          type='error',
-          show-icon,
-          :closable='false'
-        )
-      .u-mb--10
-        el-alert(
-          :title='$t(`If the server "protector" is unavailable, you will not be able to access the admin panel`)',
-          type='error',
-          show-icon,
-          :closable='false'
-        )
-
-      .u-mb--10(v-for='(settingValue, serviceName) in protectorMap')
-        el-descriptions(direction='vertical', :column='3', border)
-          el-descriptions-item
-            // Url
-            el-form-item(
-              :label='$t("Server url that allows / forbids sending requests to the API server")',
-              :error='errors[`${serviceName}--${SettingsEnum.protector}-${SettingsProtectorEnum.url}`]'
-            )
-              el-input(
-                v-model='settingValue[SettingsProtectorEnum.url]',
-                placeholder='https://url'
-              )
-
-            // Text key
-            el-form-item(
-              :label='$t("The key (string) that the server should return in the response if requests to the API server are allowed")',
-              :error='errors[`${serviceName}--${SettingsEnum.protector}-${SettingsProtectorEnum.textKey}`]'
-            )
-              el-input(
-                v-model='settingValue[SettingsProtectorEnum.textKey]',
-                :placeholder='$t("Any string")'
-              )
-
-          el-descriptions-item(width='100', align='center')
-            el-tag.u-m--5(type='danger', size='small') {{ serviceName.toUpperCase() }}
-
-          el-descriptions-item(width='100', align='center')
-            el-button(
-              type='primary',
-              @click='editSetting({ settingName: SettingsEnum.protector, serviceName, settingValue: protectorMap[serviceName], isClearAllErrors: true })'
-            ) {{ $t('Save') }}
 </template>
 
 <script lang="ts">
@@ -256,7 +207,6 @@ import {
   SettingsType,
   SettingsEnum,
   SettingsBackupEnum,
-  SettingsProtectorEnum,
   SettingsServicesType,
   SettingsExtendsType,
 } from '@/types';
@@ -312,7 +262,6 @@ enum CollapseEnum {
   codeOrText = 'codeOrText',
   marketing = 'marketing',
   backup = 'backup',
-  protector = 'protector',
 }
 
 export default defineComponent({
@@ -328,13 +277,11 @@ export default defineComponent({
       codeOrTextMap: {} as Pick<SettingsType, keyof typeof DescrCodeOrText>,
       marketingMap: {} as Pick<SettingsType, keyof typeof DescrMarketing>,
       backupMap: {} as SettingsType['backup'],
-      protectorMap: {} as SettingsType['protector'],
       // Indicates that there have been some changes in the settings
       isLoading: false,
       errors: {} as Record<string, string>,
       SettingsEnum,
       SettingsBackupEnum,
-      SettingsProtectorEnum,
       DescrImages,
       DescrColors,
       DescrCodeOrText,
@@ -394,7 +341,6 @@ export default defineComponent({
         setKeysState(DescrCodeOrText, this.codeOrTextMap);
         setKeysState(DescrMarketing, this.marketingMap);
         this.backupMap = settings.backup;
-        this.protectorMap = settings.protector;
 
         setKeysErrors(DescrImages);
         setKeysErrors(DescrColors);
@@ -404,13 +350,6 @@ export default defineComponent({
         for (let serviceName in this.backupMap) {
           for (let settingName in (this.backupMap as any)[serviceName]) {
             this.errors[`${serviceName}--${SettingsEnum.backup}-${settingName}`] = '';
-          }
-        }
-
-        // protector
-        for (let serviceName in this.protectorMap) {
-          for (let settingName in (this.protectorMap as any)[serviceName]) {
-            this.errors[`${serviceName}--${SettingsEnum.protector}-${settingName}`] = '';
           }
         }
 

@@ -71,8 +71,6 @@ export enum SettingsEnum {
   pageTitleSufix = 'pageTitleSufix',
   // Backup
   backup = 'backup',
-  // Oher
-  protector = 'protector',
 }
 
 export enum SettingsBackupEnum {
@@ -83,11 +81,6 @@ export enum SettingsBackupEnum {
   keyAlgorithmList = 'keyAlgorithmList',
   port = 'port',
   remoteDir = 'remoteDir',
-}
-
-export enum SettingsProtectorEnum {
-  url = 'url',
-  textKey = 'textKey',
 }
 
 export type SettingsType = {
@@ -128,14 +121,6 @@ export type SettingsType = {
       [SettingsBackupEnum.keyAlgorithmList]: string[];
       [SettingsBackupEnum.port]: number;
       [SettingsBackupEnum.remoteDir]: string;
-    }
-  >;
-  // Other
-  [SettingsEnum.protector]: Record<
-    ServiceApiType,
-    {
-      [SettingsProtectorEnum.url]: string;
-      [SettingsProtectorEnum.textKey]: string;
     }
   >;
 };
