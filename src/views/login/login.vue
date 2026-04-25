@@ -85,7 +85,7 @@ export default defineComponent({
 @import "@/assets/style/_variables.sass"
 
 .page
-  background-color: $app-primary-color
+  background-color: $app-color-primary
   min-height: 100vh
   display: flex
   align-items: center

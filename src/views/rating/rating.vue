@@ -169,20 +169,20 @@ export default defineComponent({
     margin-bottom: 10px
     white-space: nowrap
     scrollbar-width: 8px
-    scrollbar-color: $app-primary-color #fff
+    scrollbar-color: $app-color-primary #fff
     &::-webkit-scrollbar
       height: 8px
       background-color: #fff
     &::-webkit-scrollbar-thumb
-      background: $app-primary-color
+      background: $app-color-primary
     &-list
       display: flex
       align-items: center
     &-item
       padding: 3px 5px
       margin: 5px
-      color: $app-primary-color
-      border: 2px solid $app-primary-color
+      color: $app-color-primary
+      border: 2px solid $app-color-primary
       min-width: 30px
       display: inline-flex
       align-items: center

@@ -17,7 +17,7 @@ export default defineComponent({
 @import "@/assets/style/_variables.sass"
 .app-footer
   padding: 20px 0
-  background-color: $app-primary-color
+  background-color: $app-color-primary
   text-align: center
   margin-top: 40px
   color: #ffffff

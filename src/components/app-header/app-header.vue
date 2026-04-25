@@ -71,12 +71,12 @@ export default defineComponent({
       left: 0
       right: 0
       bottom: 0
-      background-color: $app-primary-color
+      background-color: $app-color-primary
       opacity: .7
       z-index: -1
   &__row--top
     padding: 10px 0
-    background-color: $app-primary-color
+    background-color: $app-color-primary
     .container
       display: flex
       justify-content: space-between

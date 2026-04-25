@@ -4,16 +4,16 @@ $app-screen-lg: 992px
 $app-screen-xl: 1200px
 
 $app-border-color: #dcdfe6
-$app-primary-color: #5a448d
+$app-color-primary: #5a448d
 
 :root
-  --screen-sm: $app-screen-sm
-  --screen-md: $app-screen-md
-  --screen-lg: $app-screen-lg
-  --screen-xl: $app-screen-xl
+  --screen-sm: #{$app-screen-sm}
+  --screen-md: #{$app-screen-md}
+  --screen-lg: #{$app-screen-lg}
+  --screen-xl: #{$app-screen-xl}
 
-  --app-border-color: $app-border-color
-  --app-primary-color: $app-primary-color
+  --app-border-color: #{$app-border-color}
+  --app-color-primary: #{$app-color-primary}
 
 // Между max и 1200 = 1140
 @mixin screen-xl

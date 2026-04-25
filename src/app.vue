@@ -2,6 +2,7 @@
 include /src/mixins.pug
 
 .wrapper(v-loading='isLoading')
+  app-lock-plug(v-if='$isServerBlocked.value')
   app-header(v-if='isAppRedy', :logoImage='logoImage', :headerInfoHtml='headerInfoHtml')
   .app-main
     router-view(v-if='isAppRedy || isPageLogin')
@@ -13,6 +14,7 @@ import { defineComponent } from 'vue';
 import { SettingsType, SettingsEnum, ServicesEnum } from '@/types';
 import AppHeader from '@/components/app-header/app-header.vue';
 import AppFooter from '@/components/app-footer/app-footer.vue';
+import AppLockPlug from '@/components/app-lock-plug/app-lock-plug.vue';
 import useSectionsStore from '@/store/sections';
 import { $setLazyLoadOptions } from '@/plugins/lazy-load';
 
@@ -51,6 +53,7 @@ export default defineComponent({
   components: {
     AppHeader,
     AppFooter,
+    AppLockPlug,
   },
 
   async mounted() {

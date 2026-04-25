@@ -1,6 +1,6 @@
 <template lang="pug">
 include /src/mixins.pug
-+b.tab-backups-report
++b.tab-report
   // List backups
   el-table(:data='backups', stripe, :scrollbar-always-on='true')
     // #
@@ -18,7 +18,9 @@ include /src/mixins.pug
     // Report
     el-table-column(:label='$t("Report")', align='center')
       template(#default='scope')
-        span {{ scope.row.report }}
+        el-collapse(accordion)
+          el-collapse-item
+            span {{ scope.row.report }}
 
     // Date create
     el-table-column(:label='$t("Date create")', width='120', align='center')
@@ -43,7 +45,6 @@ import { defineComponent } from 'vue';
 import { BackupType, PaginationType } from '@/types';
 
 export default defineComponent({
-  name: 'page-ratings',
   data() {
     return {
       // loading data
@@ -67,16 +68,16 @@ export default defineComponent({
   methods: {
     // Init
     async init() {
-      await this.getBackups();
+      await this.getBackupsList();
     },
 
-    // Get backups
-    async getBackups() {
+    // Get backups list
+    async getBackupsList() {
       if (this.isLoading) return;
       this.isLoading = true;
 
       try {
-        let backup = await this.$api['backups'].getBackups({ page: this.pagination.page });
+        let backup = await this.$api['backups'].getBackupsList({ page: this.pagination.page });
         let { items, page, itemsCount, maxRecordsPerPage, pagesCount } = backup;
         this.backups = items;
         this.pagination = {
@@ -95,7 +96,7 @@ export default defineComponent({
     // Get backups for page
     async changePage(page: number) {
       this.pagination.page = page;
-      await this.getBackups();
+      await this.getBackupsList();
       window.scrollTo({
         top: 0,
         behavior: 'smooth',

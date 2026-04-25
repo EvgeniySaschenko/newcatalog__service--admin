@@ -1,6 +1,8 @@
 import { $t } from '@/plugins/translations';
 import { $config } from '@/plugins/config';
+import { ref } from 'vue';
 
+let $isServerBlocked = ref(false);
 export interface FetchType {
   (url: string, params?: RequestInit): Promise<Response>;
 }
@@ -34,6 +36,11 @@ export let $fetch: FetchType = async (url: string, params?: RequestInit): Promis
   }
 
   switch (response.status) {
+    case 202: {
+      $isServerBlocked.value = true;
+      throw { server: $t('The server is blocked') };
+    }
+
     // Data validation errors
     case 400: {
       throw await response.json();
@@ -75,5 +82,6 @@ export let $fetch: FetchType = async (url: string, params?: RequestInit): Promis
 export default {
   install: (app: any, options: any) => {
     app.config.globalProperties.$fetch = $fetch;
+    app.config.globalProperties.$isServerBlocked = $isServerBlocked;
   },
 };
