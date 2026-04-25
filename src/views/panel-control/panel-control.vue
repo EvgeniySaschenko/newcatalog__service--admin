@@ -7,20 +7,24 @@ include /src/mixins.pug
   el-tabs(v-model='tabActive', @tab-change='setTabUrlParam()', type='border-card')
     el-tab-pane(:label='$t("Main Settings")', :name='TabsEnum.main')
       tab-main(v-if='tabActive == TabsEnum.main')
-    el-tab-pane(:label='$t("Backups report")', :name='TabsEnum.backupsReport')
-      tab-backups-report(v-if='tabActive == TabsEnum.backupsReport')
+    el-tab-pane(:label='$t("Report backups")', :name='TabsEnum.reportBackups')
+      tab-report-backups(v-if='tabActive == TabsEnum.reportBackups')
+    el-tab-pane(:label='$t("Report restores")', :name='TabsEnum.reportRestores')
+      tab-report-restores(v-if='tabActive == TabsEnum.reportRestores')
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 import TabMain from './tab-main.vue';
-import TabBackupsReport from './tab-backups-report.vue';
+import TabReportBackups from './tab-report-backups.vue';
+import TabReportRestores from './tab-report-restores.vue';
 
 enum TabsEnum {
   main = 'main',
-  backupsReport = 'backupsReport',
+  reportBackups = 'reportBackups',
+  reportRestores = 'reportRestores',
 }
-type TabsType = TabsEnum.main | TabsEnum.backupsReport;
+type TabsType = TabsEnum.main | TabsEnum.reportBackups | TabsEnum.reportRestores;
 
 export default defineComponent({
   name: 'page-panel-control',
@@ -34,7 +38,8 @@ export default defineComponent({
 
   components: {
     TabMain,
-    TabBackupsReport,
+    TabReportBackups,
+    TabReportRestores,
   },
 
   created() {

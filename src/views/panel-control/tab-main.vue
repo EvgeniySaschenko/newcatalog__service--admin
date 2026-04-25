@@ -50,11 +50,35 @@ include /src/mixins.pug
       :closable='false'
     )
     el-descriptions(direction='vertical', :column='3', border, v-loading='isLoading')
-      el-descriptions-item {{ $t('Create backup') }}
+      el-descriptions-item {{ $t('Create a backup copy and send it to the server') }}
       el-descriptions-item(align='center', width='100')
         el-tag(type='danger') {{ $t('Blocked').toUpperCase() }}
       el-descriptions-item(align='center', width='180')
         el-button(type='primary', @click='createBackup()') {{ $t('Create backup') }}
+
+
+  .u-mb--10
+    el-alert(
+      :title='$t("Files and database will be restored from backup")',
+      type='warning',
+      show-icon,
+      :closable='false'
+    )
+    el-descriptions(direction='vertical', :column='3', border, v-loading='isLoading')
+      el-descriptions-item 
+        el-form(label-position='top', v-loading='isLoading')
+          el-form-item(:label='$t("Path to the folder on the remote server")', required, :error='errors.remoteDirPath')
+            el-input(
+              placeholder='/home/dir1/2026-04-19T09:34:08.879Z_2',
+              v-model='remoteDirPath',
+              style='width: 100%',
+              autocomplete='on',
+            )
+        div {{ $t('The server will download a backup copy, after which the recovery process will start') }}
+      el-descriptions-item(align='center', width='100')
+        el-tag(type='danger') {{ $t('Blocked').toUpperCase() }}
+      el-descriptions-item(align='center', width='180')
+        el-button(type='primary', @click='restoreBackup()') {{ $t('Restore backup') }}
 </template>
 
 <script lang="ts">
@@ -66,6 +90,11 @@ export default defineComponent({
     return {
       // loading data
       isLoading: false,
+      // path to the backup folder on the remote server
+      remoteDirPath: '',
+      errors: {
+        remoteDirPath: '',
+      },
     };
   },
 
@@ -174,7 +203,7 @@ export default defineComponent({
       }
     },
 
-    // Run backup
+    // Create backup
     async createBackup() {
       if (this.isLoading) return;
       await this.$utils.showDialogConfirm({
@@ -187,7 +216,7 @@ export default defineComponent({
 
         if (response) {
           this.$utils.showMessageSuccess({
-            message: this.$t('Started sending files to a remote server'),
+            message: this.$t('The backup process has started'),
           });
           return;
         }
@@ -195,6 +224,37 @@ export default defineComponent({
         throw { server: this.$t('Errors occurred while creating a backup') };
       } catch (errors: any) {
         this.$utils.showMessageError({ message: errors.server, errors });
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
+    async restoreBackup() {
+      if (this.isLoading) return;
+      this.$utils.clearErrors(this.errors, this.errors);
+      await this.$utils.showDialogConfirm({
+        title: this.$t('Restore from backup?'),
+      });
+      this.isLoading = true;
+
+      try {
+        let response = await this.$api['backups'].restoreBackup({
+          remoteDirPath: this.remoteDirPath,
+        });
+
+        if (response) {
+          this.$utils.showMessageSuccess({
+            message: this.$t('The restore process from backup has started'),
+          });
+          return;
+        }
+
+        throw { server: this.$t('Error while trying to restore') };
+      } catch (errors: any) {
+        let isValidationError = this.$utils.setErrors(this.errors, errors.errors);
+        if (!isValidationError) {
+          this.$utils.showMessageError({ message: errors.server, errors });
+        }
       } finally {
         this.isLoading = false;
       }

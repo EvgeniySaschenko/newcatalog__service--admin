@@ -3,6 +3,7 @@ import App from '@/app.vue';
 import router from '@/router';
 
 // Plugins
+import fetch from '@/plugins/fetch';
 import config from '@/plugins/config';
 import pluginApi from '@/plugins/api';
 import pluginUtils from '@/plugins/utils';
@@ -19,6 +20,7 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 }
 
 app
+  .use(fetch)
   .use(config)
   .use(pluginPinia)
   .use(pluginLazyLoad.VueLazyLoad, pluginLazyLoad.options)

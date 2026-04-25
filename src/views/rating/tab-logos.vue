@@ -26,6 +26,13 @@ include /src/mixins.pug
       show-icon,
       :closable='false'
     )
+  +e.row-alert
+    el-alert(
+      :title='$t(`For subdomains: You can check the availability of a screenshot in the "Content" tab --> the desired site --> "Logo" / "Screenshot" tabs`)',
+      type='warning',
+      show-icon,
+      :closable='false'
+    )
   app-img-cropper(:img='curItem.screenshotImg', @update:img-data='setImgDataResult($event)')
 </template>
 

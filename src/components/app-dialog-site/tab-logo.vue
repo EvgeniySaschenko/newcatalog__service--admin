@@ -292,7 +292,7 @@ export default defineComponent({
       font-size: 14px
       font-weight: bold
       text-align: left
-      color: var(--app-primary-color)
+      color: var(--app-color-primary)
     &-box-logo
       padding: 10px
 </style>

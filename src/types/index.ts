@@ -265,3 +265,11 @@ export type BackupType = {
   dateCreate: Date;
   isError: boolean;
 };
+
+// Backup restore
+export type BackupRestoreType = {
+  backupRestoreId: number;
+  report: any;
+  dateCreate: Date;
+  isError: boolean;
+};
